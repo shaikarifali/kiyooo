@@ -1,0 +1,12 @@
+# mobile_scans.yaml — Stage 16. One entry per local APK file to
+# statically analyze. Loaded via the CLI (`kiyooo mobile scans add --name
+# <name> --config <this-file-per-apk>`) or the API/UI.
+#
+# There is no "fetch this app from the Play Store" step — the org supplies
+# the APK file directly (already downloaded through whatever legitimate
+# channel they use). iOS/IPA is not supported yet (different tooling,
+# different manifest format — see ingest/adapters/mobile_static.py's
+# module docstring).
+
+platform: android
+apk_path: "/data/apks/acmecorp-android-2.3.apk"

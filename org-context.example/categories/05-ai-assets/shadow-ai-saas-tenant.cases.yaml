@@ -1,0 +1,18 @@
+should_match:
+  - name: streamlit community cloud signature
+    asset: { type: http_service, value: "https://dashboard.example.com/" }
+    evidence:
+      - kind: http_response
+        content: { body: "Built with Streamlit", header: { server: "streamlit" } }
+  - name: huggingface spaces signature
+    asset: { type: http_service, value: "https://demo.example.com/" }
+    evidence:
+      - kind: http_response
+        content: { body: "hosted on huggingface.co/spaces" }
+
+should_not_match:
+  - name: ordinary internal app, no ai saas signature
+    asset: { type: http_service, value: "https://app.example.com/" }
+    evidence:
+      - kind: http_response
+        content: { body: "<html><body>Internal tool</body></html>" }

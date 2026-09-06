@@ -1,0 +1,14 @@
+id: "003-unauth-api-pii"
+category_id: unauth-api
+asset:
+  type: http_service
+  value: "https://api.example.com/v1/customers"
+evidence:
+  - kind: http_response
+    content:
+      status_code: 200
+      header: { "content-type": "application/json" }
+      body: "[{\"id\":1,\"email\":\"jane@example.com\",\"ssn\":\"REDACTED\"}]"
+human_verdict: true_positive
+human_severity: critical
+notes: "Illustrative label only. Unauthenticated PII-bearing API."

@@ -1,0 +1,32 @@
+{
+  "title": "CISA Catalog of Known Exploited Vulnerabilities",
+  "catalogVersion": "2026.08.01",
+  "dateReleased": "2026-08-01T12:00:00.000Z",
+  "count": 2,
+  "vulnerabilities": [
+    {
+      "cveID": "CVE-2023-12345",
+      "vendorProject": "Acme",
+      "product": "Widget Server",
+      "vulnerabilityName": "Acme Widget Server Remote Code Execution Vulnerability",
+      "dateAdded": "2023-06-01",
+      "shortDescription": "Acme Widget Server contains a remote code execution vulnerability.",
+      "requiredAction": "Apply mitigations per vendor instructions.",
+      "dueDate": "2023-06-22",
+      "knownRansomwareCampaignUse": "Known",
+      "notes": ""
+    },
+    {
+      "cveID": "cve-2024-99999",
+      "vendorProject": "Contoso",
+      "product": "Gadget Framework",
+      "vulnerabilityName": "Contoso Gadget Framework Authentication Bypass",
+      "dateAdded": "2024-01-15",
+      "shortDescription": "Contoso Gadget Framework contains an authentication bypass vulnerability.",
+      "requiredAction": "Apply mitigations per vendor instructions.",
+      "dueDate": "2024-02-05",
+      "knownRansomwareCampaignUse": "Unknown",
+      "notes": ""
+    }
+  ]
+}

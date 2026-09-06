@@ -1,0 +1,7 @@
+# Same demo purpose as prod-aws.yaml in this directory — see that file's
+# comment. GCP's SDK reads GOOGLE_APPLICATION_CREDENTIALS as a path to a
+# service-account JSON key file, not a raw value.
+provider: gcp
+credential_env:
+  GOOGLE_APPLICATION_CREDENTIALS: "env:ACMECORP_DEMO_GCP_SA_JSON_PATH"
+extra_args: []

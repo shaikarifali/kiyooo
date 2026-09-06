@@ -1,0 +1,13 @@
+should_match:
+  - name: zendesk branding in body
+    asset: { type: http_service, value: "https://support.acmecorp.example" }
+    evidence:
+      - kind: http_response
+        content: { body: "Need help? Powered by Zendesk" }
+
+should_not_match:
+  - name: ordinary internal-branded page
+    asset: { type: http_service, value: "https://app.acmecorp.example" }
+    evidence:
+      - kind: http_response
+        content: { body: "Welcome to Acme Corp" }

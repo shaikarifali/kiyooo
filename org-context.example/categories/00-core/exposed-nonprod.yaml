@@ -1,0 +1,52 @@
+id: exposed-nonprod-to-internet
+name: Non-production environment reachable from the internet
+version: 1
+enabled: true
+severity_base: medium
+
+applies_to:
+  - http_service
+  - subdomain
+  - url
+
+detect:
+  any_of:
+    - hostname_matches: "(?i)^(dev|staging|stg|test|qa|uat|sandbox|preprod)[.-]"
+    - http_header_matches: { "x-environment": "(?i)(dev|staging|test|qa)" }
+    - http_body_matches: "(?i)(django debug|werkzeug debugger|whoops|this is a non-production)"
+
+suppress_if:
+  - http_header_matches: { "x-auth-request-user": ".+" }
+
+evidence_required:
+  - http_response
+  - dns_record
+
+triage_hints: >
+  Non-prod environments are routinely run with weaker auth, verbose errors, or
+  seeded test data, so exposure to the open internet is a real risk even without
+  a specific vulnerability. Severity should scale with what's actually reachable:
+  a login-gated staging site is lower risk than one serving a stack trace or an
+  unauthenticated admin panel — escalate on demonstrated data/debug exposure, not
+  on hostname pattern alone. An SSO gateway in front of the host is a legitimate
+  compensating control (see sso_gateway in controls.yaml) and should suppress
+  this finding once a human has confirmed the gateway actually enforces auth.
+
+always_escalate: false
+escalation_threshold: 0.6
+
+route:
+  assign_to: owner_of_asset
+  cc: [manager_of_owner]
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 7
+    medium: 21
+    low: 45
+    info: 90
+  ticket_template: templates/nonprod-exposure.md.j2
+  # Stage 7: every new category ships at autonomy 0 (shadow);
+  # this one is promoted to 1 (approval queue) as a worked example — a human
+  # still clicks send, nothing auto-files.
+  autonomy_level: 1

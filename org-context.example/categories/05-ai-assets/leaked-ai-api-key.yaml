@@ -1,0 +1,45 @@
+id: leaked-ai-api-key
+name: AI provider API key exposed in a public response or repo
+version: 1
+enabled: true
+severity_base: critical
+
+applies_to:
+  - http_service
+  - repo
+
+detect:
+  any_of:
+    - http_body_matches: "sk-ant-[A-Za-z0-9\\-_]{20,}"
+    - http_body_matches: "\\bsk-[A-Za-z0-9]{20,}\\b"
+    - http_body_matches: "\\bhf_[A-Za-z0-9]{20,}\\b"
+
+evidence_required:
+  - http_response
+
+triage_hints: >
+  A live OpenAI/Anthropic/HuggingFace API key in a public JS bundle, config
+  file, or debug page is a direct path to running up an org's inference
+  bill (or, for keys with broader scopes, reading/modifying the account's
+  models and data) — independent of what the key is nominally used for.
+  Confirm the matched string looks like a real key shape rather than a
+  placeholder or already-rotated fixture value (`sk-xxxxxxxx...`,
+  `sk-ant-your-key-here` and similar placeholder patterns are not a
+  finding). If the key shape is genuine, this is critical regardless of
+  scope — a leaked provider credential is the finding.
+
+always_escalate: true
+escalation_threshold: 0.7
+# The evidence *is* a live credential — never send it to a hosted provider.
+redaction_profile: local_only
+
+route:
+  assign_to: appsec
+  cc: []
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 2
+    medium: 14
+    low: 30
+    info: 90

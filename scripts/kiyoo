@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+# One-word launcher: `kiyoo` starts the whole stack, `kiyoo stop` tears it
+# down. Assumes `bash scripts/setup.sh` has already been run once (deps
+# installed). This just handles the "start everything" part fast.
+#
+# Install once so `kiyoo` works from anywhere:
+#   ln -sf "$(pwd)/scripts/kiyoo" ~/.local/bin/kiyoo
+#
+set -euo pipefail
+
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+REPO_ROOT="$(cd "$(dirname "$SCRIPT_PATH")/.." && pwd)"
+cd "$REPO_ROOT"
+export PATH="$HOME/.local/bin:$HOME/.local/node/bin:$HOME/go/bin:$HOME/.local/go/bin:$PATH"
+
+API_PID_FILE=/tmp/kiyooo-api.pid
+WEB_PID_FILE=/tmp/kiyooo-web.pid
+
+info()  { echo -e "\033[1;34m==>\033[0m $*"; }
+ok()    { echo -e "\033[1;32m✓\033[0m $*"; }
+
+cmd_start() {
+  [ -f .env ] || cp .env.example .env
+
+  # KIYOOO_API_PORT lets you run this alongside labs/kiyoo-ai, which also
+  # defaults to :8000 — the web UI's NEXT_PUBLIC_API_BASE_URL is derived
+  # from the same variable below so the two can never drift out of sync
+  # (a stale .env.local pointing at the wrong port is exactly what
+  # produces a silent "TypeError: Failed to fetch" in the browser).
+  API_PORT="${KIYOOO_API_PORT:-8000}"
+
+  info "starting Postgres/Redis/MinIO + migrations..."
+  make dev
+
+  if pgrep -f "uv run kiyooo serve" >/dev/null 2>&1 || { [ -f "$API_PID_FILE" ] && kill -0 "$(cat "$API_PID_FILE")" 2>/dev/null; }; then
+    ok "API already running"
+  else
+    info "starting kiyooo API (:${API_PORT})..."
+    nohup uv run kiyooo serve --port "$API_PORT" >/tmp/kiyooo-api.log 2>&1 &
+    echo $! > "$API_PID_FILE"
+  fi
+
+  if command -v npm >/dev/null 2>&1; then
+    if [ -f "$WEB_PID_FILE" ] && kill -0 "$(cat "$WEB_PID_FILE")" 2>/dev/null; then
+      ok "web UI already running"
+    else
+      [ -d web/node_modules ] || (cd web && npm install)
+      [ -f web/.env.local ] || cp web/.env.local.example web/.env.local
+      # .env.local is only a fallback default (8000) — always overwrite the
+      # one line that must match this run's actual API port, so the web UI
+      # never silently points at the wrong one.
+      if grep -q '^NEXT_PUBLIC_API_BASE_URL=' web/.env.local 2>/dev/null; then
+        sed -i "s#^NEXT_PUBLIC_API_BASE_URL=.*#NEXT_PUBLIC_API_BASE_URL=http://localhost:${API_PORT}#" web/.env.local
+      else
+        echo "NEXT_PUBLIC_API_BASE_URL=http://localhost:${API_PORT}" >> web/.env.local
+      fi
+      info "starting web UI (:3000, API base http://localhost:${API_PORT})..."
+      (cd web && nohup npm run dev >/tmp/kiyooo-web.log 2>&1 & echo $! > "$WEB_PID_FILE")
+    fi
+  fi
+
+  sleep 1
+  echo
+  ok "kiyooo is up."
+  echo "   API:  http://localhost:${API_PORT}  (docs: /docs)"
+  echo "   UI:   http://localhost:3000"
+  echo "   logs: /tmp/kiyooo-api.log  /tmp/kiyooo-web.log"
+  echo "   stop: kiyoo stop"
+}
+
+cmd_stop() {
+  for f in "$API_PID_FILE" "$WEB_PID_FILE"; do
+    if [ -f "$f" ] && kill -0 "$(cat "$f")" 2>/dev/null; then
+      kill "$(cat "$f")" 2>/dev/null || true
+    fi
+    rm -f "$f"
+  done
+  ok "kiyooo API + web UI stopped."
+  echo "   (Postgres/Redis/MinIO still running — 'make down' to stop those too)"
+}
+
+cmd_status() {
+  for name_pid in "API:$API_PID_FILE" "web UI:$WEB_PID_FILE"; do
+    name="${name_pid%%:*}"; f="${name_pid#*:}"
+    if [ -f "$f" ] && kill -0 "$(cat "$f")" 2>/dev/null; then
+      ok "$name running (pid $(cat "$f"))"
+    else
+      echo "  $name not running"
+    fi
+  done
+}
+
+case "${1:-start}" in
+  start)  cmd_start ;;
+  stop)   cmd_stop ;;
+  status) cmd_status ;;
+  *) echo "usage: kiyoo [start|stop|status]"; exit 1 ;;
+esac

@@ -1,0 +1,47 @@
+id: shadow-ai-saas-tenant
+name: Org subdomain fronting an unsanctioned AI SaaS tenant
+version: 1
+enabled: true
+severity_base: low
+
+applies_to:
+  - ai_saas_tenant
+  - http_service
+
+detect:
+  all_of:
+    - internet_reachable: true
+  any_of:
+    - http_header_matches: { "server": "(?i)(vercel|streamlit)" }
+    - http_body_matches: "(?i)(powered by langchain|built with streamlit|gradio\\.app|huggingface\\.co/spaces)"
+
+evidence_required:
+  - http_response
+  - http_response_headers
+
+triage_hints: >
+  Same reasoning as the generic `shadow-saas-tenant` category, pointed at
+  AI-specific platforms — a subdomain or CNAME fronting a Hugging Face
+  Space, a Streamlit Community Cloud app, or a vendor's hosted AI product
+  is a visibility finding first: most of these are legitimate tools spun
+  up by a data science or ML team outside normal procurement, exactly the
+  population Stage 3's attribution sources cover worst — expect a low
+  ownership-confidence rate here and treat that gap itself as worth
+  reporting, not just the tenant. Escalate only if the tenant appears to
+  process or display real (non-fixture) org data — a demo Space with
+  synthetic examples is not a finding; a Space or app that clearly queries
+  production data or an internal API is.
+
+always_escalate: false
+escalation_threshold: 0.5
+
+route:
+  assign_to: appsec
+  cc: []
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 7
+    high: 14
+    medium: 30
+    low: 90
+    info: 180

@@ -1,0 +1,13 @@
+should_match:
+  - name: admin subdomain, no auth challenge
+    asset: { type: http_service, value: "https://admin.acmecorp.example" }
+    evidence:
+      - kind: http_response
+        content: { status_code: 200, title: "Dashboard" }
+
+should_not_match:
+  - name: admin subdomain, but auth-gated
+    asset: { type: http_service, value: "https://admin.acmecorp.example" }
+    evidence:
+      - kind: http_response
+        content: { status_code: 401, title: "Login Required" }

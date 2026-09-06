@@ -1,0 +1,39 @@
+id: cleartext-traffic-allowed
+name: App explicitly allows cleartext network traffic
+version: 1
+enabled: true
+severity_base: medium
+
+applies_to:
+  - mobile_app
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: mobile_static }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  `android:usesCleartextTraffic="true"` (or a network security config that
+  achieves the same effect) permits unencrypted HTTP anywhere the app makes
+  a network request — an on-path attacker on the same network (public wifi,
+  a compromised router) can read or tamper with that traffic. This is
+  medium as a standing posture issue; it escalates to high if the app also
+  has evidence of handling authentication tokens, payment data, or PII (a
+  co-occurring `hardcoded-api-key` finding, or the app's declared
+  permissions/name suggesting a finance/health/messaging app).
+
+always_escalate: false
+escalation_threshold: 0.6
+
+route:
+  assign_to: mobile-eng
+  cc: []
+  notify_channels: ["#mobile-eng"]
+  sla_days:
+    critical: 7
+    high: 14
+    medium: 30
+    low: 60
+    info: 90

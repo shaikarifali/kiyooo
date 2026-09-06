@@ -1,0 +1,18 @@
+should_match:
+  - name: ollama default port open
+    asset: { type: tcp_service, value: "10.0.0.9:11434" }
+    evidence:
+      - kind: port_banner
+        content: { port: 11434, protocol: tcp }
+  - name: ollama banner in http response
+    asset: { type: http_service, value: "http://10.0.0.9:11434/" }
+    evidence:
+      - kind: http_response
+        content: { body: "Ollama is running" }
+
+should_not_match:
+  - name: ordinary web port open
+    asset: { type: tcp_service, value: "10.0.0.9:443" }
+    evidence:
+      - kind: port_banner
+        content: { port: 443, protocol: tcp }

@@ -1,0 +1,24 @@
+id: invalid-enum-category
+name: Invalid enum category
+version: 1
+enabled: true
+# "extreme" is not a valid Severity literal.
+severity_base: extreme
+
+applies_to:
+  - subdomain
+
+detect:
+  all_of:
+    - hostname_matches: "^test\\."
+
+triage_hints: "hints"
+
+route:
+  assign_to: appsec
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

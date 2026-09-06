@@ -1,0 +1,18 @@
+should_match:
+  - name: tls 1.0 negotiated
+    asset: { type: http_service, value: "https://legacy.example.com/" }
+    evidence:
+      - kind: tls_cert
+        content: { protocol_version: "TLSv1.0", subject_cn: "legacy.example.com" }
+  - name: sslv3 negotiated
+    asset: { type: http_service, value: "https://legacy.example.com/" }
+    evidence:
+      - kind: tls_cert
+        content: { protocol_version: "SSLv3", subject_cn: "legacy.example.com" }
+
+should_not_match:
+  - name: tls 1.3 negotiated
+    asset: { type: http_service, value: "https://app.example.com/" }
+    evidence:
+      - kind: tls_cert
+        content: { protocol_version: "TLSv1.3", subject_cn: "app.example.com" }

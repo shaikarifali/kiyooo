@@ -1,0 +1,121 @@
+# AI infrastructure fingerprint catalog — one
+# signature per row. Each row matches against PORT_BANNER/HTTP_RESPONSE
+# evidence already collected by Stage 1's recon adapters; a match tags the
+# asset (`enrich/ai_tech.py`'s `apply_ai_tech`, mirroring Stage 3's
+# `enrich/tech.py`) rather than deciding true/false-positive on its own —
+# category `detect:` blocks (org-context.example/categories/05-ai-assets/)
+# still own that decision, same separation Stage 3's tech promotion has
+# from Stage 4's category matching.
+#
+# Every signature here is a passive read (a GET request Stage 1 already
+# made, or a banner naabu already grabbed) — nothing here initiates a new
+# probe, and nothing here is MCP's `tools/call` or any other invocation.
+# See `verify/safety.py`'s module docstring for why MCP's `tools/call` is
+# never implemented as a verification tool.
+
+signatures:
+  - id: ollama
+    label: Ollama (local inference)
+    ports: [11434]
+    body_pattern: "(?i)ollama is running"
+
+  - id: lm_studio
+    label: LM Studio
+    ports: [1234]
+    body_pattern: '(?i)"object":\s*"list".*"owned_by":\s*"lmstudio"'
+
+  - id: openai_compatible
+    label: OpenAI-compatible /v1/models endpoint
+    body_pattern: '"object":\s*"list".*"data":\s*\['
+
+  - id: text_generation_webui
+    label: text-generation-webui
+    ports: [7860]
+    body_pattern: "(?i)text-generation-webui"
+
+  - id: triton
+    label: NVIDIA Triton Inference Server
+    ports: [8000, 8001, 8002]
+    body_pattern: "(?i)triton"
+
+  - id: torchserve
+    label: TorchServe
+    ports: [8080, 8081]
+    body_pattern: "(?i)torchserve"
+
+  - id: ray_serve
+    label: Ray Serve dashboard
+    ports: [8265]
+    body_pattern: "(?i)ray dashboard"
+
+  - id: open_webui
+    label: Open WebUI
+    body_pattern: "(?i)open webui"
+
+  - id: dify
+    label: Dify
+    body_pattern: "(?i)dify"
+
+  - id: flowise
+    label: Flowise
+    ports: [3000]
+    body_pattern: "(?i)flowise"
+
+  - id: langflow
+    label: LangFlow
+    ports: [7860]
+    body_pattern: "(?i)langflow"
+
+  - id: gradio
+    label: Gradio app
+    body_pattern: "(?i)gradio"
+
+  - id: streamlit
+    label: Streamlit app
+    body_pattern: "(?i)streamlit"
+
+  - id: chroma
+    label: Chroma vector store
+    ports: [8000]
+    body_pattern: '"nanosecond heartbeat"'
+
+  - id: qdrant
+    label: Qdrant vector store
+    ports: [6333]
+    body_pattern: '"title":\s*"qdrant'
+
+  - id: weaviate
+    label: Weaviate vector store
+    ports: [8080]
+    body_pattern: "(?i)weaviate"
+
+  - id: milvus
+    label: Milvus vector store
+    ports: [19530]
+
+  - id: mlflow
+    label: MLflow model registry
+    ports: [5000]
+    body_pattern: "(?i)mlflow"
+
+  - id: kubeflow
+    label: Kubeflow
+    body_pattern: "(?i)kubeflow"
+
+  - id: jupyter
+    label: Jupyter notebook server
+    ports: [8888]
+    body_pattern: "(?i)jupyter"
+
+  - id: n8n
+    label: n8n automation
+    ports: [5678]
+    body_pattern: "(?i)n8n"
+
+  - id: langfuse
+    label: Langfuse
+    body_pattern: "(?i)langfuse"
+
+  - id: mcp_http
+    label: MCP server (HTTP/SSE transport, passive signature only)
+    body_pattern: '"jsonrpc":\s*"2\.0"'

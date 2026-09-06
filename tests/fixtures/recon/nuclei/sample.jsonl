@@ -1,0 +1,2 @@
+{"template-id":"tech-detect-nginx","info":{"name":"nginx Detection","severity":"info","tags":["tech"]},"host":"https://www.example.com","matched-at":"https://www.example.com","type":"http"}
+{"template-id":"exposed-panel-login","info":{"name":"Exposed Admin Login Panel","severity":"low","tags":["panel","exposure"]},"host":"https://api.example.com","matched-at":"https://api.example.com/admin/login","type":"http"}

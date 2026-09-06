@@ -1,0 +1,18 @@
+# container_scans.yaml — Stage 14. One entry per image or
+# Kubernetes cluster Trivy should scan. Loaded via the CLI (`kiyooo
+# containers scans add --name <name> --config <this-file-per-scan>`) or the
+# API/UI — this file is a worked example of one scan's config, same
+# per-entry-is-its-own-source pattern as `cloud_accounts.yaml`.
+
+# Example 1: an image scan.
+scan_kind: image # image | k8s
+target: "registry.acmecorp.example/web-app:1.4.2"
+credential_env: {} # e.g. registry auth vars, if the registry is private
+extra_args: []
+
+# Example 2: a cluster scan (separate entry — add both as two scans, not one).
+# scan_kind: k8s
+# target: "" # kubeconfig context name, or "" for the current context
+# credential_env:
+#   KUBECONFIG: "env:PROD_KUBECONFIG_PATH" # points at a file path, not content
+# extra_args: []

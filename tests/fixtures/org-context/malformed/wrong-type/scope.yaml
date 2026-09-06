@@ -1,0 +1,15 @@
+org_name: testcorp
+relationship: first_party
+active_scanning_enabled: false
+authorized_by: null
+authorization_date: null
+attestation: false
+
+domains:
+  - testcorp.example
+wildcards:
+  - "*.testcorp.example"
+cidrs: []
+asns: []
+cloud_accounts: []
+exclude: []

@@ -1,0 +1,46 @@
+id: vulnerable-base-image
+name: Container image contains a package with a known CVE
+version: 1
+enabled: true
+finding_granularity: one_per_vendor_finding  # many distinct vendor findings can share this category+asset; see config.py
+severity_base: high
+
+applies_to:
+  - container_image
+  - k8s_workload
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: trivy }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  Every Trivy-reported CVE lands in this one category regardless of the
+  specific CVE — Trivy's vulnerability count is unbounded and per-package,
+  which doesn't scale through a hand-maintained vendor_mapping.yaml the way
+  a small, fixed check-id set does (see Prowler's cloud categories for
+  contrast). This is exactly where the LLM adjudicator earns its keep: the
+  evidence carries the real CVE id, package, installed vs. fixed version,
+  and whether a fix is even available — reason about actual exploitability
+  and reachability from that, don't just echo the vendor severity. A CVE
+  with `fixed_version: null` (no patch exists yet) needs different guidance
+  than one where updating a base image tag resolves it immediately. Check
+  the CVE id against known-exploited-cve's own KEV data if this asset also
+  has that category populated — a CVE that's both in this image AND on
+  CISA's KEV list is a different urgency than an unexploited one.
+
+always_escalate: false
+escalation_threshold: 0.7
+
+route:
+  assign_to: platform-eng
+  cc: [appsec]
+  notify_channels: ["#platform-eng", "#appsec-triage"]
+  sla_days:
+    critical: 3
+    high: 14
+    medium: 30
+    low: 60
+    info: 90

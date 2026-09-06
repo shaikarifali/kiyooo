@@ -1,0 +1,57 @@
+## What is exposed
+
+**{{ category_name }}** ({{ severity | upper }}) on `{{ asset_value }}` ({{ asset_type }}).
+
+{{ finding_description or finding_title }}
+{% if cluster_assets and cluster_assets | length > 1 %}
+This issue was reconciled across {{ cluster_assets | length }} assets:
+
+| Asset |
+|---|
+{% for a in cluster_assets %}| `{{ a }}` |
+{% endfor %}
+{% endif %}
+
+## Why we believe this is real
+
+{{ reasoning }}
+
+Evidence: {% for c in citations %}`{{ c }}`{% if not loop.last %}, {% endif %}{% else %}none cited{% endfor %}
+
+{% if exploitability %}
+- Internet reachable: {{ exploitability.get("internet_reachable", "unknown") }}
+- Authentication required: {{ exploitability.get("authentication_required", "unknown") }}
+- Realistic attack path: {{ exploitability.get("realistic_attack_path", "unknown") }}
+{% endif %}
+{% if compensating_controls %}
+Compensating controls considered and found insufficient: {{ compensating_controls | join(", ") }}
+{% endif %}
+
+## Why it matters here
+
+{{ business_impact_hypothesis }}
+
+{% if ownership_note %}
+**Ownership note:** {{ ownership_note }}
+{% elif ownership_source %}
+Owner attribution source: {{ ownership_source }} (confidence {{ "%.2f" | format(ownership_confidence) }}).
+{% endif %}
+
+## What to do
+
+{{ remediation.get("summary", "See reasoning above.") }}
+
+{% for step in remediation.get("steps", []) %}
+{{ loop.index }}. {{ step }}
+{% endfor %}
+
+Estimated effort: {{ remediation.get("estimated_effort", "unknown") }}
+SLA due: {{ sla_due_at }}
+
+## How to verify the fix
+
+{{ remediation.get("verification", "Re-run the scan; the finding closes automatically once it no longer reproduces.") }}
+
+## Who to push back to
+
+If this looks wrong, reassign or comment `#appsec-triage` — do not just close this ticket, since closing only marks it pending re-verification, and it reopens automatically if the issue is still there on the next check.

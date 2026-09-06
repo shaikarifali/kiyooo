@@ -1,0 +1,45 @@
+id: unsafe-model-artifact
+name: Publicly served model artifact using an unsafe deserialization format
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - http_service
+  - cloud_resource
+
+detect:
+  any_of:
+    - http_body_matches: "(?i)\\.(pkl|pt|pth|bin|h5|ckpt)([\"'<)\\s]|$)"
+
+evidence_required:
+  - http_response
+
+triage_hints: >
+  Pickle-based formats (`.pkl`, `.pt`/`.pth` for older PyTorch checkpoints,
+  some `.bin`/`.ckpt` variants) execute arbitrary code on load via
+  `__reduce__` — a publicly writable path next to a publicly served model
+  directory (or a CI/deploy pipeline that pulls artifacts from a public
+  bucket without integrity checking) is a supply-chain path to remote code
+  execution on whoever loads the model, not just a confidentiality issue
+  about the model weights themselves. The finding here is "this artifact
+  is served in an unsafe-to-deserialize format from a location an attacker
+  could plausibly write to" — confirm from the response (a directory
+  listing, a download link) that the artifact is genuinely fetchable, and
+  never actually download or deserialize it yourself. Safetensors-format
+  files (`.safetensors`) are not a finding — that format does not execute
+  code on load; do not flag a repo/bucket that has migrated to it.
+
+always_escalate: false
+escalation_threshold: 0.65
+
+route:
+  assign_to: data-platform
+  cc: [appsec]
+  notify_channels: ["#data-platform", "#appsec-triage"]
+  sla_days:
+    critical: 3
+    high: 7
+    medium: 21
+    low: 45
+    info: 90

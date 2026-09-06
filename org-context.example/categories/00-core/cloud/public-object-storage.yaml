@@ -1,0 +1,46 @@
+id: public-object-storage
+name: Cloud object storage bucket is publicly accessible
+version: 1
+enabled: true
+is_sensitive_target: true  # holds/grants access to data or credentials — Stage 17 attack-path endpoint
+severity_base: critical
+
+applies_to:
+  - cloud_resource
+
+# This category's findings arrive exclusively via Stage 13's
+# Prowler ingest path (`ingest/pipeline.py::ingest_finding`), which never
+# calls `detect/engine.py` — Prowler already ran the actual check. This
+# `detect` block exists only to satisfy `CategoryDefinition`'s schema (every
+# category needs one); `cloud_tag_equals` is a real predicate, it just never
+# gets evaluated for an ingest-sourced finding in practice.
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: prowler }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  A public S3/Blob/GCS bucket is the exposure itself — no further probing is
+  needed or permitted (invariant #1: never list or fetch bucket contents to
+  "confirm" the exposure). Check the evidence's `resource_type` and
+  `description` for whether this is a known static-site or CDN-origin bucket
+  (a correct, intentional public bucket) before escalating; Prowler's own
+  check already distinguishes ACL-based from bucket-policy-based public
+  access, both should be treated the same way here. A public bucket holding
+  anything beyond intentionally-public static assets is critical.
+
+always_escalate: true
+escalation_threshold: 0.85
+
+route:
+  assign_to: cloud-platform
+  cc: [appsec]
+  notify_channels: ["#cloud-platform", "#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

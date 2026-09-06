@@ -1,0 +1,44 @@
+id: hardcoded-api-key
+name: Verified live credential hardcoded in a mobile app
+version: 1
+enabled: true
+is_sensitive_target: true  # holds/grants access to data or credentials — Stage 17 attack-path endpoint
+finding_granularity: one_per_vendor_finding  # many distinct vendor findings can share this category+asset; see config.py
+severity_base: critical
+
+applies_to:
+  - mobile_app
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: mobile_static }
+
+evidence_required:
+  - external_finding
+
+# The evidence describes a currently-live credential — same reasoning as
+# `supply-chain/leaked-secret-in-repo.yaml`.
+redaction_profile: local_only
+
+triage_hints: >
+  Same verified-live-credential reasoning as `leaked-secret-in-repo`, with a
+  materially worse distribution problem: this secret ships inside every
+  install of a published app, not just to people with repo access. Anyone
+  who downloads and decompiles the APK (a five-minute task with public
+  tools) gets the credential. Treat this as already-compromised the moment
+  it's confirmed, not "at risk of leaking" — rotation is not optional and
+  is not slowed down by "how would anyone find this."
+
+always_escalate: true
+escalation_threshold: 0.95
+
+route:
+  assign_to: appsec
+  cc: [mobile-eng]
+  notify_channels: ["#appsec-triage", "#mobile-eng"]
+  sla_days:
+    critical: 1
+    high: 1
+    medium: 7
+    low: 30
+    info: 90

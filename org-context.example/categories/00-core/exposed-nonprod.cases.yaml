@@ -1,0 +1,16 @@
+should_match:
+  - name: staging hostname
+    asset: { type: subdomain, value: "staging.acmecorp.example" }
+    evidence: []
+  - name: werkzeug debugger in body
+    asset: { type: http_service, value: "https://app.acmecorp.example" }
+    evidence:
+      - kind: http_response
+        content: { body: "Werkzeug Debugger active on this request" }
+
+should_not_match:
+  - name: production hostname, ordinary page
+    asset: { type: subdomain, value: "app.acmecorp.example" }
+    evidence:
+      - kind: http_response
+        content: { body: "Welcome to Acme Corp" }

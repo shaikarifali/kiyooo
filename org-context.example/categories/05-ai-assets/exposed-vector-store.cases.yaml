@@ -1,0 +1,23 @@
+should_match:
+  - name: qdrant default port open
+    asset: { type: tcp_service, value: "10.0.0.9:6333" }
+    evidence:
+      - kind: port_banner
+        content: { port: 6333, protocol: tcp }
+  - name: chroma heartbeat body signature
+    asset: { type: http_service, value: "http://10.0.0.9:8000/" }
+    evidence:
+      - kind: http_response
+        content: { body: "{\"nanosecond heartbeat\": 12345}" }
+  - name: weaviate body signature
+    asset: { type: http_service, value: "http://10.0.0.9:8080/v1/meta" }
+    evidence:
+      - kind: http_response
+        content: { body: "Weaviate vector database" }
+
+should_not_match:
+  - name: ordinary web port open
+    asset: { type: tcp_service, value: "10.0.0.9:443" }
+    evidence:
+      - kind: port_banner
+        content: { port: 443, protocol: tcp }

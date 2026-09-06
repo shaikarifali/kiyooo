@@ -1,0 +1,11 @@
+# kiyooo scan --seeds labs/acmecorp/seeds.txt — bare hostnames/IPs, kiyooo's
+# own recon adapters discover ports/services from here. Add these to
+# /etc/hosts first (labs/acmecorp/README.md has the exact block):
+#   127.0.0.1  staging.acmecorp.lab admin.acmecorp.lab leak.acmecorp.lab
+#   127.0.0.1  app01.acmecorp.lab app02.acmecorp.lab ... app40.acmecorp.lab
+127.0.0.1
+staging.acmecorp.lab
+admin.acmecorp.lab
+leak.acmecorp.lab
+waf.acmecorp.lab
+app01.acmecorp.lab

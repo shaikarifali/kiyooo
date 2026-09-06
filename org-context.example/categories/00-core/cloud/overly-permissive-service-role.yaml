@@ -1,0 +1,41 @@
+id: overly-permissive-service-role
+name: Compute/service identity has administrator-equivalent permissions
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - cloud_resource
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: prowler }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  An instance profile, service account, or managed identity with
+  administrator-equivalent access is a blast-radius finding, same reasoning
+  as Stage 11b's MCP tool-catalog triage: the severity is a function of what
+  the *identity* can reach, not just that the grant exists. An EC2 instance
+  profile with `AdministratorAccess` attached to an internet-facing web
+  server is critical — any RCE on that instance becomes account-wide
+  compromise. The same grant on an isolated, non-internet-facing batch job
+  with no inbound exposure is a real finding but not an emergency; note the
+  asset's own exposure findings (or lack of them) in the reasoning rather
+  than scoring this in isolation.
+
+always_escalate: false
+escalation_threshold: 0.8
+
+route:
+  assign_to: cloud-platform
+  cc: [appsec]
+  notify_channels: ["#cloud-platform", "#appsec-triage"]
+  sla_days:
+    critical: 2
+    high: 7
+    medium: 21
+    low: 30
+    info: 90

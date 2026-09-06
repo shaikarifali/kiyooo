@@ -1,0 +1,47 @@
+id: public-chatbot-excessive-agency
+name: Public-facing AI chatbot/agent app reachable, agentic capability unknown
+version: 1
+enabled: true
+severity_base: medium
+
+applies_to:
+  - ai_app
+  - http_service
+
+detect:
+  any_of:
+    - http_body_matches: "(?i)(open webui|anythingllm|dify|flowise|langflow|chainlit)"
+
+evidence_required:
+  - http_response
+
+triage_hints: >
+  A publicly reachable chatbot/agent framework instance (Open WebUI,
+  AnythingLLM, Dify, Flowise, LangFlow, Chainlit) is only as risky as what
+  it's authorized to *do* — "excessive agency" per OWASP's agentic-app
+  guidance means the app can take actions (send email, query a database,
+  run code, call other internal APIs) beyond what a public-facing chat
+  surface should ever be trusted with. This tool cannot enumerate the
+  app's configured tools/plugins without interacting with it beyond
+  passive reachability, so default to medium and look for corroborating
+  evidence: response content referencing internal system names or
+  tool/plugin lists, headers suggesting the app is not meant to be public
+  (staging banners, internal auth references), or the app plainly stating
+  its own capabilities in a landing page/system message. Escalate to high
+  or critical only when evidence indicates real system access beyond
+  answering questions, not on framework identity alone — most of these are
+  intentionally public demo or read-only assistants.
+
+always_escalate: false
+escalation_threshold: 0.6
+
+route:
+  assign_to: appsec
+  cc: [data-platform]
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 7
+    medium: 21
+    low: 45
+    info: 90

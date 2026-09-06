@@ -1,0 +1,39 @@
+id: outdated-target-sdk
+name: App targets an outdated Android SDK version
+version: 1
+enabled: true
+severity_base: low
+
+applies_to:
+  - mobile_app
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: mobile_static }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  A low `targetSdkVersion` opts the app out of newer Android platform
+  security defaults (runtime permission changes, stricter intent-filter
+  export rules, scoped storage, and more depending on the exact version
+  gap) — it's a low-severity posture issue on its own, not an active
+  exposure. It's also often a Play Store policy compliance problem
+  independent of the security angle. Note the exact `target_sdk_version`
+  from evidence in the writeup; a 1-2 version gap behind current is a
+  different conversation than a 5+ version gap.
+
+always_escalate: false
+escalation_threshold: 0.4
+
+route:
+  assign_to: mobile-eng
+  cc: []
+  notify_channels: ["#mobile-eng"]
+  sla_days:
+    critical: 30
+    high: 60
+    medium: 90
+    low: 180
+    info: 365

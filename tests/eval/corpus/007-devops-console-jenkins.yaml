@@ -1,0 +1,14 @@
+id: "007-devops-console-jenkins"
+category_id: exposed-devops-console
+asset:
+  type: http_service
+  value: "https://jenkins.example.com"
+evidence:
+  - kind: http_response
+    content:
+      status_code: 200
+      title: "Dashboard [Jenkins]"
+      body: "Jenkins ver. 2.462.1"
+human_verdict: true_positive
+human_severity: high
+notes: "Illustrative label only. Reachable Jenkins console, auth state unclear from evidence."

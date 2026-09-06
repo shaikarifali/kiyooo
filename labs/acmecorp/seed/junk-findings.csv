@@ -1,0 +1,201 @@
+ID,Host,Type,Title,Severity
+scan-1,host-001.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-2,host-002.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-3,host-003.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-4,host-004.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-5,host-005.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-6,host-006.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-7,host-007.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-8,host-008.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-9,host-009.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-10,host-010.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-11,host-011.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-12,host-012.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-13,host-013.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-14,host-014.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-15,host-015.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-16,host-016.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-17,host-017.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-18,host-018.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-19,host-019.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-20,host-020.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-21,host-021.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-22,host-022.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-23,host-023.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-24,host-024.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-25,host-025.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-26,host-026.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-27,host-027.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-28,host-028.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-29,host-029.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-30,host-030.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-31,host-031.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-32,host-032.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-33,host-033.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-34,host-034.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-35,host-035.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-36,host-036.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-37,host-037.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-38,host-038.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-39,host-039.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-40,host-040.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-41,host-001.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-42,host-002.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-43,host-003.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-44,host-004.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-45,host-005.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-46,host-006.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-47,host-007.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-48,host-008.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-49,host-009.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-50,host-010.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-51,host-011.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-52,host-012.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-53,host-013.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-54,host-014.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-55,host-015.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-56,host-016.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-57,host-017.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-58,host-018.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-59,host-019.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-60,host-020.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-61,host-021.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-62,host-022.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-63,host-023.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-64,host-024.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-65,host-025.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-66,host-026.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-67,host-027.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-68,host-028.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-69,host-029.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-70,host-030.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-71,host-031.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-72,host-032.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-73,host-033.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-74,host-034.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-75,host-035.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-76,host-036.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-77,host-037.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-78,host-038.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-79,host-039.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-80,host-040.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-81,host-001.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-82,host-002.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-83,host-003.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-84,host-004.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-85,host-005.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-86,host-006.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-87,host-007.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-88,host-008.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-89,host-009.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-90,host-010.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-91,host-011.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-92,host-012.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-93,host-013.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-94,host-014.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-95,host-015.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-96,host-016.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-97,host-017.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-98,host-018.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-99,host-019.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-100,host-020.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-101,host-021.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-102,host-022.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-103,host-023.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-104,host-024.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-105,host-025.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-106,host-026.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-107,host-027.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-108,host-028.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-109,host-029.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-110,host-030.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-111,host-031.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-112,host-032.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-113,host-033.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-114,host-034.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-115,host-035.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-116,host-036.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-117,host-037.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-118,host-038.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-119,host-039.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-120,host-040.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-121,host-001.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-122,host-002.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-123,host-003.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-124,host-004.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-125,host-005.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-126,host-006.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-127,host-007.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-128,host-008.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-129,host-009.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-130,host-010.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-131,host-011.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-132,host-012.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-133,host-013.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-134,host-014.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-135,host-015.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-136,host-016.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-137,host-017.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-138,host-018.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-139,host-019.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-140,host-020.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-141,host-021.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-142,host-022.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-143,host-023.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-144,host-024.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-145,host-025.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-146,host-026.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-147,host-027.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-148,host-028.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-149,host-029.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-150,host-030.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-151,host-031.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-152,host-032.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-153,host-033.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-154,host-034.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-155,host-035.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-156,host-036.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-157,host-037.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-158,host-038.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-159,host-039.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-160,host-040.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-161,host-001.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-162,host-002.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-163,host-003.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-164,host-004.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-165,host-005.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-166,host-006.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-167,host-007.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-168,host-008.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-169,host-009.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-170,host-010.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-171,host-011.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-172,host-012.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-173,host-013.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-174,host-014.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-175,host-015.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-176,host-016.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-177,host-017.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-178,host-018.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-179,host-019.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-180,host-020.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-181,host-021.acmecorp.internal,TLS1.2-Supported,TLS1.2 Supported,Info
+scan-182,host-022.acmecorp.internal,HSTS-Header-Present-But-Short-Max-Age,HSTS Header Present But Short Max Age,Info
+scan-183,host-023.acmecorp.internal,Server-Header-Discloses-Version,Server Header Discloses Version,Info
+scan-184,host-024.acmecorp.internal,Missing-X-Content-Type-Options,Missing X Content Type Options,Info
+scan-185,host-025.acmecorp.internal,Cookie-Missing-SameSite-Attribute,Cookie Missing SameSite Attribute,Info
+scan-186,host-026.acmecorp.internal,Directory-Listing-Disabled-Confirmed,Directory Listing Disabled Confirmed,Info
+scan-187,host-027.acmecorp.internal,TLS-Session-Resumption-Enabled,TLS Session Resumption Enabled,Info
+scan-188,host-028.acmecorp.internal,HTTP-OPTIONS-Method-Enabled,HTTP OPTIONS Method Enabled,Info
+scan-189,host-029.acmecorp.internal,Self-Signed-Cert-On-Internal-Host,Self Signed Cert On Internal Host,Info
+scan-190,host-030.acmecorp.internal,Outdated-TLS-Cipher-Suite-Available,Outdated TLS Cipher Suite Available,Info
+scan-191,mysql-exposed.acmecorp.lab:3306,sql-db-exposed,MySQL exposed,High
+scan-192,mysql-exposed.acmecorp.lab:3306,CVE-DB-1234,MySQL exposed,High
+scan-193,mysql-exposed.acmecorp.lab:3306,sql-db-exposed,MySQL exposed,High
+scan-194,mysql-exposed.acmecorp.lab:3306,CVE-DB-1234,MySQL exposed,High
+scan-195,mysql-exposed.acmecorp.lab:3306,sql-db-exposed,MySQL exposed,High
+scan-196,mysql-exposed.acmecorp.lab:3306,CVE-DB-1234,MySQL exposed,High
+scan-197,mysql-exposed.acmecorp.lab:3306,sql-db-exposed,MySQL exposed,High
+scan-198,mysql-exposed.acmecorp.lab:3306,CVE-DB-1234,MySQL exposed,High
+scan-199,mysql-exposed.acmecorp.lab:3306,sql-db-exposed,MySQL exposed,High
+scan-200,mysql-exposed.acmecorp.lab:3306,CVE-DB-1234,MySQL exposed,High

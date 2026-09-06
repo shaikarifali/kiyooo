@@ -1,0 +1,44 @@
+id: exposed-inference-endpoint
+name: LLM inference server reachable from the internet
+version: 1
+enabled: true
+severity_base: critical
+
+applies_to:
+  - tcp_service
+  - http_service
+
+detect:
+  any_of:
+    - port_in: [11434, 8000, 7860]
+    - http_body_matches: "(?i)(ollama is running|text-generation-webui|\"object\":\\s*\"list\".*\"models\")"
+
+evidence_required:
+  - port_banner
+  - http_response
+
+triage_hints: >
+  An unauthenticated Ollama (:11434), vLLM/TGI (:8000), or text-generation-webui
+  (:7860) instance is an unauthenticated remote compute resource — often with
+  the org's own documents already indexed beside it via RAG, and always with
+  a real (if metered) compute/dollar cost an attacker can consume for free.
+  This is exactly the "random dev runs it open to the internet" case commercial
+  ASM tools don't have a signature for yet. Confirm the port is actually
+  serving an inference API (via the response body fingerprint) rather than an
+  unrelated service that happens to use the same port. Never send an actual
+  inference request or attempt to pull model weights — reachability plus
+  service fingerprint is the evidence bar.
+
+always_escalate: true
+escalation_threshold: 0.85
+
+route:
+  assign_to: appsec
+  cc: [data-platform]
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

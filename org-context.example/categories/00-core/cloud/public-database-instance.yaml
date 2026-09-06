@@ -1,0 +1,43 @@
+id: public-database-instance
+name: Managed database instance is publicly accessible
+version: 1
+enabled: true
+is_sensitive_target: true  # holds/grants access to data or credentials — Stage 17 attack-path endpoint
+severity_base: critical
+
+applies_to:
+  - cloud_resource
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: prowler }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  A managed database (RDS, Cloud SQL, Azure SQL) with public accessibility
+  enabled is critical the same way `exposed-database` is for a self-hosted
+  database on a routable IP — the exposure is the finding, not confirmed
+  unauthenticated access. Do not attempt to connect or authenticate
+  (invariant #1). If this asset also has `open-security-group` open on the
+  database port, treat the pair as the same underlying exposure rather than
+  two separate tickets — check `asset_id` before filing a duplicate. A
+  publicly-accessible flag with a security group that still restricts to a
+  known corporate CIDR is a real but lower-urgency case; read the paired
+  security-group finding (if any) before deciding whether this is truly
+  internet-reachable or only nominally "public" per the cloud provider's flag.
+
+always_escalate: true
+escalation_threshold: 0.9
+
+route:
+  assign_to: data-platform
+  cc: [cloud-platform, appsec]
+  notify_channels: ["#data-platform", "#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

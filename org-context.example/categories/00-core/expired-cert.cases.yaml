@@ -1,0 +1,13 @@
+should_match:
+  - name: cert expiring in 8 days
+    asset: { type: cert, value: "app.acmecorp.example:443" }
+    evidence:
+      - kind: tls_cert
+        content: { not_after: "2026-08-15T00:00:00Z", serial_number: "ABC123" }
+
+should_not_match:
+  - name: cert expiring far in the future
+    asset: { type: cert, value: "app.acmecorp.example:443" }
+    evidence:
+      - kind: tls_cert
+        content: { not_after: "2027-06-01T00:00:00Z", serial_number: "DEF456" }

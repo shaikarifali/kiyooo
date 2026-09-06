@@ -1,0 +1,13 @@
+should_match:
+  - name: jenkins hostname, reachable
+    asset: { type: http_service, value: "https://jenkins.acmecorp.example" }
+    evidence:
+      - kind: http_response
+        content: { status_code: 200, title: "Dashboard [Jenkins]" }
+
+should_not_match:
+  - name: ordinary app hostname, reachable
+    asset: { type: http_service, value: "https://app.acmecorp.example" }
+    evidence:
+      - kind: http_response
+        content: { status_code: 200, title: "Acme Corp" }

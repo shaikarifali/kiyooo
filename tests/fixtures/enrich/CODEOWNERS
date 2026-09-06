@@ -1,0 +1,5 @@
+# Fallback owner for anything not matched below.
+* @platform-team
+
+network/* @netops
+data-platform/* @data-platform

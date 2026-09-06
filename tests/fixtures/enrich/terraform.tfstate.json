@@ -1,0 +1,54 @@
+{
+  "version": 4,
+  "terraform_version": "1.7.0",
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "web",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "module": "module.network",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "id": "i-0123456789abcdef0",
+            "public_ip": "93.184.216.34",
+            "tags": { "Name": "web" }
+          }
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "reports",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "module": "module.data-platform",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "acmecorp-reports",
+            "bucket": "acmecorp-reports"
+          }
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_vpc",
+      "name": "main",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "id": "vpc-0abc123",
+            "cidr_block": "10.0.0.0/16"
+          }
+        }
+      ]
+    }
+  ]
+}

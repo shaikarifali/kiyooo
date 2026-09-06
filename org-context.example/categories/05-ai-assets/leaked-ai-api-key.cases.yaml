@@ -1,0 +1,23 @@
+should_match:
+  - name: anthropic key shape in response body
+    asset: { type: http_service, value: "http://10.0.0.9/app.js" }
+    evidence:
+      - kind: http_response
+        content: { body: "const key = 'sk-ant-api03-abcdefghijklmnopqrstuvwx';" }
+  - name: openai key shape in response body
+    asset: { type: http_service, value: "http://10.0.0.9/config.json" }
+    evidence:
+      - kind: http_response
+        content: { body: "{\"OPENAI_API_KEY\": \"sk-abcdefghijklmnopqrstuvwx\"}" }
+  - name: huggingface token shape in response body
+    asset: { type: http_service, value: "http://10.0.0.9/env.js" }
+    evidence:
+      - kind: http_response
+        content: { body: "HF_TOKEN=hf_abcdefghijklmnopqrstuvwx" }
+
+should_not_match:
+  - name: no key-shaped content
+    asset: { type: http_service, value: "http://10.0.0.9/" }
+    evidence:
+      - kind: http_response
+        content: { body: "<html><body>Welcome</body></html>" }

@@ -1,0 +1,37 @@
+# kiyoo-ai lab — the AI-attack-surface demo. One Host-routed
+# FastAPI app for every hostname in the design's DNS layout, plus one
+# standalone TCP decoy for the MySQL handshake (Host-header routing only
+# applies to HTTP). Everything binds to 127.0.0.1 by default — same rule
+# acmecorp follows — so this never accidentally faces the real internet
+# from a laptop. The public deployment overrides
+# that with real DNS + Caddy TLS, not by editing this file.
+#
+# acmecorp's mysql-exposed uses 3306 (real mysqld, matches its README).
+# This decoy defaults to 3307 instead so `kiyoo-labs` can run both labs
+# at once without a port collision — override KIYOO_AI_DB_PORT if you
+# need this specific one on 3306 for some other reason.
+
+name: kiyoo-ai
+
+services:
+  app:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    environment:
+      KIYOO_LAB_DOMAIN: ${KIYOO_LAB_DOMAIN:-kiyoo-ai.lab}
+    ports:
+      - "127.0.0.1:${KIYOO_AI_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # exposed-database (critical TP) — same MySQL 5.7 handshake-only decoy
+  # pattern as acmecorp/mysql-exposed, but hand-rolled here
+  # instead of a real mysqld: no data, no auth path, ever.
+  db:
+    build: .
+    command: python -m app.services.db_handshake
+    ports:
+      - "127.0.0.1:${KIYOO_AI_DB_PORT:-3307}:3306"

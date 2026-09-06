@@ -1,0 +1,13 @@
+teams:
+  - id: appsec
+    slack: "#appsec"
+    manager: manager@testcorp.example
+    members:
+      - engineer@testcorp.example
+    owns:
+      cloud_accounts: []
+      dns_patterns: []
+      repos: []
+      cloud_tags: {}
+    ticket_system: jira
+    jira_project: SEC

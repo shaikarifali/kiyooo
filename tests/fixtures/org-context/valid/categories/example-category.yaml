@@ -1,0 +1,31 @@
+id: example-category
+name: Example test category
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - subdomain
+
+detect:
+  all_of:
+    - hostname_matches: "^test\\."
+
+suppress_if: []
+evidence_required: []
+
+triage_hints: "This is a fixture category used only by the test suite."
+
+always_escalate: false
+escalation_threshold: 0.75
+
+route:
+  assign_to: appsec
+  cc: []
+  notify_channels: []
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

@@ -1,0 +1,2 @@
+{"host":"www.example.com","port":"443","subject_cn":"www.example.com","issuer_cn":"R3","not_before":"2026-01-15T07:22:11Z","not_after":"2026-04-15T07:22:10Z","serial_number":"03a1b2c3d4e5f6"}
+{"host":"api.example.com","port":"443","subject_cn":"api.example.com","issuer_cn":"R3","not_before":"2026-02-01T00:00:00Z","not_after":"2026-05-02T00:00:00Z","serial_number":"04b2c3d4e5f607"}

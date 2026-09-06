@@ -1,0 +1,13 @@
+# Demo-only ProwlerConfig for the acmecorp lab's Cloud posture page — see
+# org-context.example/cloud_accounts.yaml for the field-by-field reference.
+# credential_env points at env vars that don't exist in this lab on purpose:
+# the point of planting this account is to show the account-management UI
+# itself (name, provider, enable/disable, "last audited"), not to run a real
+# audit. Point it at a real AWS account's credentials (or a local LocalStack
+# container) if you want "Audit now" to produce real findings instead of a
+# clean ProwlerRunError.
+provider: aws
+credential_env:
+  AWS_ACCESS_KEY_ID: "env:ACMECORP_DEMO_AWS_ACCESS_KEY_ID"
+  AWS_SECRET_ACCESS_KEY: "env:ACMECORP_DEMO_AWS_SECRET_ACCESS_KEY"
+extra_args: []

@@ -1,0 +1,41 @@
+id: generic-web-cve
+name: Nuclei signature match for a known web vulnerability class
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - http_service
+
+detect:
+  any_of:
+    - nuclei_tags_include: [sqli, xss, path-traversal]
+
+evidence_required:
+  - nuclei_result
+
+triage_hints: >
+  A signature-based nuclei match (never an exploit attempt — Stage 1's
+  adapter already excludes dos/intrusive/fuzz-tagged templates) for a
+  SQLi/XSS/path-traversal-class template. Read the template-id and any
+  matched request/response nuclei captured before treating this as
+  actionable — a single reflected-parameter signature hit is a real signal
+  but not proof of a working exploit chain. A WAF or CDN in front of the
+  app (see the cloudflare_waf compensating control) reduces urgency by one
+  severity level but never suppresses this outright — a WAF is bypassable,
+  and this class of finding is explicitly in never_suppress_severities'
+  spirit even when not literally listed there.
+
+always_escalate: false
+escalation_threshold: 0.6
+
+route:
+  assign_to: appsec
+  cc: []
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

@@ -1,0 +1,5 @@
+# Deliberately minimal and self-contained — this lab does not import the
+# kiyooo package: it must be independently deployable to a public VPS
+# without dragging the whole tool's dependency tree along.
+fastapi>=0.115.0
+uvicorn[standard]>=0.31.0

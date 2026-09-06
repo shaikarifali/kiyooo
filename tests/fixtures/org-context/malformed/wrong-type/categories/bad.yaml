@@ -1,0 +1,24 @@
+id: wrong-type-category
+name: Wrong type category
+# version must be an int >= 1, "one" is a string.
+version: "one"
+enabled: true
+severity_base: high
+
+applies_to:
+  - subdomain
+
+detect:
+  all_of:
+    - hostname_matches: "^test\\."
+
+triage_hints: "hints"
+
+route:
+  assign_to: appsec
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

@@ -1,0 +1,2 @@
+{"host":"www.example.com","a":["93.184.216.34"],"timestamp":"2026-08-06T12:00:00Z","resolver":["8.8.8.8"]}
+{"host":"api.example.com","a":["93.184.216.35","93.184.216.36"],"timestamp":"2026-08-06T12:00:01Z","resolver":["8.8.8.8"]}

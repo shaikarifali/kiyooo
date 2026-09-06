@@ -1,0 +1,196 @@
+#!/usr/bin/env bash
+# One-word launcher for every demo lab (labs/kiyoo-ai/, labs/acmecorp/,
+# labs/kiyoo-range/): adds every /etc/hosts entry any of them needs
+# (skips ones already there), starts whichever lab(s) you asked for, and
+# opens kiyoo-range — an actual app with a page per category, not a
+# static link list — as the one place to explore everything from.
+# Mirrors `scripts/kiyoo`'s style for the main stack.
+#
+# Install once so `kiyoo-labs` works from anywhere:
+#   ln -sf "$(pwd)/scripts/kiyoo-labs" ~/.local/bin/kiyoo-labs
+#
+set -euo pipefail
+
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+REPO_ROOT="$(cd "$(dirname "$SCRIPT_PATH")/.." && pwd)"
+cd "$REPO_ROOT"
+export PATH="$HOME/.local/bin:$PATH"
+
+AI_DOMAIN="kiyoo-ai.lab"
+AI_PORT="${KIYOO_AI_PORT:-8000}"
+ACME_DOMAIN="acmecorp.lab"
+RANGE_PORT="${KIYOO_RANGE_PORT:-9900}"  # 9000/9001 is kiyooo's own MinIO (docker-compose.yml)
+RANGE_PID_FILE=/tmp/kiyoo-range.pid
+RANGE_LOG=/tmp/kiyoo-range.log
+# On WSL, a venv whose site-packages live under /mnt/c (the 9p-mounted
+# Windows drive) can take minutes, not seconds, to import fastapi/
+# starlette/httpx — it looks like a hang, not an error, and uvicorn never
+# even reaches its startup banner. If a venv on the native Linux
+# filesystem exists (same deps), prefer it for launching kiyoo-range; the
+# app source itself is still read live from this repo either way via
+# --app-dir, so this only changes where the interpreter/packages load from.
+if [ -x "$HOME/kiyooo/.venv/bin/python" ]; then
+  RANGE_PY="$HOME/kiyooo/.venv/bin/python"
+else
+  RANGE_PY="$REPO_ROOT/.venv/bin/python"
+fi
+
+AI_SUBDOMAINS=(mcp-docs mcp-ops mcp-legacy llm chat vectors qdrant mlflow \
+               notebook models ai-portal internal-tools staging admin portal \
+               sso api git files shop legacy db)
+for i in $(seq -w 1 10); do AI_SUBDOMAINS+=("n0${i}"); done
+
+ACME_SUBDOMAINS=(staging admin leak waf)
+for i in $(seq -w 1 40); do ACME_SUBDOMAINS+=("app${i}"); done
+
+HOSTNAMES=("$AI_DOMAIN")
+for sub in "${AI_SUBDOMAINS[@]}"; do HOSTNAMES+=("${sub}.${AI_DOMAIN}"); done
+for sub in "${ACME_SUBDOMAINS[@]}"; do HOSTNAMES+=("${sub}.${ACME_DOMAIN}"); done
+
+info()  { echo -e "\033[1;34m==>\033[0m $*"; }
+ok()    { echo -e "\033[1;32m✓\033[0m $*"; }
+
+open_url() {
+  local url="$1"
+  if command -v explorer.exe >/dev/null 2>&1; then
+    explorer.exe "$url" >/dev/null 2>&1 || true  # nonzero exit on success on WSL, normal
+  elif command -v wslview >/dev/null 2>&1; then
+    wslview "$url" >/dev/null 2>&1 || true
+  elif command -v xdg-open >/dev/null 2>&1; then
+    xdg-open "$url" >/dev/null 2>&1 || true
+  else
+    echo "   open manually: $url"
+  fi
+}
+
+ensure_hosts_entries() {
+  local missing=()
+  for entry in "${HOSTNAMES[@]}"; do
+    grep -qE "^\s*127\.0\.0\.1\s+${entry}(\s|\$)" /etc/hosts 2>/dev/null || missing+=("$entry")
+  done
+  if [ "${#missing[@]}" -eq 0 ]; then
+    ok "/etc/hosts already has all ${#HOSTNAMES[@]} entries"
+    return
+  fi
+  info "adding ${#missing[@]} missing /etc/hosts entries (needs sudo)..."
+  printf '127.0.0.1 %s\n' "${missing[@]}" | sudo tee -a /etc/hosts >/dev/null
+  ok "/etc/hosts updated"
+}
+
+wait_for() {
+  local url="$1"
+  for _ in $(seq 1 30); do
+    curl -sf "$url" >/dev/null 2>&1 && return 0
+    sleep 1
+  done
+  return 1
+}
+
+start_ai() {
+  info "starting kiyoo-ai..."
+  make lab-ai-up
+  wait_for "http://${AI_DOMAIN}:${AI_PORT}/" && ok "kiyoo-ai answering on :${AI_PORT}"
+}
+
+start_acmecorp() {
+  if curl -sf http://localhost:11434/ >/dev/null 2>&1; then
+    echo "   note: something (likely a native Ollama) already answers on :11434 —"
+    echo "   acmecorp's own ollama container will fail to bind that port. That's"
+    echo "   fine if the native one already serves what the lab needs; otherwise"
+    echo "   stop it first."
+  fi
+  info "starting kiyooo's own backing store (acmecorp needs it)..."
+  make dev
+  info "starting acmecorp..."
+  make lab-up
+}
+
+start_range() {
+  if [ -f "$RANGE_PID_FILE" ] && kill -0 "$(cat "$RANGE_PID_FILE")" 2>/dev/null; then
+    ok "kiyoo-range already running"
+    return
+  fi
+  if [ ! -x "$RANGE_PY" ]; then
+    echo "no venv at $RANGE_PY — run 'uv sync' at the repo root first." >&2
+    return 1
+  fi
+  info "starting kiyoo-range (:${RANGE_PORT})..."
+  nohup "$RANGE_PY" -m uvicorn app.main:app --app-dir labs/kiyoo-range \
+    --host 0.0.0.0 --port "$RANGE_PORT" >"$RANGE_LOG" 2>&1 &
+  echo $! > "$RANGE_PID_FILE"
+  if wait_for "http://localhost:${RANGE_PORT}/healthz"; then
+    ok "kiyoo-range answering on :${RANGE_PORT}"
+  else
+    echo "   kiyoo-range didn't come up on :${RANGE_PORT} — last lines of $RANGE_LOG:" >&2
+    tail -n 5 "$RANGE_LOG" >&2 2>/dev/null || true
+    rm -f "$RANGE_PID_FILE"
+    return 1
+  fi
+}
+
+cmd_start() {
+  local target="${1:-all}"
+  case "$target" in
+    ai|acmecorp|all)
+      if ! command -v docker >/dev/null 2>&1; then
+        echo "docker not found — start Docker Desktop (with WSL integration on) first." >&2
+        exit 1
+      fi
+      ;;
+  esac
+
+  ensure_hosts_entries
+
+  # A Docker lab failing (image pull hiccup, a port collision, whatever)
+  # must never block kiyoo-range below — it's the one piece that always
+  # works and costs nothing to start, so failures here are reported, not
+  # fatal.
+  case "$target" in
+    ai)       start_ai || echo "   kiyoo-ai failed to start — see the error above." ;;
+    acmecorp) start_acmecorp || echo "   acmecorp failed to start — see the error above." ;;
+    all)
+      start_ai || echo "   kiyoo-ai failed to start — see the error above."
+      start_acmecorp || echo "   acmecorp failed to start — see the error above."
+      ;;
+    range)    : ;;  # range starts below regardless
+    *) echo "usage: kiyoo-labs [ai|acmecorp|range|stop|status]"; exit 1 ;;
+  esac
+  echo
+  if start_range; then
+    ok "done — kiyoo-range is your one page for everything: http://localhost:${RANGE_PORT}/"
+    open_url "http://localhost:${RANGE_PORT}/"
+  else
+    echo "kiyoo-range failed to start — see the error above. Nothing to open." >&2
+    exit 1
+  fi
+}
+
+cmd_stop() {
+  make lab-ai-down || true
+  make lab-down || true
+  if [ -f "$RANGE_PID_FILE" ] && kill -0 "$(cat "$RANGE_PID_FILE")" 2>/dev/null; then
+    kill "$(cat "$RANGE_PID_FILE")" 2>/dev/null || true
+  fi
+  rm -f "$RANGE_PID_FILE"
+  ok "everything stopped. (kiyooo's own Postgres/Redis/MinIO still running — 'make down' to stop those too)"
+}
+
+cmd_status() {
+  echo "--- kiyoo-range ---"
+  if [ -f "$RANGE_PID_FILE" ] && kill -0 "$(cat "$RANGE_PID_FILE")" 2>/dev/null; then
+    ok "running (pid $(cat "$RANGE_PID_FILE"))"
+  else
+    echo "  not running"
+  fi
+  echo "--- kiyoo-ai ---"
+  docker compose -f labs/kiyoo-ai/docker-compose.yml ps
+  echo "--- acmecorp ---"
+  docker compose -f labs/acmecorp/docker-compose.yml ps
+}
+
+case "${1:-}" in
+  stop)   cmd_stop ;;
+  status) cmd_status ;;
+  ai|acmecorp|range|all|"") cmd_start "${1:-all}" ;;
+  *) echo "usage: kiyoo-labs [ai|acmecorp|range|stop|status]"; exit 1 ;;
+esac

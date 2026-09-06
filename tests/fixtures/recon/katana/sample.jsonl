@@ -1,0 +1,2 @@
+{"timestamp":"2026-08-06T12:00:00Z","request":{"method":"GET","endpoint":"https://www.example.com/about"},"response":{"status_code":200}}
+{"timestamp":"2026-08-06T12:00:01Z","request":{"method":"GET","endpoint":"https://www.example.com/contact"},"response":{"status_code":200}}

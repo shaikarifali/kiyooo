@@ -1,0 +1,46 @@
+id: exposed-devops-console
+name: DevOps console reachable from the internet
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - http_service
+
+detect:
+  all_of:
+    - internet_reachable: true
+  any_of:
+    - hostname_matches: "(?i)(^|[-.])(jenkins|argocd|argo|grafana|kibana|rancher|k8s-dashboard)([-.]|$)"
+    - http_body_matches: "(?i)(jenkins|argo cd|grafana|kibana|rancher|kubernetes dashboard)"
+
+suppress_if:
+  - has_control: sso_gateway
+
+evidence_required:
+  - http_response
+  - http_title
+
+triage_hints: >
+  A Jenkins, Argo CD, Grafana, Kibana, Rancher, or Kubernetes dashboard
+  reachable from the internet is a pivot point, not just a data leak — CI
+  consoles hold build credentials and deploy keys, and orchestration
+  dashboards often have direct cluster access. Escalate to critical if the
+  console responds without auth (combine with responds_without_auth in a
+  future revision); a login-gated instance is still worth tracking but far
+  lower urgency. Never attempt to log in, even with default credentials —
+  reachability plus fingerprint identification is the evidence bar.
+
+always_escalate: false
+escalation_threshold: 0.75
+
+route:
+  assign_to: appsec
+  cc: [data-platform]
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

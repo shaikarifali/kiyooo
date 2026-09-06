@@ -1,0 +1,25 @@
+# cloud_accounts.yaml — Stage 13. One entry per cloud account
+# Prowler should audit. Loaded via the CLI (`kiyooo cloud accounts add --name
+# <name> --config <this-file-per-account>`) or the API/UI — this file is a
+# worked example of one account's config, not a list consumed directly like
+# scope.yaml (each account is its own `ExternalFindingSource` row, same as an
+# ingest source).
+#
+# credential_ref is always `env:VAR_NAME` (invariant #6/#7) — never a raw
+# key/secret here or anywhere else in org-context.
+
+provider: aws # aws | azure | gcp | kubernetes
+
+# Free-form env-var map: Prowler and the underlying cloud SDK already read
+# their own standard variable names. Set whichever ones your account's auth
+# mode needs — this example uses a static access key pair; a profile-based
+# or role-assumption setup would set different variables (or none at all,
+# relying on `extra_args` below plus ambient instance/workload identity).
+credential_env:
+  AWS_ACCESS_KEY_ID: "env:PROD_AWS_ACCESS_KEY_ID"
+  AWS_SECRET_ACCESS_KEY: "env:PROD_AWS_SECRET_ACCESS_KEY"
+
+# Whatever extra Prowler CLI flags this account's auth mode needs
+# (--profile, --role-arn, --subscription-ids, --project-ids, ...). Empty is
+# fine when credential_env alone is sufficient.
+extra_args: []

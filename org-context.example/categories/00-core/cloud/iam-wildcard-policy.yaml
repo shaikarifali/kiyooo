@@ -1,0 +1,42 @@
+id: iam-wildcard-policy
+name: IAM policy grants wildcard action and/or resource access
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - cloud_resource
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: prowler }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  `Action: "*"` and/or `Resource: "*"` in an attached IAM policy is a
+  standing privilege-escalation risk, not a point-in-time exposure — severity
+  should not be downgraded just because nothing has been observed exploiting
+  it. Escalate to critical when the policy is attached to a role assumable
+  from outside the account (a cross-account trust policy, an OIDC federation
+  for CI/CD, or a role with an overly broad `sts:AssumeRole` principal) —
+  check the evidence's `raw_payload` for the attached principal/trust
+  relationship before setting final severity. A wildcard policy attached only
+  to a break-glass role with MFA and no automated assumption path is a
+  legitimate, lower-severity case; note that distinction rather than treating
+  every wildcard policy identically.
+
+always_escalate: false
+escalation_threshold: 0.8
+
+route:
+  assign_to: cloud-platform
+  cc: [appsec]
+  notify_channels: ["#cloud-platform", "#appsec-triage"]
+  sla_days:
+    critical: 2
+    high: 7
+    medium: 21
+    low: 30
+    info: 90

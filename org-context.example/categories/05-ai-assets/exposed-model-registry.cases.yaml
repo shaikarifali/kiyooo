@@ -1,0 +1,18 @@
+should_match:
+  - name: mlflow default port open
+    asset: { type: tcp_service, value: "10.0.0.9:5000" }
+    evidence:
+      - kind: port_banner
+        content: { port: 5000, protocol: tcp }
+  - name: mlflow banner in http response
+    asset: { type: http_service, value: "http://10.0.0.9:5000/" }
+    evidence:
+      - kind: http_response
+        content: { body: "MLflow Tracking UI" }
+
+should_not_match:
+  - name: ordinary web port open
+    asset: { type: tcp_service, value: "10.0.0.9:443" }
+    evidence:
+      - kind: port_banner
+        content: { port: 443, protocol: tcp }

@@ -1,0 +1,29 @@
+controls:
+  - id: cloudflare_waf
+    detect:
+      any_of:
+        - http_header_matches: { "cf-ray": ".+" }
+        - resolved_ip_in_asn: [13335]
+    mitigates: [sqli, xss, path-traversal, generic-web-cve]
+    action: reduce_severity
+    reduce_by: 1
+    never_applies_to: [rce, ssrf-to-metadata, exposed-secret, auth-bypass]
+    note: "WAF is bypassable. Reduces urgency, never removes the finding."
+
+  - id: sso_gateway
+    detect:
+      any_of:
+        - redirect_chain_matches: "(login\\.microsoftonline\\.com|okta\\.com|accounts\\.google\\.com)"
+        - http_header_matches: { "x-auth-request-user": ".+" }
+    mitigates: [exposed-admin-panel, exposed-nonprod-to-internet, unauth-api]
+    action: suppress
+    requires_human_confirm_once: true
+
+  - id: mtls_required
+    detect:
+      all_of:
+        - tls_handshake_requires_client_cert: true
+    mitigates: ["*"]
+    action: suppress
+
+never_suppress_severities: [critical]

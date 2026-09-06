@@ -1,0 +1,13 @@
+id: "001-exposed-mysql"
+category_id: exposed-database
+asset:
+  type: tcp_service
+  value: "203.0.113.10:3306"
+evidence:
+  - kind: port_banner
+    content: { port: 3306, protocol: tcp, banner: "5.7.31-MySQL Community Server" }
+human_verdict: true_positive
+human_severity: critical
+notes: >
+  Illustrative label only — hand-crafted for testing the eval harness
+  itself, not a genuine accuracy sample from a real scan.

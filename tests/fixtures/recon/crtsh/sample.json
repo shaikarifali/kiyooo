@@ -1,0 +1,24 @@
+[
+  {
+    "issuer_ca_id": 185752,
+    "issuer_name": "C=US, O=Let's Encrypt, CN=R3",
+    "common_name": "www.example.com",
+    "name_value": "www.example.com\napi.example.com",
+    "id": 10123456789,
+    "entry_timestamp": "2026-01-15T08:22:11.000",
+    "not_before": "2026-01-15T07:22:11",
+    "not_after": "2026-04-15T07:22:10",
+    "serial_number": "03a1b2c3d4e5f60718293a4b5c6d7e8f9021"
+  },
+  {
+    "issuer_ca_id": 185752,
+    "issuer_name": "C=US, O=Let's Encrypt, CN=R3",
+    "common_name": "*.example.com",
+    "name_value": "*.example.com",
+    "id": 10123456790,
+    "entry_timestamp": "2025-11-02T03:10:44.000",
+    "not_before": "2025-11-02T02:10:44",
+    "not_after": "2026-01-31T02:10:43",
+    "serial_number": "04b2c3d4e5f60718293a4b5c6d7e8f90210a1"
+  }
+]

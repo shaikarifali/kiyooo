@@ -1,0 +1,13 @@
+should_match:
+  - name: resource tagged as a Trivy ingest finding
+    asset: { type: k8s_workload, value: "default/Namespace/default" }
+    evidence:
+      - kind: cloud_config
+        content: { tags: { kiyooo.ingest_source: trivy } }
+
+should_not_match:
+  - name: resource with no ingest-source tag
+    asset: { type: k8s_workload, value: "default/Namespace/staging" }
+    evidence:
+      - kind: cloud_config
+        content: { tags: { environment: "prod" } }

@@ -1,0 +1,39 @@
+id: expired-cert
+name: TLS certificate expired or expiring soon
+version: 1
+enabled: true
+severity_base: medium
+
+applies_to:
+  - cert
+
+detect:
+  any_of:
+    - tls_cert_expires_within_days: 14
+
+evidence_required:
+  - tls_cert
+
+triage_hints: >
+  An expired or soon-to-expire certificate is a low-complexity, high-volume
+  finding — the same expiring cert is often shared across dozens of hosts
+  behind a load balancer, which is exactly what clustering (fingerprint
+  modulo asset) collapses into one finding to triage instead of one per
+  host. Severity scales with what the certificate protects: a
+  customer-facing login page is worse than an internal staging host nobody
+  uses. Already expired (not just expiring) should escalate faster than the
+  default SLA suggests — browsers already show a hard warning to users.
+
+always_escalate: false
+escalation_threshold: 0.6
+
+route:
+  assign_to: appsec
+  cc: []
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 3
+    high: 7
+    medium: 30
+    low: 60
+    info: 90

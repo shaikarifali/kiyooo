@@ -1,0 +1,13 @@
+should_match:
+  - name: bucket tagged public
+    asset: { type: cloud_resource, value: "s3://acmecorp-public-assets" }
+    evidence:
+      - kind: cloud_config
+        content: { tags: { public_access: "true" } }
+
+should_not_match:
+  - name: bucket tagged private
+    asset: { type: cloud_resource, value: "s3://acmecorp-private-backups" }
+    evidence:
+      - kind: cloud_config
+        content: { tags: { public_access: "false" } }

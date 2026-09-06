@@ -1,0 +1,13 @@
+should_match:
+  - name: dangling s3 bucket fingerprint
+    asset: { type: http_service, value: "https://old.acmecorp.example" }
+    evidence:
+      - kind: http_response
+        content: { body: "NoSuchBucket The specified bucket does not exist" }
+
+should_not_match:
+  - name: ordinary page, no fingerprint
+    asset: { type: http_service, value: "https://app.acmecorp.example" }
+    evidence:
+      - kind: http_response
+        content: { body: "Welcome to Acme Corp dashboard" }

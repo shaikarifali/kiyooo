@@ -1,0 +1,41 @@
+id: missing-network-policy
+name: Namespace has no NetworkPolicy restricting pod-to-pod traffic
+version: 1
+enabled: true
+finding_granularity: one_per_vendor_finding  # many distinct vendor findings can share this category+asset; see config.py
+severity_base: low
+
+applies_to:
+  - k8s_workload
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: trivy }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  A missing NetworkPolicy is low severity by itself — Kubernetes' default
+  allow-all pod networking is common and often an accepted risk, not an
+  oversight. It matters as context for other findings, not usually as a
+  standalone ticket: if this namespace also has a workload with a critical
+  CVE or a privileged container, the lack of network segmentation is what
+  turns "one compromised pod" into "lateral movement across the namespace."
+  Note that connection in the reasoning when it applies; don't route this
+  category to an SLA-tracked queue on its own unless the org's threat model
+  specifically calls for network segmentation as a control.
+
+always_escalate: false
+escalation_threshold: 0.5
+
+route:
+  assign_to: platform-eng
+  cc: []
+  notify_channels: ["#platform-eng"]
+  sla_days:
+    critical: 14
+    high: 30
+    medium: 60
+    low: 90
+    info: 180

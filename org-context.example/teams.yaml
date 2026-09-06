@@ -1,0 +1,30 @@
+teams:
+  - id: data-platform
+    slack: "#data-platform"
+    manager: alice@acmecorp.example
+    members:
+      - bob@acmecorp.example
+      - carol@acmecorp.example
+    owns:
+      cloud_accounts: ["prod-data", "stg-data"]
+      dns_patterns: ["*.analytics.acmecorp.example", "*-db.acmecorp.example"]
+      repos: ["acmecorp/data-*"]
+      cloud_tags:
+        Owner: data-platform
+    escalation_after_sla: alice@acmecorp.example
+    ticket_system: jira
+    jira_project: DATA
+
+  - id: appsec
+    slack: "#appsec-triage"
+    manager: dana@acmecorp.example
+    members:
+      - erin@acmecorp.example
+    owns:
+      cloud_accounts: []
+      dns_patterns: []
+      repos: []
+      cloud_tags: {}
+    escalation_after_sla: dana@acmecorp.example
+    ticket_system: jira
+    jira_project: SEC

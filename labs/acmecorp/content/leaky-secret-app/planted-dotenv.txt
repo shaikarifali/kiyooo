@@ -1,0 +1,10 @@
+# acmecorp demo lab — labs/acmecorp/README.md's planted `leaked-secret`
+# finding. This key is randomly generated for this lab only; it was never
+# a live credential and is not associated with any real Anthropic account.
+# Served at /.env by nginx-conf/leaky-secret-app.conf — named .txt here,
+# not .env, so it isn't caught by this repo's blanket ".env" gitignore
+# rule (that rule exists to stop a *real* secret from ever landing in git;
+# a demo fixture is exactly the kind of file that should still go through
+# an explicit, reviewable path rather than an exception to that rule).
+ANTHROPIC_API_KEY=sk-ant-api03-W1GtQCoug5WPJZNjgtGDP5WcW1GtQCoug5WPJZNjgtGDP5Wc
+DATABASE_URL=mysql://root:acmecorp-demo-only@mysql-exposed:3306/customers

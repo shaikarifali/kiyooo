@@ -1,0 +1,10 @@
+controls:
+  - id: test_waf
+    detect:
+      any_of:
+        - http_header_matches: { "x-test-waf": ".+" }
+    mitigates: [xss, sqli]
+    action: reduce_severity
+    reduce_by: 1
+
+never_suppress_severities: [critical]

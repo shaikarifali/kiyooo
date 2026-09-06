@@ -1,0 +1,50 @@
+# Example config for `kiyooo ingest sources add --config <this file>`
+# (or the same shape, as JSON, in the web UI's "Add a source" form / the
+# POST /api/ingest/sources request body).
+#
+# This is a generic REST/JSON connector — it doesn't know anything about
+# a specific vendor. You point it at the tool's list/export endpoint and
+# tell it where in each item's JSON the fields kiyooo needs live. No code
+# change, no redeploy.
+#
+# credential_ref never holds a raw key — it's a pointer to an env var the
+# API/CLI process already has set (invariant #6/#7). Set the real value
+# out-of-band, e.g. `export ASM_TOOL_API_KEY=...` before running
+# `kiyooo serve` / `kiyooo ingest sources sync`.
+
+base_url: https://asm-tool.example.com
+path: /api/v1/issues
+method: GET
+
+# auth_type: none | bearer | header | basic
+auth_type: header
+auth_header: X-Api-Key
+auth_value_template: "{credential}"
+credential_ref: "env:ASM_TOOL_API_KEY"
+
+# Dotted path to the list of items within the response body.
+# "" (or omit) if the response body IS the list.
+items_path: data.issues
+
+# Dotted paths, per item, into that vendor's JSON shape.
+field_mapping:
+  external_id: id
+  vendor_issue_type: issueType
+  title: title
+  vendor_severity: severity
+  asset_value: asset.hostname
+
+# Every item from this source is treated as this asset type. See
+# kiyooo/db/models.py::AssetType for the full list (domain, subdomain,
+# ip, url, http_service, cloud_resource, ...).
+default_asset_type: subdomain
+
+# Optional incremental sync — kiyooo automatically sends the last
+# successful sync's timestamp as this query param on the next sync.
+since_param: updated_since
+
+# Optional cursor-based pagination, capped at max_pages. Omit both if
+# the endpoint returns everything in one page.
+next_cursor_path: meta.next_cursor
+cursor_param: cursor
+max_pages: 20

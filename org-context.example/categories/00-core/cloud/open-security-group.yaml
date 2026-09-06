@@ -1,0 +1,43 @@
+id: open-security-group
+name: Security group / firewall rule allows ingress from the entire internet
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - cloud_resource
+
+# See public-object-storage.yaml's comment: this category is Stage 13
+# (Prowler)-ingest-only, so `detect` is a structural placeholder never
+# actually evaluated — Prowler already made the determination.
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: prowler }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  0.0.0.0/0 (or ::/0) ingress on a security group / NSG / firewall rule is
+  high severity independent of what's actually running behind it — the
+  finding is the rule, not a confirmed live service (that's a separate
+  `exposed-*` finding if one exists). Escalate to critical when the evidence's
+  `description`/`status_detail` names a sensitive management port (22, 3389,
+  5432, 3306, 6379, 27017, 9200) rather than an intentionally public one
+  (80, 443). A rule scoped to a load balancer's own security group as the
+  source, not 0.0.0.0/0, would not have triggered this check — trust
+  Prowler's own scoping here rather than re-deriving it.
+
+always_escalate: false
+escalation_threshold: 0.75
+
+route:
+  assign_to: cloud-platform
+  cc: [appsec]
+  notify_channels: ["#cloud-platform"]
+  sla_days:
+    critical: 1
+    high: 5
+    medium: 14
+    low: 30
+    info: 90

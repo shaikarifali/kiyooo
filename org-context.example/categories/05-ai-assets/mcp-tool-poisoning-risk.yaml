@@ -1,0 +1,45 @@
+id: mcp-tool-poisoning-risk
+name: MCP tool manifest contains instruction-level content aimed at an AI client
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - mcp_server
+  - ai_app
+
+detect:
+  any_of:
+    - evidence_injection_suspected: true
+
+evidence_required: []
+
+triage_hints: >
+  Tool *descriptions* in an MCP manifest enter a client's context window
+  with instruction-level authority — an attacker who controls a tool's
+  description (their own malicious MCP server, or a compromised legitimate
+  one) can embed hidden instructions that an AI client obeys as if the
+  operator wrote them ("tool poisoning"). This category reuses Stage
+  4.5's injection canary (`normalize/injection.py`) — the same detector
+  that scans HTTP response bodies for prompt-injection patterns — pointed
+  at whatever MCP tool-manifest evidence exists (only ever populated by an
+  external scanner import via `kiyooo ingest`; this tool never calls
+  `tools/list` itself). A flagged tool description is a real finding
+  regardless of whether the server otherwise looks legitimate — imperative
+  language, hidden-instruction markers, or terminal control sequences in a
+  tool's `description` field is not something a tool description should
+  ever need. Quote the specific flagged text in your reasoning.
+
+always_escalate: true
+escalation_threshold: 0.6
+
+route:
+  assign_to: appsec
+  cc: []
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 2
+    medium: 14
+    low: 30
+    info: 90

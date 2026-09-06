@@ -1,0 +1,107 @@
+# vendor_mapping.yaml — maps external tool issue types to our category ids.
+#
+# Every ImportedFinding's `vendor_issue_type` is looked up here. No entry means
+# the finding is stored as `mapping_status: unmapped` and surfaced via
+# `kiyooo ingest unmapped` — it is never silently dropped, and it never creates
+# a Finding row on its own. We ingest vendor findings; we do not inherit vendor
+# severity — the Finding's raw_severity always comes from the mapped
+# category's severity_base.
+#
+# vendor_issue_type must be unique across this file.
+
+mappings:
+  # Tenable.io plugin names
+  - vendor_issue_type: "MySQL Server Detection"
+    category_id: exposed-database
+  - vendor_issue_type: "PostgreSQL Detection"
+    category_id: exposed-database
+  - vendor_issue_type: "SSL Certificate Expiry"
+    category_id: expired-cert
+
+  # Mandiant Attack Surface Management issue types
+  - vendor_issue_type: "sql-db-exposed"
+    category_id: exposed-database
+  - vendor_issue_type: "exposed-admin-login"
+    category_id: exposed-admin-panel
+  - vendor_issue_type: "cloud-storage-bucket-exposed"
+    category_id: exposed-cloud-storage
+
+  # nuclei template ids (from the nuclei_jsonl importer)
+  - vendor_issue_type: "exposed-jenkins"
+    category_id: exposed-devops-console
+  - vendor_issue_type: "aws-s3-bucket-open"
+    category_id: exposed-cloud-storage
+  - vendor_issue_type: "cve-known-exploited"
+    category_id: known-exploited-cve
+
+  # Prowler (Stage 13 cloud posture) check ids. Prowler ships thousands of
+  # checks across AWS/Azure/GCP/Kubernetes — this starter set covers the
+  # highest-signal ones; run `prowler <provider> --list-checks` against your
+  # own account and add entries here as gaps show up in
+  # `kiyooo ingest unmapped` rather than trying to map every check id
+  # up front. Unmapped Prowler checks are visible, not silently dropped —
+  # same guarantee as every other ingest source.
+  - vendor_issue_type: "s3_bucket_public_access"
+    category_id: public-object-storage
+  - vendor_issue_type: "s3_bucket_public_list_acl"
+    category_id: public-object-storage
+  - vendor_issue_type: "s3_bucket_public_write_acl"
+    category_id: public-object-storage
+  - vendor_issue_type: "ec2_securitygroup_allow_ingress_from_internet_to_all_ports"
+    category_id: open-security-group
+  - vendor_issue_type: "ec2_securitygroup_allow_wide_open_public_ipv4"
+    category_id: open-security-group
+  - vendor_issue_type: "iam_policy_allows_privilege_escalation"
+    category_id: iam-wildcard-policy
+  - vendor_issue_type: "iam_no_custom_policy_permissive_role"
+    category_id: iam-wildcard-policy
+  - vendor_issue_type: "ebs_volume_encryption"
+    category_id: unencrypted-storage-at-rest
+  - vendor_issue_type: "rds_storage_encrypted"
+    category_id: unencrypted-storage-at-rest
+  - vendor_issue_type: "rds_instance_no_public_access"
+    category_id: public-database-instance
+  - vendor_issue_type: "ec2_instance_profile_attached_admin_policy"
+    category_id: overly-permissive-service-role
+
+  # Trivy (Stage 14 containers/k8s). "trivy-vulnerable-package" is a single
+  # constant covering every CVE Trivy reports — see
+  # ingest/adapters/trivy.py's module docstring for why per-CVE mapping
+  # doesn't scale the way Prowler's small check-id set does. The
+  # misconfiguration check ids below ARE a small, fixed set (Trivy's
+  # built-in Kubernetes Rego policies) — same starter-set caveat as
+  # Prowler's: verify against `trivy k8s --list-checks` and extend as gaps
+  # show up in `kiyooo ingest unmapped`.
+  - vendor_issue_type: "trivy-vulnerable-package"
+    category_id: vulnerable-base-image
+  - vendor_issue_type: "AVD-KSV-0011"
+    category_id: privileged-container
+  - vendor_issue_type: "AVD-KSV-0012"
+    category_id: root-container
+  - vendor_issue_type: "AVD-KSV-0110"
+    category_id: overly-permissive-clusterrolebinding
+  - vendor_issue_type: "AVD-KSV-0009"
+    category_id: missing-network-policy
+
+  # TruffleHog (Stage 15 source code / supply chain). One constant issue
+  # type for every verified secret — see
+  # ingest/adapters/trufflehog.py's module docstring: TruffleHog's
+  # own `--only-verified` flag already did the hard part (confirming the
+  # credential is live), so there's nothing left for our own category
+  # granularity to add per detector type (AWS/GitHub/Stripe/...); that
+  # detail lives in evidence for the LLM to reason about instead.
+  - vendor_issue_type: "trufflehog-verified-secret"
+    category_id: leaked-secret-in-repo
+
+  # Mobile static analysis (Stage 16). Fixed set — mobile_static.py's
+  # parser produces exactly these vendor_issue_type constants.
+  - vendor_issue_type: "mobile-exported-component-no-permission"
+    category_id: exported-component-no-permission
+  - vendor_issue_type: "mobile-cleartext-traffic-allowed"
+    category_id: cleartext-traffic-allowed
+  - vendor_issue_type: "mobile-outdated-target-sdk"
+    category_id: outdated-target-sdk
+  - vendor_issue_type: "mobile-hardcoded-secret"
+    category_id: hardcoded-api-key
+  - vendor_issue_type: "mobile-exposed-firebase-config"
+    category_id: exposed-firebase-config

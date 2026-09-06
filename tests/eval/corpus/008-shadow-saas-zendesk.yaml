@@ -1,0 +1,13 @@
+id: "008-shadow-saas-zendesk"
+category_id: shadow-saas-tenant
+asset:
+  type: http_service
+  value: "https://support.example.com"
+evidence:
+  - kind: http_response
+    content:
+      status_code: 200
+      body: "Need help? Powered by Zendesk"
+human_verdict: not_exploitable
+human_severity: low
+notes: "Illustrative label only. Sanctioned support tool, informational finding."

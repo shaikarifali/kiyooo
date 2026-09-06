@@ -1,0 +1,18 @@
+should_match:
+  - name: sqli-tagged nuclei template match
+    asset: { type: http_service, value: "https://app.example.com/" }
+    evidence:
+      - kind: nuclei_result
+        content: { template-id: "generic-sqli-error", info: { tags: ["sqli", "generic"] } }
+  - name: xss-tagged nuclei template match
+    asset: { type: http_service, value: "https://app.example.com/" }
+    evidence:
+      - kind: nuclei_result
+        content: { template-id: "reflected-xss", info: { tags: ["xss"] } }
+
+should_not_match:
+  - name: unrelated tech-detect template
+    asset: { type: http_service, value: "https://app.example.com/" }
+    evidence:
+      - kind: nuclei_result
+        content: { template-id: "tech-detect-nginx", info: { tags: ["tech"] } }

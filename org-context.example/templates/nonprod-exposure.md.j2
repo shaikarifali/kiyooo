@@ -1,0 +1,43 @@
+## What is exposed
+
+A non-production environment (**{{ category_name }}**, {{ severity | upper }}) is
+reachable from the public internet at `{{ asset_value }}` ({{ asset_type }}).
+
+{{ finding_description or finding_title }}
+
+## Why we believe this is real
+
+{{ reasoning }}
+
+Evidence: {% for c in citations %}`{{ c }}`{% if not loop.last %}, {% endif %}{% else %}none cited{% endfor %}
+
+## Why it matters here
+
+{{ business_impact_hypothesis }}
+
+Non-prod hosts routinely run with weaker auth, verbose errors, or seeded test
+data — internet exposure is a real risk even without a specific vulnerability.
+
+{% if ownership_note %}
+**Ownership note:** {{ ownership_note }}
+{% elif ownership_source %}
+Owner attribution source: {{ ownership_source }} (confidence {{ "%.2f" | format(ownership_confidence) }}).
+{% endif %}
+
+## What to do
+
+{{ remediation.get("summary", "Restrict this host to an internal network or put it behind the SSO gateway.") }}
+
+{% for step in remediation.get("steps", []) %}
+{{ loop.index }}. {{ step }}
+{% endfor %}
+
+SLA due: {{ sla_due_at }}
+
+## How to verify the fix
+
+{{ remediation.get("verification", "Confirm the host is no longer internet-reachable, or that it now requires SSO — re-scanning closes this automatically.") }}
+
+## Who to push back to
+
+If this is an intentional public demo/sandbox, reassign or comment `#appsec-triage` with the reason — don't just close it, since closing only marks it pending re-verification.

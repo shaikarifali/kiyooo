@@ -1,0 +1,48 @@
+id: exposed-admin-panel
+name: Admin panel reachable without authentication
+version: 1
+enabled: true
+severity_base: critical
+
+applies_to:
+  - http_service
+
+detect:
+  all_of:
+    - internet_reachable: true
+    - responds_without_auth: true
+  any_of:
+    - hostname_matches: "(?i)(^|[-.])(admin|manage|panel|console|cpanel|wp-admin)([-.]|$)"
+    - http_body_matches: "(?i)(admin login|administrator login|control panel|management console)"
+
+suppress_if:
+  - has_control: sso_gateway
+
+evidence_required:
+  - http_response
+  - http_title
+
+triage_hints: >
+  An admin interface that doesn't require a login is a critical finding
+  independent of what it manages — the exposure itself is the bug, not
+  whatever an attacker could do once inside. Confirm the page is genuinely
+  an admin surface (not a marketing page that happens to mention "admin",
+  or a login page that just looks unauthenticated because the redirect to
+  SSO hasn't fired yet in a screenshot) before escalating. An SSO gateway in
+  front of the host is a legitimate compensating control (see sso_gateway in
+  controls.yaml) and should suppress this finding once a human has confirmed
+  the gateway actually enforces auth on this specific path.
+
+always_escalate: true
+escalation_threshold: 0.85
+
+route:
+  assign_to: appsec
+  cc: [data-platform]
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

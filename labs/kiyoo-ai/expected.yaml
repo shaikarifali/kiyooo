@@ -1,0 +1,114 @@
+# Expected-findings matrix for the kiyoo-ai lab. This is
+# reference data describing what a full kiyooo scan + detect + triage run
+# against this lab *should* produce — written by hand against the actual
+# service responses in app/services/ (each entry below was checked against
+# a real request/response pair during the build, not guessed from the design doc
+# alone).
+#
+# NOT wired into a `kiyooo lab verify` command. A future iteration proposes one,
+# but building it means adding a subcommand to kiyooo/cli.py — the main
+# tool — which this lab build deliberately stays out of (see the project's
+# standing rule: lab/demo work only touches labs/, never kiyooo/cli.py or
+# web/). If you want that command, it's a small addition to the main CLI,
+# not to this lab — ask for it as its own change.
+#
+# Hostnames use KIYOO_LAB_DOMAIN (default kiyoo-ai.lab for local runs);
+# substitute the real domain for a public deployment.
+
+version: 1
+target: kiyoo-ai.lab
+
+expectations:
+  - id: exp-mcp-twin-a
+    asset: mcp-docs.kiyoo-ai.lab
+    category: exposed-mcp-server
+    expect_verdict: true_positive
+    expect_severity: medium
+    note: read-only tool catalog (search_docs, get_weather, list_faq)
+
+  - id: exp-mcp-twin-b
+    asset: mcp-ops.kiyoo-ai.lab
+    category: exposed-mcp-server
+    expect_verdict: true_positive
+    expect_severity: critical
+    note: query_customer_db + send_email + run_shell + read_file in one catalog
+
+  - id: exp-mcp-poisoned
+    asset: mcp-legacy.kiyoo-ai.lab
+    category: mcp-tool-poisoning-risk
+    expect_verdict: true_positive
+    note: >
+      only fires when the tools/list manifest is fed in via `kiyooo ingest`
+      — a live scan never calls tools/list itself. The verdict must NOT be
+      false_positive; if it ever is, that's a real injection-defence bug,
+      not a lab bug.
+
+  - id: exp-vector-chroma
+    asset: vectors.kiyoo-ai.lab
+    category: exposed-vector-store
+    expect_verdict: true_positive
+    note: body match on the literal Chroma heartbeat key
+
+  - id: exp-vector-qdrant
+    asset: qdrant.kiyoo-ai.lab
+    category: exposed-vector-store
+    expect_verdict: true_positive
+
+  - id: exp-model-registry
+    asset: mlflow.kiyoo-ai.lab
+    category: exposed-model-registry
+    expect_verdict: true_positive
+
+  - id: exp-unsafe-artifact
+    asset: models.kiyoo-ai.lab
+    category: unsafe-model-artifact
+    expect_verdict: true_positive
+    note: sentiment-v2.pkl in a directory listing; artifact is never fetched/parsed by kiyooo
+
+  - id: exp-chatbot-agency
+    asset: chat.kiyoo-ai.lab
+    category: public-chatbot-excessive-agency
+    expect_verdict: true_positive
+    expect_severity: medium
+
+  - id: exp-shadow-saas
+    asset: ai-portal.kiyoo-ai.lab
+    category: shadow-ai-saas-tenant
+    note: requires internet_reachable:true — only fires on the real public deployment, not localhost
+
+  - id: exp-leaked-key
+    asset: git.kiyoo-ai.lab
+    category: leaked-ai-api-key
+    expect_verdict: true_positive
+    expect_severity: critical
+    note: LABFAKE-marked key, correctly shaped, never a live credential (see PLANTED_SECRETS.md)
+
+  - id: exp-sso-fp
+    asset: portal.kiyoo-ai.lab
+    category: exposed-admin-panel
+    expect_verdict: false_positive
+    expect_control_credited: sso_gateway
+    note: 302s to sso.kiyoo-ai.lab before anything else fires
+
+  - id: exp-waf-reduction
+    asset: shop.kiyoo-ai.lab
+    category: generic-web-cve
+    expect_verdict: true_positive
+    expect_severity: medium
+    note: cf-ray header present; reduced, NOT suppressed
+
+  - id: exp-legacy-noise
+    asset: legacy.kiyoo-ai.lab
+    category: weak-tls-version
+    expect_verdict: not_exploitable
+    expect_severity: low
+    note: requires Caddy fronting this host with an actually-expired self-signed cert
+
+  - id: exp-synthetic-api
+    asset: api.kiyoo-ai.lab
+    category: exposed-admin-panel
+    note: obviously-synthetic user records (Faker-style, @example.com) should downgrade severity
+
+negative_expectations:
+  - asset_pattern: "n0*.kiyoo-ai.lab"
+    no_findings_above: info

@@ -1,0 +1,42 @@
+id: exposed-firebase-config
+name: Firebase Realtime Database URL embedded in a mobile app
+version: 1
+enabled: true
+finding_granularity: one_per_vendor_finding  # many distinct vendor findings can share this category+asset; see config.py
+severity_base: medium
+
+applies_to:
+  - mobile_app
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: mobile_static }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  This finding is static only — an embedded Firebase database URL, not a
+  confirmed-open database. Confirming actual read/write access would mean
+  an active HTTP request to Google's infrastructure, which this mobile
+  static-analysis stage deliberately does not make (invariants #1/#3:
+  passive by default). Route to Stage 6's scope-enforced active
+  verification (or a manual check) before treating this as confirmed —
+  many apps embed this URL with database rules that correctly require
+  authentication. Do not mark this critical purely from the URL's presence;
+  "the URL is exposed" and "the database is exposed" are different claims,
+  and only the first one is what this finding actually asserts.
+
+always_escalate: false
+escalation_threshold: 0.5
+
+route:
+  assign_to: mobile-eng
+  cc: [appsec]
+  notify_channels: ["#mobile-eng", "#appsec-triage"]
+  sla_days:
+    critical: 3
+    high: 7
+    medium: 21
+    low: 45
+    info: 90

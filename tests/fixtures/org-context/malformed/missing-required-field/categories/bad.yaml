@@ -1,0 +1,23 @@
+# Missing the required "name" field.
+id: missing-name-category
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - subdomain
+
+detect:
+  all_of:
+    - hostname_matches: "^test\\."
+
+triage_hints: "hints"
+
+route:
+  assign_to: appsec
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

@@ -1,0 +1,14 @@
+id: "004-unauth-api-healthcheck"
+category_id: unauth-api
+asset:
+  type: http_service
+  value: "https://api.example.com/healthz"
+evidence:
+  - kind: http_response
+    content:
+      status_code: 200
+      header: { "content-type": "application/json" }
+      body: "{\"status\":\"ok\",\"version\":\"3.2.1\"}"
+human_verdict: not_exploitable
+human_severity: low
+notes: "Illustrative label only. Public health-check endpoint, no sensitive data."

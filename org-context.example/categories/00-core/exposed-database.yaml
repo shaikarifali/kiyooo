@@ -1,0 +1,45 @@
+id: exposed-database
+name: Database service reachable from the internet
+version: 1
+enabled: true
+is_sensitive_target: true  # holds/grants access to data or credentials — Stage 17 attack-path endpoint
+severity_base: critical
+
+applies_to:
+  - tcp_service
+  - ip
+
+detect:
+  any_of:
+    - service_banner_matches: "(?i)(postgres|mysql|mongodb|redis|elasticsearch|memcached)"
+    - port_in: [5432, 3306, 27017, 6379, 9200, 11211]
+
+suppress_if:
+  - tls_handshake_requires_client_cert: true
+
+evidence_required:
+  - port_banner
+  - dns_record
+
+triage_hints: >
+  A database wire protocol answering on a routable IP is a critical finding
+  independent of authentication state — the exposure itself is the bug. Confirm
+  the port is actually the claimed service (not a honeypot or unrelated TCP
+  listener) via banner evidence before escalating. Do not attempt to authenticate
+  or query the database; reachability plus service identification is sufficient
+  evidence. If a control (e.g. mtls_required) is attached to the asset, note it in
+  the verdict but do not let it fully suppress a critical per never_suppress_severities.
+
+always_escalate: true
+escalation_threshold: 0.9
+
+route:
+  assign_to: data-platform
+  cc: [appsec]
+  notify_channels: ["#data-platform", "#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

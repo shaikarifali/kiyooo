@@ -1,0 +1,39 @@
+org_name: acmecorp
+
+# Passive-only until an org explicitly turns this on. Active scanning additionally
+# requires --active on the CLI (Stage 1) and this attestation.
+#
+# Turned on here because every host in scope below is a synthetic, self-owned
+# demo lab (labs/acmecorp/, labs/kiyoo-ai/) — first-party, localhost-only,
+# decoy-grade, never a real target. Most categories (anything that has to
+# read an HTTP/TLS response to fingerprint a service — which is most of
+# them) can't produce a finding at all in passive-only mode: httpx/tlsx are
+# active tools, and ScopeGuard denies them without this. Flip this back to
+# false before pointing org-context at anything that isn't your own lab.
+relationship: first_party
+active_scanning_enabled: true
+authorized_by: "self (demo lab — see comment above)"
+authorization_date: "2026-08-31"
+attestation: true
+
+domains:
+  - acmecorp.example
+wildcards:
+  - "*.acmecorp.example"
+  # Stage 12's demo lab (labs/acmecorp/) — fake hostnames, real localhost
+  # services, never a production entry. See labs/acmecorp/README.md.
+  - "*.acmecorp.lab"
+  # Stage 11b's AI attack-surface demo lab (labs/kiyoo-ai/) — same rule:
+  # fake hostnames, real localhost services. See labs/kiyoo-ai/README.md.
+  - "*.kiyoo-ai.lab"
+cidrs:
+  - 203.0.113.0/24
+  - 127.0.0.1/32
+asns: []
+cloud_accounts:
+  - prod-data
+  - stg-data
+
+# Always wins over everything above.
+exclude:
+  - status.acmecorp.example

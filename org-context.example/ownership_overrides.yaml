@@ -1,0 +1,5 @@
+overrides:
+  - asset_value: legacy-billing.acmecorp.example
+    owner_type: team
+    owner_ref: data-platform
+    note: "Predates ownership tagging; confirmed with data-platform 2026-01-15."

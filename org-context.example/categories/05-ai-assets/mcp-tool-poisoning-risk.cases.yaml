@@ -1,0 +1,15 @@
+should_match:
+  - name: tool manifest flagged by the injection canary
+    asset: { type: mcp_server, value: "mcp.internal.example.com:3001" }
+    evidence:
+      - kind: http_response
+        content: { body: "tool description with hidden instructions" }
+        injection_suspected: true
+
+should_not_match:
+  - name: clean tool manifest
+    asset: { type: mcp_server, value: "mcp.internal.example.com:3001" }
+    evidence:
+      - kind: http_response
+        content: { body: "{\"tools\": [{\"name\": \"search_docs\"}]}" }
+        injection_suspected: false

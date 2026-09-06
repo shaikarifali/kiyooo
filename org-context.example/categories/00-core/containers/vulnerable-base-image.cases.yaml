@@ -1,0 +1,13 @@
+should_match:
+  - name: resource tagged as a Trivy ingest finding
+    asset: { type: container_image, value: "registry.acmecorp.example/web-app:1.4.2" }
+    evidence:
+      - kind: cloud_config
+        content: { tags: { kiyooo.ingest_source: trivy } }
+
+should_not_match:
+  - name: resource with no ingest-source tag
+    asset: { type: container_image, value: "registry.acmecorp.example/web-app:1.4.3" }
+    evidence:
+      - kind: cloud_config
+        content: { tags: { environment: "prod" } }

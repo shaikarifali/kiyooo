@@ -1,0 +1,13 @@
+should_match:
+  - name: mysql port open
+    asset: { type: tcp_service, value: "10.0.0.5:3306" }
+    evidence:
+      - kind: port_banner
+        content: { port: 3306, protocol: tcp }
+
+should_not_match:
+  - name: ssh port open, not a database port
+    asset: { type: tcp_service, value: "10.0.0.5:22" }
+    evidence:
+      - kind: port_banner
+        content: { port: 22, protocol: tcp }

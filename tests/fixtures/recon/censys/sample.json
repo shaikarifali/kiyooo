@@ -1,0 +1,11 @@
+[
+  {
+    "result": {
+      "ip": "93.184.216.34",
+      "services": [
+        {"port": 443, "service_name": "HTTP", "transport_protocol": "TCP"},
+        {"port": 22, "service_name": "SSH", "transport_protocol": "TCP"}
+      ]
+    }
+  }
+]

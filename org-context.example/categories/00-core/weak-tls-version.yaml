@@ -1,0 +1,42 @@
+id: weak-tls-version
+name: Deprecated TLS protocol version negotiated
+version: 1
+enabled: true
+severity_base: medium
+
+applies_to:
+  - http_service
+  - tcp_service
+  - cert
+
+detect:
+  any_of:
+    - tls_protocol_version_in: ["SSLv3", "TLSv1.0", "TLSv1.1"]
+
+evidence_required:
+  - tls_cert
+
+triage_hints: >
+  TLS 1.0/1.1 and SSLv3 are deprecated (BEAST/POODLE-class weaknesses) but
+  the actual risk depends entirely on what's behind the listener. A
+  decommissioned host that nobody routes real traffic to and holds no
+  session/credential material is not exploitable/informational — check
+  `is_active` and how recently this asset changed before escalating.
+  A production host handling live sessions or credentials over a weak
+  protocol version is a real finding; the same protocol weakness on a
+  host nobody uses is not "nobody's problem" because the crypto is
+  outdated, it's nobody's problem because there's nothing to steal.
+
+always_escalate: false
+escalation_threshold: 0.5
+
+route:
+  assign_to: appsec
+  cc: []
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 7
+    high: 14
+    medium: 45
+    low: 90
+    info: 180

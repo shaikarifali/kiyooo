@@ -1,0 +1,55 @@
+id: exposed-mcp-server
+name: MCP server reachable without authentication
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - mcp_server
+  - http_service
+  - tcp_service
+
+detect:
+  any_of:
+    - http_body_matches: '"jsonrpc":\s*"2\.0"'
+    - http_header_matches: { "mcp-protocol-version": ".+" }
+    - port_in: [3001, 8090]
+
+evidence_required:
+  - http_response
+
+triage_hints: >
+  An MCP (Model Context Protocol) server does not require authentication by
+  design in most current deployments — roughly 40% of remote MCP servers
+  expose their tools with no authentication at all, and in manually verified
+  samples every unauthenticated server allowed reading its own tool listing.
+  This category detects reachability and protocol signature only; it never
+  calls `tools/call` or `initialize` itself (see verify/safety.py — that
+  boundary is hard-coded, not a config option). Severity is a function of
+  *what tools the server exposes*, not just reachability:
+    - No tool-catalog evidence available yet -> high (unauthenticated RPC
+      surface, unknown blast radius — treat as high until a tool listing
+      is available to reason about, never downgrade on absence of evidence).
+    - If evidence includes a `tools/list` response (e.g. from an external
+      scanner import via `kiyooo ingest`, never from this tool's own active
+      probing): read the tool names/descriptions. Read-only tools
+      (search, lookup, get_*) -> medium. Any tool with access to private
+      data AND external communication (query_db + send_email, write_file +
+      deploy, run_shell) -> critical — this is the "private data +
+      untrusted content + external channel" combination that makes
+      injection-driven exfiltration possible.
+  Cite the specific tool names in your reasoning when a catalog is present.
+
+always_escalate: true
+escalation_threshold: 0.7
+
+route:
+  assign_to: appsec
+  cc: [data-platform]
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

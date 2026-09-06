@@ -1,0 +1,47 @@
+id: unauth-api
+name: API endpoint reachable without authentication
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - http_service
+
+detect:
+  all_of:
+    - internet_reachable: true
+    - responds_without_auth: true
+  any_of:
+    - hostname_matches: "(?i)(^|[-.])api([-.]|$)"
+    - http_header_matches: { "content-type": "application/json" }
+
+suppress_if:
+  - has_control: sso_gateway
+
+evidence_required:
+  - http_response
+  - http_response_headers
+
+triage_hints: >
+  An API responding without a 401/403 and without a login redirect is not
+  automatically a vulnerability — plenty of APIs are intentionally public
+  (read-only status endpoints, public data feeds). Escalate based on what
+  the response actually contains: PII, internal identifiers, write
+  operations advertised in an OpenAPI/Swagger doc, or anything resembling
+  authenticated-only functionality served with no auth check. A generic
+  health-check or version endpoint with no sensitive data is not_exploitable,
+  not a false_positive — it's real, just not worth acting on.
+
+always_escalate: false
+escalation_threshold: 0.7
+
+route:
+  assign_to: appsec
+  cc: [data-platform]
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 7
+    medium: 21
+    low: 45
+    info: 90

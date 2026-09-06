@@ -1,0 +1,48 @@
+id: subdomain-takeover
+name: Dangling CNAME vulnerable to subdomain takeover
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - http_service
+
+detect:
+  all_of:
+    - internet_reachable: true
+  any_of:
+    - http_body_matches: "(?i)(no such bucket|there isn't a github pages site here|the specified bucket does not exist|domain mapping not found|trying to access your website|no such app)"
+
+evidence_required:
+  - dns_record
+  - http_response
+
+triage_hints: >
+  A hostname whose HTTP response carries a provider's "unclaimed resource"
+  fingerprint (an S3 bucket, a GitHub Pages site, a Heroku app, etc.) is a
+  takeover risk: a stranger who re-registers that resource would have the
+  org's own subdomain serve their content, including to any session/cookie
+  scoped to the parent domain. Verify the fingerprint string actually matches
+  the target provider's real "not found" page (providers change wording over
+  time) rather than a generic 404. Never attempt to actually register/claim
+  the dangling resource — that is an exploitation primitive and out of scope;
+  reachability plus fingerprint match is the evidence bar. This detects via
+  the response body alone (no DNS CNAME-chain history is available yet — see
+  `diff/rules.py`'s docstring on why `asset_edge` can't answer "did this
+  hostname's resolution change since last scan" precisely today), so it only
+  catches a dangling CNAME that is still live and responding, not one that
+  stopped resolving entirely.
+
+always_escalate: false
+escalation_threshold: 0.8
+
+route:
+  assign_to: appsec
+  cc: []
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 5
+    medium: 14
+    low: 30
+    info: 90

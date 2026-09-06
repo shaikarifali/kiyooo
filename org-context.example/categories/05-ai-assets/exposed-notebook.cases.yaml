@@ -1,0 +1,24 @@
+should_match:
+  - name: jupyter on default port with signature body
+    asset: { type: http_service, value: "http://10.0.0.9:8888/" }
+    evidence:
+      - kind: port_banner
+        content: { port: 8888, protocol: tcp }
+      - kind: http_response
+        content: { body: "Jupyter Notebook" }
+
+should_not_match:
+  - name: jupyter signature on a non-default port
+    asset: { type: http_service, value: "http://10.0.0.9:9999/" }
+    evidence:
+      - kind: port_banner
+        content: { port: 9999, protocol: tcp }
+      - kind: http_response
+        content: { body: "Jupyter Notebook" }
+  - name: default port open but not jupyter
+    asset: { type: http_service, value: "http://10.0.0.9:8888/" }
+    evidence:
+      - kind: port_banner
+        content: { port: 8888, protocol: tcp }
+      - kind: http_response
+        content: { body: "some other app" }

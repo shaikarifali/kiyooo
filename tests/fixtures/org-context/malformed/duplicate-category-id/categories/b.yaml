@@ -1,0 +1,23 @@
+id: dup-category
+name: Second definition, same id as a.yaml
+version: 1
+enabled: true
+severity_base: medium
+
+applies_to:
+  - subdomain
+
+detect:
+  all_of:
+    - hostname_matches: "^other\\."
+
+triage_hints: "hints"
+
+route:
+  assign_to: appsec
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

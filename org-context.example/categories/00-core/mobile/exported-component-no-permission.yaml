@@ -1,0 +1,41 @@
+id: exported-component-no-permission
+name: Android component exported with no permission required
+version: 1
+enabled: true
+finding_granularity: one_per_vendor_finding  # many distinct vendor findings can share this category+asset; see config.py
+severity_base: medium
+
+applies_to:
+  - mobile_app
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: mobile_static }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  An exported activity/service/receiver/provider with no `android:permission`
+  is reachable by any other app on the device via an implicit or explicit
+  intent — this is the finding, independent of what the component does.
+  Escalate based on `component_type` and what the evidence's component name
+  suggests it does: an exported `ContentProvider` handling user data is far
+  worse than an exported activity that just opens a help screen. A launcher
+  activity being exported is normal and expected, not a finding — check the
+  component name isn't the app's own main/launcher entry point before
+  treating this as meaningful.
+
+always_escalate: false
+escalation_threshold: 0.65
+
+route:
+  assign_to: mobile-eng
+  cc: [appsec]
+  notify_channels: ["#mobile-eng", "#appsec-triage"]
+  sla_days:
+    critical: 3
+    high: 14
+    medium: 30
+    low: 60
+    info: 90

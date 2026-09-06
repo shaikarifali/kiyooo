@@ -1,0 +1,26 @@
+# kiyooo scan --seeds labs/kiyoo-ai/seeds.txt — bare hostnames, kiyooo's
+# own recon adapters discover the rest from here. Requires labs/kiyoo-ai's
+# /etc/hosts entries (labs/kiyoo-ai/README.md, or just run `kiyoo-labs`,
+# which adds them for you) and "*.kiyoo-ai.lab" in scope.yaml.
+mcp-docs.kiyoo-ai.lab
+mcp-ops.kiyoo-ai.lab
+mcp-legacy.kiyoo-ai.lab
+llm.kiyoo-ai.lab
+chat.kiyoo-ai.lab
+vectors.kiyoo-ai.lab
+qdrant.kiyoo-ai.lab
+mlflow.kiyoo-ai.lab
+notebook.kiyoo-ai.lab
+models.kiyoo-ai.lab
+ai-portal.kiyoo-ai.lab
+internal-tools.kiyoo-ai.lab
+staging.kiyoo-ai.lab
+admin.kiyoo-ai.lab
+portal.kiyoo-ai.lab
+sso.kiyoo-ai.lab
+api.kiyoo-ai.lab
+git.kiyoo-ai.lab
+files.kiyoo-ai.lab
+shop.kiyoo-ai.lab
+legacy.kiyoo-ai.lab
+db.kiyoo-ai.lab

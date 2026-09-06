@@ -1,0 +1,42 @@
+id: overly-permissive-clusterrolebinding
+name: ClusterRoleBinding grants cluster-admin or wildcard permissions
+version: 1
+enabled: true
+finding_granularity: one_per_vendor_finding  # many distinct vendor findings can share this category+asset; see config.py
+severity_base: high
+
+applies_to:
+  - k8s_workload
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: trivy }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  A ClusterRoleBinding to `cluster-admin` (or a wildcard-verb/resource
+  ClusterRole) attached to a ServiceAccount used by a workload means any
+  pod running as that ServiceAccount can act as a cluster administrator.
+  Escalate to critical when the bound ServiceAccount belongs to a workload
+  that also accepts untrusted input (internet-facing, or processes
+  user-uploaded content) — the same blast-radius reasoning Stage 11b uses
+  for MCP tool catalogs applies here: the grant is the precondition, what
+  the workload is exposed to determines real severity. A binding scoped to
+  a genuinely cluster-wide operator (a CI/CD controller, a monitoring
+  agent) with no external input path is a real finding but lower urgency.
+
+always_escalate: false
+escalation_threshold: 0.8
+
+route:
+  assign_to: platform-eng
+  cc: [appsec]
+  notify_channels: ["#platform-eng", "#appsec-triage"]
+  sla_days:
+    critical: 2
+    high: 7
+    medium: 21
+    low: 30
+    info: 90

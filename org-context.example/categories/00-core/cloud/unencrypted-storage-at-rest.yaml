@@ -1,0 +1,39 @@
+id: unencrypted-storage-at-rest
+name: Storage resource has no encryption at rest configured
+version: 1
+enabled: true
+severity_base: medium
+
+applies_to:
+  - cloud_resource
+
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: prowler }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  Missing encryption at rest (an unencrypted EBS volume, RDS instance, or
+  storage account) is medium on its own — it's a defense-in-depth gap, not an
+  active exposure. It escalates sharply in combination with another finding
+  on the same resource: if this same asset also has `public-object-storage`
+  or `public-database-instance` open, the two together mean data is not just
+  reachable but also unprotected if the underlying disks/snapshots are ever
+  exfiltrated or a snapshot is shared incorrectly. Check for a co-occurring
+  exposure finding on the same asset before finalizing severity.
+
+always_escalate: false
+escalation_threshold: 0.6
+
+route:
+  assign_to: cloud-platform
+  cc: []
+  notify_channels: ["#cloud-platform"]
+  sla_days:
+    critical: 7
+    high: 14
+    medium: 30
+    low: 60
+    info: 90

@@ -1,0 +1,44 @@
+id: exposed-cloud-storage
+name: Cloud storage resource tagged publicly accessible
+version: 1
+enabled: true
+is_sensitive_target: true  # holds/grants access to data or credentials — Stage 17 attack-path endpoint
+severity_base: critical
+
+applies_to:
+  - cloud_resource
+
+detect:
+  all_of:
+    - cloud_tag_equals: { "public_access": "true" }
+
+evidence_required:
+  - cloud_config
+
+triage_hints: >
+  A storage resource (S3 bucket, GCS bucket, Azure blob container) tagged
+  or configured as publicly accessible is critical if it contains anything
+  beyond static site assets — confirm what's actually in it before treating
+  this as noise. A bucket serving a public marketing site's images is
+  expected; a bucket with the same public setting holding backups, database
+  dumps, or customer exports is a different severity entirely even though
+  the misconfiguration is identical. Do not enumerate or download bucket
+  contents beyond what's needed to confirm the resource type — listing is
+  reconnaissance, bulk downloading customer data is not.
+
+always_escalate: true
+escalation_threshold: 0.85
+# Bucket/object listings can hint at what customer data is inside — send
+# tags and config to a hosted provider, not response bodies.
+redaction_profile: headers_only
+
+route:
+  assign_to: data-platform
+  cc: [appsec]
+  notify_channels: ["#data-platform", "#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

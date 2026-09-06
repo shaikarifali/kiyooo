@@ -1,0 +1,44 @@
+id: exposed-vector-store
+name: Vector database reachable without authentication
+version: 1
+enabled: true
+severity_base: critical
+
+applies_to:
+  - vector_db
+  - tcp_service
+  - http_service
+
+detect:
+  any_of:
+    - port_in: [6333, 19530]
+    - http_body_matches: '(?i)("nanosecond heartbeat"|"title":\s*"qdrant|weaviate)'
+
+evidence_required:
+  - port_banner
+
+triage_hints: >
+  An unauthenticated Chroma, Qdrant, Weaviate, or Milvus instance is a
+  direct path to whatever it indexes — commonly a RAG pipeline's source
+  documents, which for a customer-support or internal-knowledge bot means
+  the underlying knowledge base is downloadable. Detect absent auth and
+  collection metadata (collection names, counts, dimensionality) only — do
+  not retrieve embeddings or documents to "prove" the exposure; listing
+  collections is reconnaissance, pulling vectors or documents out is not
+  and this tool never does it. Severity should scale with what the
+  collection names imply (a collection named `internal-docs` or
+  `customer-support-kb` is worse than one named `demo` or `test`).
+
+always_escalate: true
+escalation_threshold: 0.8
+
+route:
+  assign_to: data-platform
+  cc: [appsec]
+  notify_channels: ["#data-platform", "#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

@@ -1,0 +1,44 @@
+id: shadow-saas-tenant
+name: Org subdomain fronting an unsanctioned SaaS tenant
+version: 1
+enabled: true
+severity_base: low
+
+applies_to:
+  - http_service
+
+detect:
+  all_of:
+    - internet_reachable: true
+  any_of:
+    - http_header_matches: { "server": "(?i)(zendesk|shopify|squarespace)" }
+    - http_body_matches: "(?i)(powered by zendesk|powered by intercom|this notion page|powered by squarespace|powered by webflow)"
+
+evidence_required:
+  - http_response
+  - http_response_headers
+
+triage_hints: >
+  A subdomain fronting a third-party SaaS platform's branding is a
+  visibility finding, not necessarily a vulnerability — most of these are
+  legitimate, sanctioned tools. The value is surfacing tenants IT doesn't
+  know exist: a marketing team's Webflow site, a support team's Zendesk
+  instance, spun up without going through procurement. Escalate only if the
+  tenant appears to hold sensitive data (a helpdesk with customer PII, a
+  Notion workspace with internal docs) rather than treating every SaaS
+  fingerprint match as actionable — most of these should close as
+  not_exploitable/informational once ownership confirms it's sanctioned.
+
+always_escalate: false
+escalation_threshold: 0.5
+
+route:
+  assign_to: appsec
+  cc: []
+  notify_channels: ["#appsec-triage"]
+  sla_days:
+    critical: 7
+    high: 14
+    medium: 30
+    low: 90
+    info: 180

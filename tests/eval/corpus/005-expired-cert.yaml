@@ -1,0 +1,14 @@
+id: "005-expired-cert"
+category_id: expired-cert
+asset:
+  type: cert
+  value: "legacy.example.com:443"
+evidence:
+  - kind: tls_cert
+    content:
+      subject_cn: "legacy.example.com"
+      not_after: "2025-01-01T00:00:00Z"
+      serial_number: "AB12CD34"
+human_verdict: true_positive
+human_severity: medium
+notes: "Illustrative label only. Cert already expired at scan time."

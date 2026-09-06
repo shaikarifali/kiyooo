@@ -1,0 +1,2 @@
+{"url":"https://www.example.com","status_code":200,"title":"Example Domain","webserver":"ECAcc (nyd/D179)","tech":["Varnish"],"content_length":1256,"host":"93.184.216.34"}
+{"url":"https://api.example.com","status_code":301,"title":"","webserver":"nginx","tech":["nginx"],"content_length":0,"host":"93.184.216.35"}

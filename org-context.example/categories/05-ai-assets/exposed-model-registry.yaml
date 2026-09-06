@@ -1,0 +1,41 @@
+id: exposed-model-registry
+name: Model registry / MLOps dashboard reachable without authentication
+version: 1
+enabled: true
+severity_base: high
+
+applies_to:
+  - model_registry
+  - http_service
+
+detect:
+  any_of:
+    - port_in: [5000]
+    - http_body_matches: "(?i)(mlflow|kubeflow)"
+
+evidence_required:
+  - http_response
+
+triage_hints: >
+  An unauthenticated MLflow/Kubeflow/W&B instance exposes model artifacts,
+  training run metadata (which can leak hyperparameters and, in logged
+  params/tags, credentials or dataset paths), and sometimes a registry
+  that can be used to promote a model to production. Confirm reachability
+  and that it's genuinely unauthenticated (some deployments front MLflow
+  with an SSO proxy that only shows on the actual UI, not every API path)
+  before escalating. Do not download model artifacts or trigger any run —
+  reachability plus the unauthenticated API surface is the evidence bar.
+
+always_escalate: false
+escalation_threshold: 0.7
+
+route:
+  assign_to: data-platform
+  cc: [appsec]
+  notify_channels: ["#data-platform", "#appsec-triage"]
+  sla_days:
+    critical: 3
+    high: 7
+    medium: 21
+    low: 45
+    info: 90

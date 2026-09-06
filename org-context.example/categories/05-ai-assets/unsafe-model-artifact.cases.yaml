@@ -1,0 +1,18 @@
+should_match:
+  - name: pickle checkpoint referenced in a directory listing
+    asset: { type: http_service, value: "http://10.0.0.9/models/" }
+    evidence:
+      - kind: http_response
+        content: { body: "<a href=\"model.pkl\">model.pkl</a>" }
+  - name: pytorch checkpoint referenced
+    asset: { type: http_service, value: "http://10.0.0.9/models/" }
+    evidence:
+      - kind: http_response
+        content: { body: "<a href=\"checkpoint.pt\">checkpoint.pt</a>" }
+
+should_not_match:
+  - name: safetensors format is not a finding
+    asset: { type: http_service, value: "http://10.0.0.9/models/" }
+    evidence:
+      - kind: http_response
+        content: { body: "<a href=\"model.safetensors\">model.safetensors</a>" }

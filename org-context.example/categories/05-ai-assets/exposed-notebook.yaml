@@ -1,0 +1,44 @@
+id: exposed-notebook
+name: Jupyter notebook server reachable without a token
+version: 1
+enabled: true
+severity_base: critical
+
+applies_to:
+  - notebook
+  - http_service
+
+detect:
+  all_of:
+    - port_in: [8888]
+  any_of:
+    - http_body_matches: "(?i)jupyter"
+
+evidence_required:
+  - http_response
+
+triage_hints: >
+  A Jupyter/JupyterHub instance with a live kernel is remote code
+  execution by design for whoever can reach it — this is not a
+  "misconfiguration that might leak data," it is an interactive shell.
+  Check whether the response indicates token-based auth is required
+  (a login/token prompt) versus a bare notebook listing or an already-open
+  kernel session — the latter is critical regardless of what's in the
+  visible notebooks, since a reachable kernel means arbitrary code
+  execution is one cell away. Never execute a cell or open a kernel
+  session yourself to confirm; the response shape (login prompt vs.
+  notebook tree/running kernel list) is sufficient evidence.
+
+always_escalate: true
+escalation_threshold: 0.6
+
+route:
+  assign_to: data-platform
+  cc: [appsec]
+  notify_channels: ["#data-platform", "#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 1
+    medium: 7
+    low: 30
+    info: 90

@@ -1,0 +1,23 @@
+should_match:
+  - name: jsonrpc 2.0 body signature
+    asset: { type: http_service, value: "http://10.0.0.9:3001/" }
+    evidence:
+      - kind: http_response
+        content: { body: "{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -32600}}" }
+  - name: mcp protocol version header
+    asset: { type: http_service, value: "http://10.0.0.9:8090/" }
+    evidence:
+      - kind: http_response
+        content: { header: { "mcp-protocol-version": "2025-06-18" } }
+  - name: default mcp port open
+    asset: { type: tcp_service, value: "10.0.0.9:3001" }
+    evidence:
+      - kind: port_banner
+        content: { port: 3001, protocol: tcp }
+
+should_not_match:
+  - name: ordinary rest api response
+    asset: { type: http_service, value: "http://10.0.0.9:8080/" }
+    evidence:
+      - kind: http_response
+        content: { body: "{\"status\": \"ok\"}" }

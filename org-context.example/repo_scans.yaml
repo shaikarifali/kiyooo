@@ -1,0 +1,22 @@
+# repo_scans.yaml — Stage 15. One entry per repo TruffleHog
+# should scan for verified live secrets. Loaded via the CLI (`kiyooo repos
+# scans add --name <name> --config <this-file-per-repo>`) or the API/UI —
+# this file is a worked example of one repo's config, same
+# per-entry-is-its-own-source pattern as `cloud_accounts.yaml`/
+# `container_scans.yaml`.
+#
+# There is deliberately no "enumerate every repo in this GitHub org"
+# connector in v1 — that needs a different API shape per git host
+# (GitHub/GitLab/Gitea/Forgejo all paginate differently), and the org
+# already knows which repos matter. List them explicitly here; broader
+# auto-discovery is a natural follow-up once this MVP earns its keep.
+
+# Public repo — no credential needed.
+repo_url: "https://github.com/acmecorp/public-docs.git"
+extra_args: []
+
+# Private repo — credential_ref resolves into the {credential} placeholder
+# at run time. Never a raw token in this file.
+# repo_url: "https://{credential}@github.com/acmecorp/internal-api.git"
+# credential_ref: "env:GITHUB_REPO_SCAN_TOKEN"
+# extra_args: []

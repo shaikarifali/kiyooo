@@ -1,0 +1,16 @@
+id: "002-admin-panel-behind-sso"
+category_id: exposed-admin-panel
+asset:
+  type: http_service
+  value: "https://admin.example.com"
+evidence:
+  - kind: http_response
+    content:
+      status_code: 302
+      title: "Redirecting to login.microsoftonline.com"
+      header: { location: "https://login.microsoftonline.com/oauth2/authorize" }
+human_verdict: false_positive
+human_severity: info
+notes: >
+  Illustrative label only. SSO-gated despite matching the admin hostname
+  pattern — should not be a true positive.

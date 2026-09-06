@@ -1,0 +1,46 @@
+id: privileged-container
+name: Container runs in privileged mode
+version: 1
+enabled: true
+finding_granularity: one_per_vendor_finding  # many distinct vendor findings can share this category+asset; see config.py
+severity_base: critical
+
+applies_to:
+  - k8s_workload
+  - container_image
+
+# This category's findings arrive exclusively via Stage 14's
+# Trivy ingest path (`ingest/pipeline.py::ingest_finding`), which never
+# calls `detect/engine.py` — Trivy's own misconfig scanner already made the
+# determination. This `detect` block is a structural placeholder to satisfy
+# `CategoryDefinition`'s schema, same pattern as Stage 13's cloud categories.
+detect:
+  any_of:
+    - cloud_tag_equals: { kiyooo.ingest_source: trivy }
+
+evidence_required:
+  - external_finding
+
+triage_hints: >
+  A privileged container has no meaningful isolation from the host — it can
+  access host devices, adjust kernel parameters, and in most configurations
+  break out to the node entirely. This is critical regardless of what the
+  container actually runs; do not downgrade based on the workload's stated
+  purpose. Escalate further if the evidence's `k8s_resource` shows this
+  workload is internet-facing (paired with an ingress/LoadBalancer service on
+  the same namespace) — privileged plus internet-reachable is the worst
+  practical combination this category can represent.
+
+always_escalate: true
+escalation_threshold: 0.9
+
+route:
+  assign_to: platform-eng
+  cc: [appsec]
+  notify_channels: ["#platform-eng", "#appsec-triage"]
+  sla_days:
+    critical: 1
+    high: 3
+    medium: 14
+    low: 30
+    info: 90

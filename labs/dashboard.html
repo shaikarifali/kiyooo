@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>kiyoo labs</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 900px; margin: 2em auto; padding: 0 1em; color: #1a1a1a; }
+  h1 { margin-bottom: 0.2em; }
+  .sub { color: #666; margin-top: 0; }
+  h2 { border-bottom: 2px solid #ddd; padding-bottom: 0.3em; margin-top: 2em; }
+  .lab-note { color: #555; font-size: 0.95em; }
+  table { border-collapse: collapse; width: 100%; margin-top: 0.5em; }
+  td, th { text-align: left; padding: 0.4em 0.6em; border-bottom: 1px solid #eee; }
+  th { color: #888; font-weight: 600; font-size: 0.85em; text-transform: uppercase; }
+  a { color: #2563eb; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code { background: #f4f4f4; padding: 0.1em 0.4em; border-radius: 3px; }
+  .cmd { background: #1a1a1a; color: #d4d4d4; padding: 1em; border-radius: 6px; font-family: monospace; white-space: pre; overflow-x: auto; }
+  .note { background: #fff8e1; border-left: 4px solid #f5c518; padding: 0.8em 1em; margin: 1em 0; }
+</style>
+</head>
+<body>
+
+<h1>kiyoo labs</h1>
+<p class="sub">Everything built for the <code>kiyooo</code> project, one page. Regenerate/reopen this with <code>kiyoo-labs</code>.</p>
+
+<div class="note">
+Not everything below is running right now — this page is a static index of
+every URL either lab can serve, not a live status check (these are separate
+apps on separate origins; a browser can't poll them from this page without
+each one sending CORS headers, which none of them do on purpose). Start
+what you need with <code>kiyoo-labs</code>.
+</div>
+
+<h2>kiyoo-ai — AI attack-surface lab</h2>
+<p class="lab-note">Start: <code>kiyoo-labs ai</code> (or <code>kiyoo-labs</code> for both). Folder: <code>labs/kiyoo-ai/</code>.</p>
+<table>
+<tr><th>Service</th><th>URL</th><th>What</th></tr>
+<tr><td>landing</td><td><a href="http://kiyoo-ai.lab:8000/">kiyoo-ai.lab:8000</a></td><td>lab index</td></tr>
+<tr><td>mcp-docs</td><td><a href="http://mcp-docs.kiyoo-ai.lab:8000/">mcp-docs.kiyoo-ai.lab:8000</a></td><td>harmless MCP twin — click tools/list</td></tr>
+<tr><td>mcp-ops</td><td><a href="http://mcp-ops.kiyoo-ai.lab:8000/">mcp-ops.kiyoo-ai.lab:8000</a></td><td>dangerous MCP twin (run_shell, send_email, ...)</td></tr>
+<tr><td>mcp-legacy</td><td><a href="http://mcp-legacy.kiyoo-ai.lab:8000/">mcp-legacy.kiyoo-ai.lab:8000</a></td><td>poisoned tool description — click tools/list</td></tr>
+<tr><td>internal-tools</td><td><a href="http://internal-tools.kiyoo-ai.lab:8000/">internal-tools.kiyoo-ai.lab:8000</a></td><td>drift scenario (403 until <code>scenarios/dev-exposes-prod.sh</code> runs)</td></tr>
+<tr><td>llm</td><td><a href="http://llm.kiyoo-ai.lab:8000/">llm.kiyoo-ai.lab:8000</a></td><td>Ollama-shaped inference endpoint</td></tr>
+<tr><td>chat</td><td><a href="http://chat.kiyoo-ai.lab:8000/">chat.kiyoo-ai.lab:8000</a></td><td>public chatbot claiming tool access</td></tr>
+<tr><td>vectors</td><td><a href="http://vectors.kiyoo-ai.lab:8000/api/v1/collections">vectors.kiyoo-ai.lab:8000/api/v1/collections</a></td><td>Chroma-shaped vector store</td></tr>
+<tr><td>qdrant</td><td><a href="http://qdrant.kiyoo-ai.lab:8000/collections">qdrant.kiyoo-ai.lab:8000/collections</a></td><td>Qdrant-shaped vector store</td></tr>
+<tr><td>mlflow</td><td><a href="http://mlflow.kiyoo-ai.lab:8000/api/2.0/mlflow/experiments/list">mlflow.kiyoo-ai.lab:8000/.../experiments/list</a></td><td>model registry — experiment names</td></tr>
+<tr><td>notebook</td><td><a href="http://notebook.kiyoo-ai.lab:8000/">notebook.kiyoo-ai.lab:8000</a></td><td>Jupyter-shaped, no token, no kernel</td></tr>
+<tr><td>models</td><td><a href="http://models.kiyoo-ai.lab:8000/">models.kiyoo-ai.lab:8000</a></td><td>directory listing with a fake .pkl</td></tr>
+<tr><td>ai-portal</td><td><a href="http://ai-portal.kiyoo-ai.lab:8000/">ai-portal.kiyoo-ai.lab:8000</a></td><td>shadow AI SaaS tenant</td></tr>
+<tr><td>staging</td><td><a href="http://staging.kiyoo-ai.lab:8000/">staging.kiyoo-ai.lab:8000</a></td><td>nonprod leaking to what looks like prod</td></tr>
+<tr><td>admin</td><td><a href="http://admin.kiyoo-ai.lab:8000/">admin.kiyoo-ai.lab:8000</a></td><td>unauth'd admin login</td></tr>
+<tr><td>portal</td><td><a href="http://portal.kiyoo-ai.lab:8000/">portal.kiyoo-ai.lab:8000</a></td><td>redirects to SSO — false-positive case</td></tr>
+<tr><td>api</td><td><a href="http://api.kiyoo-ai.lab:8000/v1/users">api.kiyoo-ai.lab:8000/v1/users</a></td><td>synthetic user records</td></tr>
+<tr><td>git</td><td><a href="http://git.kiyoo-ai.lab:8000/.env">git.kiyoo-ai.lab:8000/.env</a></td><td>leaked fake AI API keys</td></tr>
+<tr><td>files</td><td><a href="http://files.kiyoo-ai.lab:8000/">files.kiyoo-ai.lab:8000</a></td><td>open bucket-style listing</td></tr>
+<tr><td>shop</td><td><a href="http://shop.kiyoo-ai.lab:8000/">shop.kiyoo-ai.lab:8000</a></td><td>WAF-fronted app</td></tr>
+<tr><td>legacy</td><td><a href="http://legacy.kiyoo-ai.lab:8000/">legacy.kiyoo-ai.lab:8000</a></td><td>expired-cert host</td></tr>
+<tr><td>noise (x10)</td><td><a href="http://n001.kiyoo-ai.lab:8000/">n001</a>...<a href="http://n010.kiyoo-ai.lab:8000/">n010</a>.kiyoo-ai.lab:8000</td><td>healthy, zero findings expected</td></tr>
+<tr><td>db</td><td>kiyoo-ai.lab:3306</td><td>MySQL handshake decoy (TCP, not browsable)</td></tr>
+</table>
+
+<h2>acmecorp — conventional attack-surface lab</h2>
+<p class="lab-note">Start: <code>kiyoo-labs acmecorp</code> (or <code>kiyoo-labs</code> for both) — needs kiyooo's own <code>make dev</code> stack too, the launcher handles that. Folder: <code>labs/acmecorp/</code>.</p>
+<table>
+<tr><th>Service</th><th>URL</th><th>What</th></tr>
+<tr><td>staging-app</td><td><a href="http://staging.acmecorp.lab:8081/">staging.acmecorp.lab:8081</a></td><td>nonprod, debug header, fake customer data</td></tr>
+<tr><td>leaky-secret-app</td><td><a href="http://leak.acmecorp.lab:8082/">leak.acmecorp.lab:8082</a></td><td>leaked .env, redaction demo</td></tr>
+<tr><td>sso-admin-panel</td><td><a href="http://admin.acmecorp.lab:8083/">admin.acmecorp.lab:8083</a></td><td>admin panel behind mock SSO — false-positive case</td></tr>
+<tr><td>waf-app</td><td><a href="http://waf.acmecorp.lab:8084/">waf.acmecorp.lab:8084</a></td><td>behind a WAF-shaped header</td></tr>
+<tr><td>expired-cert-app</td><td><a href="https://app01.acmecorp.lab:8443/">app01.acmecorp.lab:8443</a> (+ app02...app40)</td><td>expired self-signed cert — your browser will warn, that's the point; 40 vhosts share one cert (clustering demo)</td></tr>
+<tr><td>ollama</td><td><a href="http://localhost:11434/">localhost:11434</a></td><td>real Ollama, no model pulled — reachability is the finding</td></tr>
+<tr><td>minio-public</td><td><a href="http://localhost:9501/">localhost:9501</a> (console)</td><td>public bucket holding a planted invoice.pdf</td></tr>
+<tr><td>mysql-exposed</td><td>acmecorp.lab:3306 (any of the vhosts resolve here)</td><td>MySQL, default creds (TCP, not browsable)</td></tr>
+</table>
+
+<h2>commands</h2>
+<div class="cmd">kiyoo-labs            # start both labs + hosts entries, reopen this page
+kiyoo-labs ai          # start only kiyoo-ai
+kiyoo-labs acmecorp    # start only acmecorp
+kiyoo-labs stop        # stop both
+kiyoo-labs status      # show container status for both</div>
+
+</body>
+</html>
