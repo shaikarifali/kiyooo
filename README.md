@@ -226,9 +226,36 @@ uv run kiyooo doctor
 `org-context.example/` (or whatever `KIYOOO_ORG_CONTEXT_PATH` points at) parses and
 validates cleanly. A malformed category fails the check — it never silently skips.
 
+### Scope → scan → triage → route, start to ticket
+
+The same walkthrough `CLI.md` §11 gives, so it's visible without a second click:
+
+```bash
+kiyooo org create acme --name "Acme Corporation" --created-by you@acme.example
+kiyooo seed add --org acme --domain acme.example --added-by you@acme.example
+kiyooo seed add --org acme --wildcard "*.acme.example" --added-by you@acme.example
+
+echo acme.example > seeds.txt
+kiyooo scan --seeds seeds.txt --org acme --profile standard
+# -> prints a scan_run_id, call it $RUN
+
+kiyooo detect --scan-run $RUN     # category + control predicates, no LLM call
+kiyooo triage --scan-run $RUN     # LLM adjudication over every NEW finding
+kiyooo route run --scan-run $RUN  # resolves owner+SLA, drafts/files per autonomy level
+
+kiyooo route approvals list       # see what's drafted before anything sends
+kiyooo route approvals send <approval-id> --reviewer you@acme.example   # a human actually sends it
+```
+
+Or skip the terminal for steps 3-4: `kiyooo review <finding-id> --verdict true_positive
+--rationale "..." --reviewer you@acme.example` is the same call the web UI's
+Agree/Disagree buttons make. And `kiyooo scan --explain` / `--dry-run` (see the
+network table below) let you see exactly what a scan *would* touch before it
+touches anything.
+
 See **[`CLI.md`](CLI.md)** for the full command reference — every command grouped
-by workflow (scope, scan, triage, route, ingest, ...), with real flags and a
-start-to-ticket walkthrough.
+by workflow (scope, scan, triage, route, ingest, enrichment, categories, eval/
+feedback, ops), with every flag and every group's `--help` contents kept in sync.
 
 ## API & web UI
 
