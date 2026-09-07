@@ -11,20 +11,46 @@ reimplementing them. What it actually does: **adjudicates** whether a finding is
 real in your environment, **attributes** it to the person who can fix it, and
 **routes** it to them with proof it was real and proof it's fixed.
 
+**See [`ARCHITECTURE.md`](ARCHITECTURE.md)** for the full pipeline diagram,
+component-by-component walkthrough, data model, and the safety invariants
+enforced in code — the how-it-works reference for reviewers. `CLI.md` is the
+command-by-command workflow reference.
+
 ## Status
 
-All of the design's stages (0 through 12) are built: recon orchestration,
+The full pipeline is built end to end: recon orchestration,
 normalization/graph/diff, enrichment/ownership, the detection rules engine,
 LLM triage, agentic verification, external-findings import, routing &
 ticketing, the human feedback loop, the skills system, scheduling/metrics/
-secret-redaction, a FastAPI backend + Next.js UI (`kiyooo serve` + `web/`),
-the AI attack-surface module (`org-context.example/categories/05-ai-assets/`,
-`detect/ai_fingerprints.py`), and the `labs/acmecorp/` demo lab. See
-the design doc §7 for each stage's Definition of Done, and each area's own
-module docstrings for what's real-and-tested versus real-but-unverified-
-without-live-infra (a live Postgres, a Docker daemon, a real LLM provider)
-in this particular environment — that distinction is called out explicitly
-wherever it applies, never silently assumed away.
+secret-redaction, and a FastAPI backend + Next.js UI (`kiyooo serve` + `web/`).
+
+Beyond core attack-surface discovery, five domain-specific modules are also
+built and wired into both the CLI and the web UI, each wrapping a real OSS
+scanner rather than reimplementing one:
+
+- **Cloud posture** — AWS/Azure/GCP/Kubernetes accounts audited via Prowler
+  (`kiyooo/api/routers/cloud.py`)
+- **Containers & Kubernetes** — image/cluster scans via Trivy
+  (`kiyooo/api/routers/containers.py`)
+- **Source code & supply chain** — verified live-secret scanning via
+  TruffleHog (`kiyooo/api/routers/repos.py`)
+- **Mobile (Android)** — static APK analysis via apktool + TruffleHog
+  (`kiyooo/api/routers/mobile.py`)
+- **Attack paths** — computed on demand over the live asset graph
+  (`kiyooo/api/routers/attack_paths.py`)
+
+Plus the **AI attack-surface module** — native passive fingerprinting for
+LLM endpoints, MCP servers, vector stores, model registries, and more
+(`org-context.example/categories/05-ai-assets/`, `detect/ai_fingerprints.py`)
+— and three demo labs under `labs/`: `acmecorp` (conventional attack
+surface), `kiyoo-ai` (AI attack surface), and `kiyoo-range` (a single
+interactive front door onto both, covering all 23 shipped categories with
+zero setup — see `labs/README.md`).
+
+Each area's own module docstrings call out what's real-and-tested versus
+real-but-unverified-without-live-infra (a live Postgres, a Docker daemon, a
+real LLM provider) in a given environment — that distinction is stated
+explicitly wherever it applies, never silently assumed away.
 
 ## What each command actually does to the network
 
