@@ -16,6 +16,28 @@ component-by-component walkthrough, data model, and the safety invariants
 enforced in code — the how-it-works reference for reviewers. `CLI.md` is the
 command-by-command workflow reference.
 
+## Pipeline
+
+```mermaid
+flowchart LR
+    A[Recon\nsubfinder/naabu/httpx/nuclei/...] --> B[Normalize\nasset identity, fingerprint, redact]
+    B --> C[Detect\ncategory + control predicates]
+    C --> D[Triage\nLLM adjudication]
+    D -->|needs more evidence| E[Verify\nagentic, passive-only tool calls]
+    E --> D
+    D --> F{Human review}
+    F -->|agree/disagree| G[Route\nticket / approval / shadow]
+    G --> H[Ticket system\nJira / Slack / email]
+    I[External scanners\nProwler, Trivy, TruffleHog, apktool] --> B
+    J[Vendor ASM/VM tools\nvia generic REST ingest] --> B
+```
+
+Every arrow that touches a target's own infrastructure passes through
+**ScopeGuard** first; the LLM never sets scope, sends a packet, or closes a
+finding — only a `HumanReview` can. Full breakdown of every box above,
+plus the data model and all safety invariants, is in
+[`ARCHITECTURE.md`](ARCHITECTURE.md).
+
 ## Status
 
 The full pipeline is built end to end: recon orchestration,
@@ -24,28 +46,42 @@ LLM triage, agentic verification, external-findings import, routing &
 ticketing, the human feedback loop, the skills system, scheduling/metrics/
 secret-redaction, and a FastAPI backend + Next.js UI (`kiyooo serve` + `web/`).
 
-Beyond core attack-surface discovery, five domain-specific modules are also
-built and wired into both the CLI and the web UI, each wrapping a real OSS
+### Domain modules — traditional infrastructure
+
+Five modules extend the same detect → triage → route pipeline into other
+domains, wired into both the CLI and the web UI, each wrapping a real OSS
 scanner rather than reimplementing one:
 
-- **Cloud posture** — AWS/Azure/GCP/Kubernetes accounts audited via Prowler
-  (`kiyooo/api/routers/cloud.py`)
-- **Containers & Kubernetes** — image/cluster scans via Trivy
-  (`kiyooo/api/routers/containers.py`)
-- **Source code & supply chain** — verified live-secret scanning via
-  TruffleHog (`kiyooo/api/routers/repos.py`)
-- **Mobile (Android)** — static APK analysis via apktool + TruffleHog
-  (`kiyooo/api/routers/mobile.py`)
-- **Attack paths** — computed on demand over the live asset graph
-  (`kiyooo/api/routers/attack_paths.py`)
+| Module | Wraps | Router / CLI group |
+|---|---|---|
+| **Cloud posture** — AWS/Azure/GCP/Kubernetes account audits | Prowler | `kiyooo/api/routers/cloud.py`, `kiyooo cloud` |
+| **Containers & Kubernetes** — image/cluster scans | Trivy | `kiyooo/api/routers/containers.py`, `kiyooo containers` |
+| **Source code & supply chain** — verified live-secret scanning | TruffleHog | `kiyooo/api/routers/repos.py`, `kiyooo repos` |
+| **Mobile (Android)** — static APK analysis | apktool + TruffleHog | `kiyooo/api/routers/mobile.py`, `kiyooo mobile` |
+| **Attack paths** — computed on demand over the live asset graph | no external tool | `kiyooo/api/routers/attack_paths.py` |
 
-Plus the **AI attack-surface module** — native passive fingerprinting for
-LLM endpoints, MCP servers, vector stores, model registries, and more
-(`org-context.example/categories/05-ai-assets/`, `detect/ai_fingerprints.py`)
-— and three demo labs under `labs/`: `acmecorp` (conventional attack
-surface), `kiyoo-ai` (AI attack surface), and `kiyoo-range` (a single
-interactive front door onto both, covering all 23 shipped categories with
-zero setup — see `labs/README.md`).
+### AI attack-surface module
+
+Architecturally different from the five above: **native passive
+fingerprinting**, not a wrapped external tool
+(`kiyooo/detect/ai_fingerprints.py`). It finds LLM endpoints, MCP servers,
+vector stores, model registries, notebook servers, and shadow AI SaaS
+tenants the same way recon finds a subdomain or an open port — 10 categories
+under `org-context.example/categories/05-ai-assets/`.
+
+### Demo labs
+
+Three labs under `labs/` prove the above against something closer to a real
+environment than a unit-test fixture:
+
+| Lab | Covers | Setup |
+|---|---|---|
+| **`acmecorp/`** | Conventional attack surface — exposed database, leaked secret, expired/clustering TLS cert, a correctly-suppressed SSO false-positive, a severity-reduced WAF case, 200 rows of vendor noise | Docker Compose (`docker compose up`) |
+| **`kiyoo-ai/`** | AI attack surface — MCP servers (harmless + dangerous, to show catalog-aware triage matters), a vector store, a model registry, a notebook server, a shadow AI SaaS tenant | Docker Compose |
+| **`kiyoo-range/`** | Single interactive front door onto both labs — all 23 shipped categories, one page each, live-evidence button. Falls back to a labeled real captured example when the backing lab isn't running — never a bare connection error | `.venv/bin/python -m uvicorn` — one port, no sudo |
+
+See [`labs/README.md`](labs/README.md) for the fastest way to look at any of
+this running.
 
 Each area's own module docstrings call out what's real-and-tested versus
 real-but-unverified-without-live-infra (a live Postgres, a Docker daemon, a
