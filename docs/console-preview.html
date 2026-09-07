@@ -1,0 +1,632 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>kiyooo Console</title>
+<style>
+:root{
+  --bg:#0a0d14; --surface:#11151f; --surface-2:#161b28; --surface-3:#1c2233; --border:#232a3a;
+  --text:#e7eaf2; --text-2:#99a2b8; --text-3:#626b82;
+  --accent:#5b8cff; --accent-soft:rgba(91,140,255,.12); --accent-strong:#cddcff;
+  --critical:#fb4f6d; --high:#f97316; --medium:#eab308; --low:#22c55e; --info:#7d8aa8;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+*{box-sizing:border-box;}
+body{ background:var(--bg); color:var(--text); font-family:var(--sans); font-size:15px; line-height:1.6; margin:0; }
+h1,h2,h3,h4{ margin:0; text-wrap:balance; letter-spacing:-0.015em; }
+p{ margin:0; }
+code{ font-family:var(--mono); background:var(--surface-2); border:1px solid var(--border); border-radius:4px; padding:.1em .4em; font-size:.88em; color:#c7d0e8; }
+a{ color:var(--accent); text-decoration:none; }
+::selection{ background:var(--accent-soft); }
+
+.wrap{ max-width:1080px; margin:0 auto; padding:0 28px; }
+
+/* ---------- hero ---------- */
+.hero{ padding:72px 0 44px; border-bottom:1px solid var(--border); }
+.eyebrow{ display:inline-flex; align-items:center; gap:8px; font-family:var(--mono); font-size:11.5px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--accent-strong); background:var(--accent-soft); border:1px solid rgba(91,140,255,.3); padding:5px 11px; border-radius:99px; margin-bottom:22px; }
+.eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--low); box-shadow:0 0 6px var(--low); }
+.hero h1{ font-size:clamp(30px,4.4vw,44px); line-height:1.12; max-width:19ch; font-weight:700; }
+.hero h1 .accent{ color:var(--accent); }
+.hero-sub{ font-size:16.5px; color:var(--text-2); max-width:62ch; margin-top:18px; line-height:1.65; }
+.hero-sub b{ color:var(--text); font-weight:600; }
+
+.stat-row{ display:flex; gap:.7em; flex-wrap:wrap; margin-top:34px; }
+.stat{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:.85em 1.2em; min-width:128px; flex:1; }
+.stat .value{ font-size:1.6em; font-weight:700; font-variant-numeric:tabular-nums; color:var(--accent-strong); }
+.stat .label{ color:var(--text-3); font-size:.7em; text-transform:uppercase; letter-spacing:.06em; margin-top:.2em; }
+
+/* ---------- pipeline ---------- */
+.section{ padding:56px 0; border-bottom:1px solid var(--border); }
+.kicker{ font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--text-3); margin-bottom:10px; }
+.section h2{ font-size:24px; }
+.section-intro{ color:var(--text-2); font-size:15.5px; max-width:68ch; margin-top:10px; line-height:1.6; }
+
+.pipeline{ display:flex; align-items:stretch; gap:0; margin-top:32px; overflow-x:auto; }
+.pstep{ flex:1; min-width:150px; background:var(--surface); border:1px solid var(--border); padding:18px 18px 16px; position:relative; }
+.pstep:first-child{ border-radius:10px 0 0 10px; }
+.pstep:last-child{ border-radius:0 10px 10px 0; }
+.pstep + .pstep{ border-left:none; }
+.pstep .pnum{ font-family:var(--mono); font-size:11px; color:var(--text-3); }
+.pstep h4{ font-size:14px; margin-top:10px; }
+.pstep p{ font-size:12.5px; color:var(--text-2); margin-top:6px; line-height:1.5; }
+.pstep::after{ content:"›"; position:absolute; right:-11px; top:50%; transform:translateY(-50%); width:22px; height:22px; border-radius:50%; background:var(--bg); border:1px solid var(--border); color:var(--text-3); display:flex; align-items:center; justify-content:center; font-size:13px; z-index:2; }
+.pstep:last-child::after{ display:none; }
+.pstep.gate h4{ color:var(--accent-strong); }
+.thesis{ margin-top:18px; padding:14px 18px; background:var(--accent-soft); border:1px solid rgba(91,140,255,.28); border-radius:8px; font-size:14px; color:var(--text); }
+.thesis b{ color:var(--accent-strong); }
+
+/* ---------- device frame ---------- */
+.device{ margin-top:32px; border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:0 20px 50px -24px rgba(0,0,0,.6); background:var(--surface); }
+.chrome{ display:flex; align-items:center; gap:14px; padding:10px 14px; background:var(--surface-2); border-bottom:1px solid var(--border); }
+.chrome .dots{ display:flex; gap:6px; }
+.chrome .dots span{ width:10px; height:10px; border-radius:50%; background:var(--border); }
+.chrome .addr{ flex:1; background:var(--surface); border:1px solid var(--border); border-radius:6px; padding:5px 12px; font-family:var(--mono); font-size:12px; color:var(--text-3); }
+.chrome .addr b{ color:var(--text-2); font-weight:500; }
+.chrome .live-pill{ font-family:var(--mono); font-size:10.5px; padding:.3em .7em; border-radius:99px; border:1px solid var(--border); color:var(--text-2); background:var(--surface); white-space:nowrap; }
+.chrome .live-pill::before{ content:""; display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--text-3); margin-right:.5em; }
+
+.appshell{ display:flex; align-items:stretch; height:560px; }
+.appnav{ width:196px; flex-shrink:0; border-right:1px solid var(--border); padding:14px 10px; overflow-y:auto; background:var(--bg); }
+.appnav .navgroup{ font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--text-3); padding:10px 10px 5px; }
+.appnav button.navlink{ all:unset; display:flex; align-items:center; gap:.6em; width:100%; padding:.5em .6em; border-radius:6px; color:var(--text-2); font-size:12.5px; margin-bottom:1px; cursor:pointer; box-sizing:border-box; }
+.appnav button.navlink .dot{ width:6px; height:6px; border-radius:50%; background:var(--accent); opacity:.5; flex-shrink:0; }
+.appnav button.navlink:hover{ background:var(--surface-2); color:var(--text); }
+.appnav button.navlink.active{ background:var(--accent-soft); color:var(--accent-strong); font-weight:600; }
+.appnav button.navlink.active .dot{ opacity:1; box-shadow:0 0 6px var(--accent); }
+.appmain{ flex:1; min-width:0; padding:22px 26px; overflow-y:auto; background:var(--bg); }
+.appmain h3.pagetitle{ font-size:20px; margin-bottom:6px; }
+.appmain p.desc{ color:var(--text-2); font-size:13.5px; max-width:640px; line-height:1.6; margin-bottom:18px; }
+
+.mcard{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px; margin-bottom:10px; }
+.mcard-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.mcard h4{ font-size:13.5px; margin-bottom:3px; }
+.mcard .meta{ font-size:11.5px; color:var(--text-3); }
+.example-tag{ font-family:var(--mono); font-size:9px; letter-spacing:.05em; text-transform:uppercase; color:var(--text-3); border:1px dashed var(--border); border-radius:4px; padding:1px 6px; margin-left:6px; vertical-align:1px; }
+
+.mbadge{ display:inline-flex; align-items:center; gap:.4em; padding:.15em .55em .15em .5em; border-radius:99px; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; background:var(--surface-2); border:1px solid var(--border); }
+.mbadge::before{ content:""; width:6px; height:6px; border-radius:50%; background:var(--sev,var(--info)); box-shadow:0 0 6px var(--sev,transparent); }
+.mbadge.critical{ --sev:var(--critical); color:var(--critical); }
+.mbadge.high{ --sev:var(--high); color:var(--high); }
+.mbadge.medium{ --sev:var(--medium); color:var(--medium); }
+.mbadge.low{ --sev:var(--low); color:var(--low); }
+.mbadge.info{ --sev:var(--info); color:var(--info); }
+
+.mbtn{ font-family:var(--sans); font-size:11.5px; font-weight:600; padding:.4em .85em; border-radius:6px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); cursor:pointer; }
+.mbtn.primary{ background:var(--accent); border-color:var(--accent); color:#06101f; }
+
+/* toggle switch */
+.mswitch-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.mswitch{ position:relative; width:38px; height:22px; border-radius:99px; background:var(--surface-3); border:1px solid var(--border); cursor:pointer; flex-shrink:0; padding:0; }
+.mswitch::after{ content:""; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:var(--text-3); transition:transform .15s ease, background .15s ease; }
+.mswitch.on{ background:var(--accent-soft); border-color:var(--accent); }
+.mswitch.on::after{ transform:translateX(16px); background:var(--accent); }
+
+.chain{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:10px; }
+.hop{ background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:12px; min-width:150px; }
+.hop .hty{ font-family:var(--mono); font-size:9.5px; color:var(--text-3); text-transform:uppercase; letter-spacing:.05em; }
+.hop .hval{ font-family:var(--mono); font-size:12px; margin-top:2px; color:var(--text); }
+.chain-arrow{ color:var(--text-3); font-size:16px; }
+.score-tag{ font-family:var(--mono); font-size:11px; color:var(--accent-strong); background:var(--accent-soft); border:1px solid rgba(91,140,255,.3); padding:2px 8px; border-radius:6px; }
+
+.tabstrip{ display:flex; gap:6px; flex-wrap:wrap; margin-top:28px; }
+.tabstrip button{ font-family:var(--mono); font-size:11.5px; padding:.5em 1em; border-radius:7px; border:1px solid var(--border); background:var(--surface); color:var(--text-2); cursor:pointer; }
+.tabstrip button:hover{ color:var(--text); }
+.tabstrip button.active{ background:var(--accent-soft); border-color:var(--accent); color:var(--accent-strong); }
+
+/* ---------- AI attack surface grid ---------- */
+.cat-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:26px; }
+@media (max-width:700px){ .cat-grid{ grid-template-columns:1fr; } }
+.cat-card{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:13px 16px; display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.cat-card h4{ font-size:13.5px; margin-bottom:3px; }
+.cat-card .meta{ font-size:11.5px; color:var(--text-3); }
+
+/* ---------- demo labs ---------- */
+.lab-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:26px; }
+@media (max-width:860px){ .lab-grid{ grid-template-columns:1fr; } }
+.lab-card{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:17px 18px; display:flex; flex-direction:column; gap:10px; }
+.lab-card h4{ font-size:14.5px; display:flex; align-items:center; gap:8px; }
+.lab-card p{ font-size:12.5px; color:var(--text-2); line-height:1.55; margin:0; }
+.lab-cmd{ font-family:var(--mono); font-size:11px; background:#05070a; border:1px solid var(--border); border-radius:6px; padding:6px 10px; color:var(--accent-strong); overflow-x:auto; white-space:nowrap; }
+.lab-note{ font-size:11px; color:var(--text-3); border-top:1px solid var(--border); padding-top:9px; margin-top:auto; line-height:1.5; }
+
+/* ---------- tools ledger ---------- */
+.ledger{ margin-top:26px; border:1px solid var(--border); border-radius:10px; overflow:hidden; background:var(--surface); }
+.ledger-scroll{ overflow-x:auto; }
+table.tools{ width:100%; border-collapse:collapse; min-width:680px; }
+table.tools th{ text-align:left; font-family:var(--mono); font-size:10.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); padding:11px 16px; border-bottom:1px solid var(--border); background:var(--surface-2); }
+table.tools td{ padding:13px 16px; border-bottom:1px solid var(--border); font-size:13px; vertical-align:top; }
+table.tools tr:last-child td{ border-bottom:none; }
+table.tools tr:hover td{ background:rgba(255,255,255,.02); }
+.toolname{ font-weight:600; }
+.toolname a{ color:var(--text); }
+.toolname a:hover{ color:var(--accent); }
+.stars{ font-family:var(--mono); color:var(--text-2); }
+.license-tag{ font-family:var(--mono); font-size:11px; color:var(--text-2); background:var(--surface-2); border:1px solid var(--border); border-radius:4px; padding:1px 6px; }
+
+/* ---------- invariants ---------- */
+.inv-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:26px; }
+@media (max-width:700px){ .inv-grid{ grid-template-columns:1fr; } }
+.inv{ background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+.inv .n{ font-family:var(--mono); font-size:11px; color:var(--text-3); }
+.inv p{ font-size:13px; color:var(--text-2); margin-top:4px; line-height:1.55; }
+.inv p b{ color:var(--text); font-weight:600; }
+
+/* ---------- footer ---------- */
+footer{ padding:52px 0 68px; }
+.runbox{ margin-top:22px; background:#05070a; border:1px solid var(--border); border-radius:10px; padding:16px 18px; font-family:var(--mono); font-size:12.5px; line-height:1.9; color:#d6dcec; overflow-x:auto; }
+.runbox .c{ color:var(--text-3); }
+.runbox .k{ color:var(--accent-strong); }
+.footer-grid{ display:grid; grid-template-columns:1.3fr 1fr; gap:32px; margin-top:34px; }
+@media (max-width:700px){ .footer-grid{ grid-template-columns:1fr; } }
+footer h4{ font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--text-3); margin-bottom:10px; }
+footer p, footer li{ font-size:13.5px; color:var(--text-2); line-height:1.6; }
+footer ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px; }
+.footer-rule{ margin:36px 0 18px; border:none; border-top:1px solid var(--border); }
+.fineprint{ font-family:var(--mono); font-size:11px; color:var(--text-3); }
+
+@media (max-width:760px){
+  .appshell{ height:auto; flex-direction:column; }
+  .appnav{ width:100%; display:flex; overflow-x:auto; padding:8px; border-right:none; border-bottom:1px solid var(--border); }
+  .appnav .navgroup{ display:none; }
+  .appnav button.navlink{ width:auto; white-space:nowrap; }
+}
+@media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+</style>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div class="eyebrow"><span class="dot"></span>OPEN-SOURCE · SELF-HOSTED · SINGLE ORG</div>
+    <h1>Attack surface management where the <span class="accent">AI does triage</span>, not discovery.</h1>
+    <p class="hero-sub">kiyooo doesn't reimplement subdomain scanners or vulnerability crawlers — it wraps
+      best-in-class open-source tools (Prowler, Trivy, TruffleHog, apktool, plus its own passive recon) and puts an
+      LLM adjudicator in front of every hit they produce. <b>A raw finding is a candidate, never something shown to
+      a human on its own</b> — it has to survive category matching and cited-evidence adjudication first. Below is
+      the complete console: the original recon/triage/cost pipeline (Stages 0–12) plus the cloud, containers, repo,
+      and mobile modules added on top of it (Stages 13–17) — one nav, one pipeline, nothing set aside.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="value">15</div><div class="label">Console pages</div></div>
+      <div class="stat"><div class="value">40</div><div class="label">Detection categories</div></div>
+      <div class="stat"><div class="value">4</div><div class="label">OSS scanners wrapped</div></div>
+      <div class="stat"><div class="value">696</div><div class="label">Tests passing</div></div>
+      <div class="stat"><div class="value">8</div><div class="label">Hard invariants</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker">The pipeline</div>
+    <h2>Every finding takes the same road, regardless of source</h2>
+    <p class="section-intro">Whether a hit comes from Prowler scanning an AWS account or from kiyooo's own recon
+      against your external perimeter, it goes through the identical five steps before a person ever sees it.</p>
+    <div class="pipeline">
+      <div class="pstep"><div class="pnum">01</div><h4>Discover</h4><p>Prowler / Trivy / TruffleHog / apktool run against your own infra — never a third party's.</p></div>
+      <div class="pstep"><div class="pnum">02</div><h4>Ingest</h4><p>Vendor severity is discarded. <code>raw_severity</code> always comes from the matched category.</p></div>
+      <div class="pstep gate"><div class="pnum">03</div><h4>Adjudicate</h4><p>An LLM verdict, every claim cited to an evidence ID. It has no authority to close anything.</p></div>
+      <div class="pstep gate"><div class="pnum">04</div><h4>Review</h4><p>A human confirms true/false-positive. Nothing auto-closes a critical.</p></div>
+      <div class="pstep"><div class="pnum">05</div><h4>Route</h4><p>A ticket drafts. A human sends it — sinks never fire on their own.</p></div>
+    </div>
+    <div class="thesis">This is the whole differentiator: <b>discovery is a commodity, adjudication isn't.</b>
+      A false-positive rate a human has to wade through is the actual product failure kiyooo exists to prevent.</div>
+  </section>
+
+  <section class="section">
+    <div class="kicker">The console</div>
+    <h2>All 15 pages, the actual copy, live-clickable</h2>
+    <p class="section-intro">This is a faithful recreation of kiyooo's real Next.js UI — same nav grouping, same
+      CSS tokens, same on-page copy shipped in the repo — populated with <span class="example-tag">example</span>
+      data standing in for a scan you haven't run yet. Click anything in the sidebar, or flip a switch on Settings.</p>
+
+    <div class="device">
+      <div class="chrome">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="addr">localhost:3000<b id="addr-path">/</b></div>
+        <div class="live-pill">sample data</div>
+      </div>
+      <div class="appshell">
+        <nav class="appnav">
+          <div class="navgroup">Recon &amp; scope</div>
+          <button class="navlink" data-tab="change"><span class="dot"></span>Change feed</button>
+          <button class="navlink" data-tab="scope"><span class="dot"></span>Scope</button>
+          <button class="navlink" data-tab="ingest"><span class="dot"></span>Ingest</button>
+          <div class="navgroup">Attack surface</div>
+          <button class="navlink" data-tab="cloud"><span class="dot"></span>Cloud posture</button>
+          <button class="navlink" data-tab="containers"><span class="dot"></span>Containers</button>
+          <button class="navlink" data-tab="repos"><span class="dot"></span>Repos</button>
+          <button class="navlink" data-tab="mobile"><span class="dot"></span>Mobile</button>
+          <button class="navlink" data-tab="attackpaths"><span class="dot"></span>Attack paths</button>
+          <div class="navgroup">Triage &amp; assets</div>
+          <button class="navlink" data-tab="triage"><span class="dot"></span>Triage queue</button>
+          <button class="navlink" data-tab="assets"><span class="dot"></span>Asset explorer</button>
+          <button class="navlink" data-tab="coverage"><span class="dot"></span>Coverage</button>
+          <button class="navlink" data-tab="categories"><span class="dot"></span>Categories</button>
+          <div class="navgroup">Console</div>
+          <button class="navlink" data-tab="models"><span class="dot"></span>Model configuration</button>
+          <button class="navlink" data-tab="settings"><span class="dot"></span>Settings</button>
+          <button class="navlink" data-tab="dashboard"><span class="dot"></span>Dashboard</button>
+        </nav>
+        <main class="appmain" id="appmain"></main>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker">Native detection, not a wrapped tool — Stage 11b</div>
+    <h2>The AI attack surface nobody else scans for</h2>
+    <p class="section-intro">MCP servers, vector stores, model registries, notebook servers, shadow AI SaaS
+      tenants — kiyooo fingerprints these with its own passive recon, the same way it finds a subdomain or an
+      open port. There's no dedicated nav page for it because it doesn't need one: these 10 categories and 5 new
+      asset types (<code>llm_endpoint</code>, <code>mcp_server</code>, <code>vector_db</code>,
+      <code>model_registry</code>, <code>notebook</code>) already flow through Asset explorer, Categories, and the
+      Triage queue you clicked through above — try the Asset explorer tab again, <code>mcp-legacy.acme.com</code>
+      and <code>vectors.acme.com</code> are in there.</p>
+    <div class="cat-grid">
+      <div class="cat-card"><div><h4>exposed-inference-endpoint</h4><div class="meta">LLM inference server reachable from the internet</div></div><span class="mbadge critical">critical</span></div>
+      <div class="cat-card"><div><h4>exposed-vector-store</h4><div class="meta">Vector database reachable without authentication</div></div><span class="mbadge critical">critical</span></div>
+      <div class="cat-card"><div><h4>exposed-notebook</h4><div class="meta">Jupyter notebook server reachable without a token</div></div><span class="mbadge critical">critical</span></div>
+      <div class="cat-card"><div><h4>leaked-ai-api-key</h4><div class="meta">AI provider key exposed in a public response or repo</div></div><span class="mbadge critical">critical</span></div>
+      <div class="cat-card"><div><h4>exposed-mcp-server</h4><div class="meta">MCP server reachable without authentication</div></div><span class="mbadge high">high</span></div>
+      <div class="cat-card"><div><h4>mcp-tool-poisoning-risk</h4><div class="meta">Tool manifest contains instruction-level content aimed at an AI client</div></div><span class="mbadge high">high</span></div>
+      <div class="cat-card"><div><h4>exposed-model-registry</h4><div class="meta">MLOps dashboard reachable without authentication</div></div><span class="mbadge high">high</span></div>
+      <div class="cat-card"><div><h4>unsafe-model-artifact</h4><div class="meta">Public model artifact using an unsafe deserialization format</div></div><span class="mbadge high">high</span></div>
+      <div class="cat-card"><div><h4>public-chatbot-excessive-agency</h4><div class="meta">Public AI agent app reachable, agentic capability unknown</div></div><span class="mbadge medium">medium</span></div>
+      <div class="cat-card"><div><h4>shadow-ai-saas-tenant</h4><div class="meta">Org subdomain fronting an unsanctioned AI SaaS tenant</div></div><span class="mbadge low">low</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker">Proving it against something real</div>
+    <h2>Three demo labs, one command</h2>
+    <p class="section-intro">Self-contained, offline, resettable Docker environments that plant real instances of
+      kiyooo's shipped categories — including their false-positive paths — so a demo isn't just a screenshot.
+      <code>kiyoo-labs</code> starts all three and adds every <code>/etc/hosts</code> entry they need.</p>
+    <div class="lab-grid">
+      <div class="lab-card">
+        <h4>acmecorp</h4>
+        <p>Conventional attack surface: exposed DB, leaked secrets, an expired cert, an SSO false-positive, a
+          WAF-reduced severity, a seeded-data downgrade. Everything binds to <code>127.0.0.1</code> only.</p>
+        <div class="lab-cmd">$ kiyoo-labs acmecorp</div>
+        <div class="lab-note">Stage 12. Fake hosts like <code>staging.acmecorp.lab</code>, <code>admin.acmecorp.lab</code>.</div>
+      </div>
+      <div class="lab-card">
+        <h4>kiyoo-ai</h4>
+        <p>The AI attack surface above, planted for real: MCP twin servers (harmless / dangerous / poisoned), a
+          vector store, a model registry, a notebook server, a shadow AI SaaS tenant, plus a drift scenario.</p>
+        <div class="lab-cmd">$ kiyoo-labs ai</div>
+        <div class="lab-note">Stage 11b's lab. ~20 services behind one Host-routed FastAPI app.</div>
+      </div>
+      <div class="lab-card">
+        <h4>kiyoo-range</h4>
+        <p>Not a planted-asset lab — the interactive front door onto both of the above. One page per shipped
+          category (13 infra + 10 AI), each with a live-evidence fetch against the real decoy, not a static link.</p>
+        <div class="lab-cmd">$ kiyoo-labs range</div>
+        <div class="lab-note">Also serves 4 categories with no other planted home: exposed-devops-console, subdomain-takeover, known-exploited-cve, shadow-saas-tenant.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="kicker">Under the hood</div>
+    <h2>Four scanners, all Apache/AGPL, all picked for stars + license</h2>
+    <p class="section-intro">Per-tool star counts and licenses, checked before anything got wrapped — the project
+      rule is real community adoption plus a permissive-enough license, never a random GitHub repo.</p>
+    <div class="ledger"><div class="ledger-scroll">
+      <table class="tools">
+        <thead><tr><th>Tool</th><th>Wraps</th><th>Stars</th><th>License</th><th>Module</th></tr></thead>
+        <tbody>
+          <tr><td class="toolname"><a href="https://github.com/prowler-cloud/prowler" target="_blank" rel="noreferrer">Prowler</a></td><td>AWS / Azure / GCP / Kubernetes account audits</td><td class="stars">~14,000★</td><td><span class="license-tag">Apache-2.0</span></td><td>Cloud posture</td></tr>
+          <tr><td class="toolname"><a href="https://github.com/aquasecurity/trivy" target="_blank" rel="noreferrer">Trivy</a></td><td>Container image &amp; Kubernetes cluster scanning</td><td class="stars">~36,500★</td><td><span class="license-tag">Apache-2.0</span></td><td>Containers</td></tr>
+          <tr><td class="toolname"><a href="https://github.com/trufflesecurity/trufflehog" target="_blank" rel="noreferrer">TruffleHog</a></td><td>Verified live-secret scanning (git &amp; filesystem)</td><td class="stars">~25,700★</td><td><span class="license-tag">AGPL-3.0</span></td><td>Repos &amp; Mobile</td></tr>
+          <tr><td class="toolname"><a href="https://apktool.org" target="_blank" rel="noreferrer">apktool</a></td><td>Android APK manifest &amp; resource decoding</td><td class="stars">~19,000★</td><td><span class="license-tag">Apache-2.0</span></td><td>Mobile</td></tr>
+        </tbody>
+      </table>
+    </div></div>
+  </section>
+
+  <section class="section" style="border-bottom:none;">
+    <div class="kicker">Why it's safe to run against yourself</div>
+    <h2>Eight invariants the code never gets to break</h2>
+    <p class="section-intro">Not aspirations — enforced at the network-executor and pipeline layer, regardless of
+      what a task or a prompt asks for.</p>
+    <div class="inv-grid">
+      <div class="inv"><span class="n">01</span><p><b>No exploitation primitives.</b> Verification proves reachability, never compromise.</p></div>
+      <div class="inv"><span class="n">02</span><p><b>All outbound traffic routes through ScopeGuard,</b> enforced at the executor, never the planner.</p></div>
+      <div class="inv"><span class="n">03</span><p><b>Passive by default.</b> Active scanning needs a config flag, a CLI flag, and an attestation.</p></div>
+      <div class="inv"><span class="n">04</span><p><b>The LLM has no authority.</b> It cites evidence; it never closes a finding.</p></div>
+      <div class="inv"><span class="n">05</span><p><b>Evidence is data, never instruction</b> — even an instruction found inside it is just a finding to report.</p></div>
+      <div class="inv"><span class="n">06</span><p><b>A human approves outbound.</b> Sinks draft; people send.</p></div>
+      <div class="inv"><span class="n">07</span><p><b>Secrets are redacted at ingest</b> — a <code>credential_ref</code> pointer, never a live value.</p></div>
+      <div class="inv"><span class="n">08</span><p><b>Models are pinned.</b> Changing one needs an eval re-run and a changelog entry.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="kicker">Run it for real</div>
+    <h2>This preview has no server behind it — the actual app does</h2>
+    <p class="section-intro">Everything above is real shipped code, rendered without Docker. To click through it
+      against your own data:</p>
+    <div class="runbox">
+<div><span class="c">$</span> <span class="k">docker compose up -d</span>            <span class="c"># postgres</span></div>
+<div><span class="c">$</span> <span class="k">uv run alembic upgrade head</span>     <span class="c"># latest migration: 0018_module_toggles</span></div>
+<div><span class="c">$</span> <span class="k">uv run kiyooo modules list</span>       <span class="c"># see the 5 toggles from the CLI</span></div>
+<div><span class="c">$</span> <span class="k">npm --prefix web run dev</span>         <span class="c"># localhost:3000</span></div>
+    </div>
+    <div class="footer-grid">
+      <div><h4>What you're looking at</h4><p>Real page copy and layout from <code>web/app/</code>, styled with the exact tokens in <code>web/app/globals.css</code>. The Settings switches above are live — try turning a module off and watching its nav entry disappear, the same behavior <code>ModuleGate</code> gives the real page.</p></div>
+      <div><h4>Not a live instance</h4><ul><li>No packets leave this page</li><li>No data shown is yours — it's illustrative</li><li>Toggling a switch here doesn't touch your database</li></ul></div>
+    </div>
+    <hr class="footer-rule">
+    <div class="fineprint">kiyooo — AI-triaged attack surface management, self-hosted · this page is static, no network calls made</div>
+  </footer>
+
+</div>
+
+<script>
+const ADDR_PATHS = {
+  change:"/", scope:"/scope", ingest:"/ingest",
+  cloud:"/cloud", containers:"/containers", repos:"/repos", mobile:"/mobile", attackpaths:"/attack-paths",
+  triage:"/triage", assets:"/assets", coverage:"/coverage", categories:"/categories",
+  models:"/models", settings:"/settings", dashboard:"/dashboard",
+};
+const MODULE_TABS = ["cloud","containers","repos","mobile","attackpaths"];
+
+const PAGES = {
+change: () => `
+  <h3 class="pagetitle">What&apos;s new</h3>
+  <p class="desc">Change events across the asset graph — the default landing page. Lookback: <code>24h</code>.</p>
+  <div class="mcard"><div class="mcard-top">
+    <div><span class="mbadge high">cert changed</span> <span style="margin-left:8px; font-family:var(--mono); font-size:12.5px;">payments.acme.com</span> <span class="example-tag">example</span></div>
+    <div class="meta">2 hours ago</div>
+  </div></div>
+  <div class="mcard"><div class="mcard-top">
+    <div><span class="mbadge critical">takeover risk</span> <span style="margin-left:8px; font-family:var(--mono); font-size:12.5px;">old-blog.acme.com</span> <span class="example-tag">example</span></div>
+    <div class="meta">9 hours ago</div>
+  </div></div>
+  <div class="mcard"><div class="mcard-top">
+    <div><span class="mbadge info">port opened</span> <span style="margin-left:8px; font-family:var(--mono); font-size:12.5px;">10.0.4.12:8080</span> <span class="example-tag">example</span></div>
+    <div class="meta">1 day ago</div>
+  </div></div>
+  <div class="mcard"><div class="mcard-top">
+    <div><span class="mbadge low">new asset</span> <span style="margin-left:8px; font-family:var(--mono); font-size:12.5px;">api-v2.acme.com</span> <span class="example-tag">example</span></div>
+    <div class="meta">1 day ago</div>
+  </div></div>`,
+
+scope: () => `
+  <h3 class="pagetitle">Scope</h3>
+  <p class="desc">Seeds define what kiyooo is allowed to touch — ScopeGuard checks every outbound target against
+    this list before anything fires, and denies/confirms get an <code>audit_log</code> row regardless.</p>
+  <div class="mcard"><div class="mcard-top"><div><h4>acme.com <span class="example-tag">example</span></h4><div class="meta">apex_domain</div></div><span class="mbadge low">in scope</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>*.acme.com <span class="example-tag">example</span></h4><div class="meta">wildcard</div></div><span class="mbadge low">in scope</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>acme-corp <span class="example-tag">example</span></h4><div class="meta">github_org &middot; not network-checkable, storable only</div></div><span class="mbadge info">unenforced</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>10.0.4.0/28 <span class="example-tag">example</span></h4><div class="meta">cidr &middot; staging, excluded by reviewer</div></div><span class="mbadge medium">excluded</span></div></div>`,
+
+ingest: () => `
+  <h3 class="pagetitle">Ingest</h3>
+  <p class="desc">A generic REST connector for any vendor without a dedicated adapter yet. A hit with no
+    <code>vendor_mapping.yaml</code> entry never gets silently dropped — it shows up here as unmapped instead.</p>
+  <div class="mcard"><div class="mcard-top">
+    <div><h4>jira-vuln-export <span class="example-tag">example</span></h4><div class="meta">generic REST &middot; bearer auth &middot; last synced 4 hours ago</div></div>
+    <span class="mbadge low">enabled</span>
+  </div></div>
+  <div class="mcard">
+    <h4 style="margin-bottom:8px;">Unmapped vendor issue types <span class="example-tag">example</span></h4>
+    <div class="meta" style="line-height:2;">
+      <code>jira-CUSTOM-4471</code> — no vendor_mapping.yaml entry yet<br>
+      <code>legacy-scanner-ssl-weak-cipher</code> — no vendor_mapping.yaml entry yet
+    </div>
+  </div>`,
+
+triage: () => `
+  <h3 class="pagetitle">Triage queue</h3>
+  <p class="desc">Filtered to status <code>triaged</code> — an LLM verdict already attached, every claim cited to
+    an evidence ID, waiting on a human true/false-positive call. Nothing here closed itself.</p>
+  <div class="mcard"><div class="mcard-top">
+    <div><span class="mbadge critical">critical</span> <span style="margin-left:8px;">public-object-storage</span> <span class="example-tag">example</span><div class="meta" style="margin-top:4px;"><code>s3://acme-prod-invoices</code> — LLM: true positive, cites evidence #4821</div></div>
+  </div></div>
+  <div class="mcard"><div class="mcard-top">
+    <div><span class="mbadge high">high</span> <span style="margin-left:8px;">vulnerable-base-image</span> <span class="example-tag">example</span><div class="meta" style="margin-top:4px;"><code>payments-api:2026.09</code> — LLM: true positive (CVE-2026-31337, no fix published)</div></div>
+  </div></div>
+  <div class="mcard"><div class="mcard-top">
+    <div><span class="mbadge medium">medium</span> <span style="margin-left:8px;">leaked-secret-in-repo</span> <span class="example-tag">example</span><div class="meta" style="margin-top:4px;"><code>acme/payments-api</code> — LLM: escalated, ownership ambiguous</div></div>
+  </div></div>
+  <div class="mcard"><div class="mcard-top">
+    <div><span class="mbadge high">high</span> <span style="margin-left:8px;">exposed-mcp-server</span> <span class="example-tag">example</span><div class="meta" style="margin-top:4px;"><code>mcp-legacy.acme.com</code> — LLM: true positive, no auth on tool-call endpoint</div></div>
+  </div></div>`,
+
+assets: () => `
+  <h3 class="pagetitle">Asset explorer</h3>
+  <p class="desc">Filter/search over the asset graph — click an asset for its ownership and edges.</p>
+  <div class="mcard"><div class="mcard-top"><div><h4>acme.com <span class="example-tag">example</span></h4><div class="meta">domain</div></div><span class="mbadge low">active</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>s3://acme-prod-invoices <span class="example-tag">example</span></h4><div class="meta">cloud_resource</div></div><span class="mbadge low">active</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>payments-api-7f9c <span class="example-tag">example</span></h4><div class="meta">k8s_workload</div></div><span class="mbadge low">active</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>com.acme.wallet <span class="example-tag">example</span></h4><div class="meta">mobile_app</div></div><span class="mbadge low">active</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>mcp-legacy.acme.com <span class="example-tag">example</span></h4><div class="meta">mcp_server — Stage 11b, fingerprinted, not vendor-ingested</div></div><span class="mbadge low">active</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>vectors.acme.com <span class="example-tag">example</span></h4><div class="meta">vector_db</div></div><span class="mbadge low">active</span></div></div>`,
+
+coverage: () => `
+  <h3 class="pagetitle">Coverage &amp; orphan-asset report</h3>
+  <p class="desc">How much of the asset graph has a confirmed owner. <span class="example-tag">example</span></p>
+  <div class="stat-row" style="margin-top:0;">
+    <div class="stat"><div class="value">214</div><div class="label">Total assets</div></div>
+    <div class="stat"><div class="value">189</div><div class="label">Active assets</div></div>
+    <div class="stat"><div class="value">76%</div><div class="label">Owner confidence ≥ 0.8</div></div>
+  </div>
+  <div class="mcard"><h4 style="margin-bottom:8px;">Ownership resolution</h4>
+    <div class="meta" style="line-height:2;">Confirmed owner — 143<br>Disputed — 12<br>Orphan — 34</div>
+  </div>`,
+
+categories: () => `
+  <h3 class="pagetitle">Categories</h3>
+  <p class="desc">40 detection categories, each testable against a sample asset+evidence payload before it ever
+    sees real data.</p>
+  <div class="mcard"><div class="mcard-top"><div><h4>public-object-storage</h4><div class="meta">is_sensitive_target</div></div><span class="mbadge critical">critical</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>vulnerable-base-image</h4><div class="meta">one_per_vendor_finding</div></div><span class="mbadge high">high</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>leaked-secret-in-repo</h4><div class="meta">local_only &middot; is_sensitive_target</div></div><span class="mbadge critical">critical</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>exposed-mcp-server</h4><div class="meta">05-ai-assets &middot; Stage 11b, native fingerprinting</div></div><span class="mbadge high">high</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>leaked-ai-api-key</h4><div class="meta">05-ai-assets &middot; local_only</div></div><span class="mbadge critical">critical</span></div></div>
+  <div class="mcard">
+    <h4 style="margin-bottom:8px;">Preview payload <span class="example-tag">example</span></h4>
+    <pre style="background:#05070a; border:1px solid var(--border); border-radius:8px; padding:12px 14px; font-family:var(--mono); font-size:11.5px; color:#d6dcec; margin:0; overflow-x:auto;">{
+  "asset": { "type": "cloud_resource", "value": "s3://acme-prod-invoices" },
+  "evidence": [{ "kind": "cloud_tag", "content": { "acl": "public-read" } }]
+}</pre>
+  </div>`,
+
+models: () => `
+  <h3 class="pagetitle">Model configuration</h3>
+  <p class="desc">One pin per role. Changing a digest or prompt version needs an eval re-run and a changelog
+    entry — invariant #8, not a preference.</p>
+  <div class="mcard"><div class="mcard-top"><div><h4>Bulk <span class="example-tag">example</span></h4><div class="meta">runs on every finding first, local — no per-finding cost</div></div><span class="mbadge info"><code style="background:none;border:none;padding:0;">ollama / llama3.1:8b</code></span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>Escalation <span class="example-tag">example</span></h4><div class="meta">low-confidence or high/critical severity only</div></div><span class="mbadge info"><code style="background:none;border:none;padding:0;">anthropic / claude-sonnet</code></span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>Embedding <span class="example-tag">example</span></h4><div class="meta">similar-past-decisions search, not adjudication itself</div></div><span class="mbadge info"><code style="background:none;border:none;padding:0;">ollama / nomic-embed-text</code></span></div></div>`,
+
+dashboard: () => `
+  <h3 class="pagetitle">Cost &amp; agreement dashboard</h3>
+  <p class="desc">Model/human agreement per category+model+prompt_version, and LLM spend. Low-agreement categories
+    are the ones whose triage_hints need rewriting. <span class="example-tag">example</span></p>
+  <div class="stat-row" style="margin-top:0;">
+    <div class="stat"><div class="value">$12.40</div><div class="label">Total LLM spend</div></div>
+    <div class="stat"><div class="value">38</div><div class="label">Scan runs</div></div>
+    <div class="stat"><div class="value">$0.3263</div><div class="label">Cost per scan run</div></div>
+  </div>
+  <div class="mcard"><h4 style="margin-bottom:8px;">Agreement by category</h4>
+    <div class="meta" style="line-height:2;">public-object-storage &middot; claude-sonnet &middot; v3 — 94%<br>vulnerable-base-image &middot; llama3.1:8b &middot; v3 — <span style="color:var(--medium);">81% (low, review triage_hints)</span></div>
+  </div>`,
+
+cloud: () => `
+  <h3 class="pagetitle">Cloud posture</h3>
+  <p class="desc">Point kiyooo at an AWS, Azure, GCP, or Kubernetes account and audit it with Prowler
+    (open-source, Apache-2.0). A raw Prowler hit is a candidate, never a finding shown on its own — every one
+    goes through category match and LLM adjudication before it reaches the triage queue.</p>
+  <div class="mcard"><div class="mcard-top">
+    <div><h4>prod-aws <span class="example-tag">example</span></h4><div class="meta"><code>aws</code> &middot; last audited 6 hours ago</div></div>
+    <span class="mbadge low">enabled</span>
+  </div></div>
+  <div class="mcard"><div class="mcard-top">
+    <div><h4>staging-gcp <span class="example-tag">example</span></h4><div class="meta"><code>gcp</code> &middot; last audited 2 days ago</div></div>
+    <span class="mbadge low">enabled</span>
+  </div></div>
+  <div class="mcard" style="border-style:dashed;"><span class="mbtn secondary" style="opacity:.7;">+ Add a cloud account</span></div>`,
+
+containers: () => `
+  <h3 class="pagetitle">Containers &amp; Kubernetes</h3>
+  <p class="desc">Point kiyooo at a container image or Kubernetes cluster and scan it with Trivy
+    (open-source, Apache-2.0). Every CVE Trivy reports lands in one <code>vulnerable-base-image</code> category
+    regardless of which CVE — the package/version/fix is evidence for the LLM to reason about, not a category per CVE.</p>
+  <div class="mcard"><div class="mcard-top">
+    <div><h4>payments-api:2026.09 <span class="example-tag">example</span></h4><div class="meta"><code>image</code> &middot; last scanned 1 hour ago</div></div>
+    <span class="mbadge low">enabled</span>
+  </div></div>
+  <div class="mcard"><div class="mcard-top">
+    <div><h4>prod-eks-cluster <span class="example-tag">example</span></h4><div class="meta"><code>k8s</code> &middot; last scanned yesterday</div></div>
+    <span class="mbadge low">enabled</span>
+  </div></div>
+  <div class="mcard" style="border-style:dashed;"><span class="mbtn secondary" style="opacity:.7;">+ Add a scan target</span></div>`,
+
+repos: () => `
+  <h3 class="pagetitle">Source code &amp; supply chain</h3>
+  <p class="desc">Point kiyooo at a git repo and scan it for verified live secrets with TruffleHog
+    (open-source engine, AGPL-3.0). TruffleHog only reports after confirming the credential still works against
+    its real provider — an already-rotated key never becomes a candidate at all. Flagged <code>local_only</code>,
+    so a verified secret never reaches a hosted LLM.</p>
+  <div class="mcard"><div class="mcard-top">
+    <div><h4>acme/payments-api <span class="example-tag">example</span></h4><div class="meta">github.com &middot; last scanned 3 hours ago</div></div>
+    <span class="mbadge low">enabled</span>
+  </div></div>
+  <div class="mcard" style="border-style:dashed;"><span class="mbtn secondary" style="opacity:.7;">+ Add a repo</span></div>`,
+
+mobile: () => `
+  <h3 class="pagetitle">Mobile</h3>
+  <p class="desc">Point kiyooo at a local Android APK for static analysis — apktool (open-source, Apache-2.0)
+    decodes the manifest and resources, then a reused TruffleHog filesystem scan checks for verified live secrets.
+    Strictly static: no device, emulator, or Frida, and no fetching apps from a store on your behalf.</p>
+  <div class="mcard"><div class="mcard-top">
+    <div><h4>com.acme.wallet — v4.2.1 <span class="example-tag">example</span></h4><div class="meta">android &middot; last scanned 5 days ago</div></div>
+    <span class="mbadge low">enabled</span>
+  </div></div>
+  <div class="mcard" style="border-style:dashed;"><span class="mbtn secondary" style="opacity:.7;">+ Add an APK</span></div>`,
+
+attackpaths: () => `
+  <h3 class="pagetitle">Attack paths</h3>
+  <p class="desc">One correlated path instead of N unrelated findings — connects an ordinary weakness to a
+    resource that holds or grants access to data or credentials, via the shortest chain of asset relationships.
+    Computed live from the current asset graph, not a stored list.</p>
+  <div class="mcard">
+    <div class="mcard-top">
+      <h4>Path to public-object-storage <span class="example-tag">example</span></h4>
+      <span class="score-tag">score 0.90</span>
+    </div>
+    <div class="chain">
+      <div class="hop"><div class="hty">k8s_workload</div><div class="hval">payments-api-7f9c</div><span class="mbadge high" style="margin-top:6px;">vulnerable-base-image</span></div>
+      <div class="chain-arrow">→</div>
+      <div class="hop"><div class="hty">cloud_resource</div><div class="hval">s3://acme-prod-invoices</div><span class="mbadge critical" style="margin-top:6px;">public-object-storage</span></div>
+    </div>
+  </div>`,
+
+settings: () => `
+  <h3 class="pagetitle">Settings</h3>
+  <p class="desc">Turn optional attack-surface modules on or off. This only controls the nav and each module's
+    page — it never touches the API, CLI, or any data already ingested, so re-enabling one loses nothing.
+    <b style="color:var(--text);">Try it:</b> flip a switch below.</p>
+  <div id="settings-rows"></div>`,
+};
+
+const MODULE_META = {
+  cloud:{label:"Cloud posture", desc:"AWS / Azure / GCP / Kubernetes account audits via Prowler."},
+  containers:{label:"Containers & Kubernetes", desc:"Image and cluster scanning via Trivy."},
+  repos:{label:"Source code & supply chain", desc:"Verified live-secret scanning via TruffleHog."},
+  mobile:{label:"Mobile", desc:"Static Android APK analysis via apktool + TruffleHog."},
+  attackpaths:{label:"Attack paths", desc:"Correlated chains from a weakness to a sensitive resource."},
+};
+
+const moduleState = { cloud:true, containers:true, repos:true, mobile:true, attackpaths:true };
+let activeTab = "cloud";
+
+function renderSettingsRows(){
+  const el = document.getElementById("settings-rows");
+  if (!el) return;
+  el.innerHTML = MODULE_TABS.map((key) => {
+    const on = moduleState[key];
+    const meta = MODULE_META[key];
+    return `<div class="mcard mswitch-row" data-row="${key}">
+      <div><h4 style="margin-bottom:2px;">${meta.label}</h4><div class="meta">${meta.desc}</div></div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span class="mbadge ${on ? "low" : "info"}">${on ? "on" : "off"}</span>
+        <button class="mswitch ${on ? "on" : ""}" data-switch="${key}" aria-label="Toggle ${meta.label}"></button>
+      </div>
+    </div>`;
+  }).join("");
+  el.querySelectorAll("[data-switch]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.getAttribute("data-switch");
+      moduleState[key] = !moduleState[key];
+      renderSettingsRows();
+      renderNav();
+      if (activeTab === key && !moduleState[key]) setTab("settings");
+    });
+  });
+}
+
+function renderNav(){
+  document.querySelectorAll(".appnav .navlink").forEach((link) => {
+    const key = link.getAttribute("data-tab");
+    const isModule = MODULE_TABS.includes(key);
+    link.hidden = isModule && !moduleState[key];
+    link.classList.toggle("active", key === activeTab);
+  });
+}
+
+function setTab(key){
+  activeTab = key;
+  document.getElementById("appmain").innerHTML = PAGES[key]();
+  document.getElementById("addr-path").textContent = ADDR_PATHS[key];
+  if (key === "settings") renderSettingsRows();
+  renderNav();
+}
+
+document.querySelectorAll(".appnav .navlink").forEach((link) => {
+  link.addEventListener("click", () => setTab(link.getAttribute("data-tab")));
+});
+
+setTab("change");
+</script>
+
+</body></html>

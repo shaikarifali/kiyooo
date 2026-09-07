@@ -11,6 +11,14 @@ reimplementing them. What it actually does: **adjudicates** whether a finding is
 real in your environment, **attributes** it to the person who can fix it, and
 **routes** it to them with proof it was real and proof it's fixed.
 
+**For reviewers: download [`docs/console-preview.html`](docs/console-preview.html)
+and open it in a browser** — a single self-contained file, no server, no
+Docker, no network calls. It's a faithful, click-through recreation of the
+real Next.js console (same nav, same on-page copy, same CSS tokens from
+`web/app/globals.css`) populated with example data, plus the pipeline,
+the AI attack-surface categories, the wrapped-scanner ledger, and all 8
+invariants — the fastest way to see the whole system's shape in one sitting.
+
 **See [`ARCHITECTURE.md`](ARCHITECTURE.md)** for the full pipeline diagram,
 component-by-component walkthrough, data model, and the safety invariants
 enforced in code — the how-it-works reference for reviewers. `CLI.md` is the
