@@ -184,7 +184,7 @@ button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-
       the complete console: the original recon/triage/cost pipeline (Stages 0–12) plus the cloud, containers, repo,
       and mobile modules added on top of it (Stages 13–17) — one nav, one pipeline, nothing set aside.</p>
     <div class="stat-row">
-      <div class="stat"><div class="value">15</div><div class="label">Console pages</div></div>
+      <div class="stat"><div class="value">17</div><div class="label">Console pages</div></div>
       <div class="stat"><div class="value">40</div><div class="label">Detection categories</div></div>
       <div class="stat"><div class="value">4</div><div class="label">OSS scanners wrapped</div></div>
       <div class="stat"><div class="value">696</div><div class="label">Tests passing</div></div>
@@ -210,7 +210,7 @@ button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-
 
   <section class="section">
     <div class="kicker">The console</div>
-    <h2>All 15 pages, the actual copy, live-clickable</h2>
+    <h2>All 17 pages, the actual copy, live-clickable</h2>
     <p class="section-intro">This is a faithful recreation of kiyooo's real Next.js UI — same nav grouping, same
       CSS tokens, same on-page copy shipped in the repo — populated with <span class="example-tag">example</span>
       data standing in for a scan you haven't run yet. Click anything in the sidebar, or flip a switch on Settings.</p>
@@ -232,11 +232,13 @@ button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-
           <button class="navlink" data-tab="containers"><span class="dot"></span>Containers</button>
           <button class="navlink" data-tab="repos"><span class="dot"></span>Repos</button>
           <button class="navlink" data-tab="mobile"><span class="dot"></span>Mobile</button>
+          <button class="navlink" data-tab="aisurface"><span class="dot"></span>AI attack surface</button>
           <button class="navlink" data-tab="attackpaths"><span class="dot"></span>Attack paths</button>
           <div class="navgroup">Triage &amp; assets</div>
           <button class="navlink" data-tab="triage"><span class="dot"></span>Triage queue</button>
           <button class="navlink" data-tab="assets"><span class="dot"></span>Asset explorer</button>
           <button class="navlink" data-tab="coverage"><span class="dot"></span>Coverage</button>
+          <button class="navlink" data-tab="scanruns"><span class="dot"></span>Scan runs</button>
           <button class="navlink" data-tab="categories"><span class="dot"></span>Categories</button>
           <div class="navgroup">Console</div>
           <button class="navlink" data-tab="models"><span class="dot"></span>Model configuration</button>
@@ -253,11 +255,11 @@ button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-
     <h2>The AI attack surface nobody else scans for</h2>
     <p class="section-intro">MCP servers, vector stores, model registries, notebook servers, shadow AI SaaS
       tenants — kiyooo fingerprints these with its own passive recon, the same way it finds a subdomain or an
-      open port. There's no dedicated nav page for it because it doesn't need one: these 10 categories and 5 new
-      asset types (<code>llm_endpoint</code>, <code>mcp_server</code>, <code>vector_db</code>,
-      <code>model_registry</code>, <code>notebook</code>) already flow through Asset explorer, Categories, and the
-      Triage queue you clicked through above — try the Asset explorer tab again, <code>mcp-legacy.acme.com</code>
-      and <code>vectors.acme.com</code> are in there.</p>
+      open port. Its own nav page — <b style="color:var(--text);">AI attack surface</b>, above — is only part of
+      the picture: these 10 categories and 5 new asset types (<code>llm_endpoint</code>, <code>mcp_server</code>,
+      <code>vector_db</code>, <code>model_registry</code>, <code>notebook</code>) also flow through Asset
+      explorer, Categories, and the Triage queue you clicked through above — try the Asset explorer tab again,
+      <code>mcp-legacy.acme.com</code> and <code>vectors.acme.com</code> are in there.</p>
     <div class="cat-grid">
       <div class="cat-card"><div><h4>exposed-inference-endpoint</h4><div class="meta">LLM inference server reachable from the internet</div></div><span class="mbadge critical">critical</span></div>
       <div class="cat-card"><div><h4>exposed-vector-store</h4><div class="meta">Vector database reachable without authentication</div></div><span class="mbadge critical">critical</span></div>
@@ -296,7 +298,7 @@ button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-
       <div class="lab-card">
         <h4>kiyoo-range</h4>
         <p>Not a planted-asset lab — the interactive front door onto both of the above. One page per shipped
-          category (13 infra + 10 AI), each with a live-evidence fetch against the real decoy, not a static link.</p>
+          category (30 infra + 10 AI), each with a live-evidence fetch against the real decoy, not a static link.</p>
         <div class="lab-cmd">$ kiyoo-labs range</div>
         <div class="lab-note">Also serves 4 categories with no other planted home: exposed-devops-console, subdomain-takeover, known-exploited-cve, shadow-saas-tenant.</div>
       </div>
@@ -362,8 +364,8 @@ button:focus-visible, a:focus-visible{ outline:2px solid var(--accent); outline-
 <script>
 const ADDR_PATHS = {
   change:"/", scope:"/scope", ingest:"/ingest",
-  cloud:"/cloud", containers:"/containers", repos:"/repos", mobile:"/mobile", attackpaths:"/attack-paths",
-  triage:"/triage", assets:"/assets", coverage:"/coverage", categories:"/categories",
+  cloud:"/cloud", containers:"/containers", repos:"/repos", mobile:"/mobile", aisurface:"/ai-surface", attackpaths:"/attack-paths",
+  triage:"/triage", assets:"/assets", coverage:"/coverage", scanruns:"/scan-runs", categories:"/categories",
   models:"/models", settings:"/settings", dashboard:"/dashboard",
 };
 const MODULE_TABS = ["cloud","containers","repos","mobile","attackpaths"];
@@ -452,6 +454,13 @@ coverage: () => `
   <div class="mcard"><h4 style="margin-bottom:8px;">Ownership resolution</h4>
     <div class="meta" style="line-height:2;">Confirmed owner — 143<br>Disputed — 12<br>Orphan — 34</div>
   </div>`,
+
+scanruns: () => `
+  <h3 class="pagetitle">Scan runs</h3>
+  <p class="desc">Every scan, ingest, or detect pass — a per-run audit trail every finding, change event, and
+    log line traces back to via its <code>scan_run_id</code>.</p>
+  <div class="mcard"><div class="mcard-top"><div><h4>run_8f21 <span class="example-tag">example</span></h4><div class="meta">profile: standard &middot; org: acme &middot; 6 hours ago</div></div><span class="mbadge low">complete</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>run_8f0a <span class="example-tag">example</span></h4><div class="meta">profile: deep &middot; --active &middot; yesterday</div></div><span class="mbadge low">complete</span></div></div>`,
 
 categories: () => `
   <h3 class="pagetitle">Categories</h3>
@@ -543,6 +552,16 @@ mobile: () => `
     <span class="mbadge low">enabled</span>
   </div></div>
   <div class="mcard" style="border-style:dashed;"><span class="mbtn secondary" style="opacity:.7;">+ Add an APK</span></div>`,
+
+aisurface: () => `
+  <h3 class="pagetitle">AI attack surface</h3>
+  <p class="desc">Native passive fingerprinting (<code>detect/ai_fingerprints.py</code>), not a wrapped external
+    tool — kiyooo finds these the same way recon finds a subdomain or an open port. The 10 categories below all
+    flow through the same Asset explorer, Categories, and Triage queue as everything else.</p>
+  <div class="mcard"><div class="mcard-top"><div><h4>mcp-legacy.acme.com <span class="example-tag">example</span></h4><div class="meta">mcp_server &middot; no auth on tool-call endpoint</div></div><span class="mbadge high">high</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>vectors.acme.com <span class="example-tag">example</span></h4><div class="meta">vector_db &middot; reachable without authentication</div></div><span class="mbadge critical">critical</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>notebook.acme.com <span class="example-tag">example</span></h4><div class="meta">notebook &middot; Jupyter, no token required</div></div><span class="mbadge critical">critical</span></div></div>
+  <div class="mcard"><div class="mcard-top"><div><h4>registry.acme.com <span class="example-tag">example</span></h4><div class="meta">model_registry &middot; MLOps dashboard, unauthenticated</div></div><span class="mbadge high">high</span></div></div>`,
 
 attackpaths: () => `
   <h3 class="pagetitle">Attack paths</h3>
