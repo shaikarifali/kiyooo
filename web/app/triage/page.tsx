@@ -29,6 +29,16 @@ export default function TriageQueuePage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [reviewer, setReviewer] = useState("");
   const [modal, setModal] = useState<"owner" | "resolution" | null>(null);
+  const [bulkActionError, setBulkActionError] = useState<string | null>(null);
+
+  function openModal(which: "owner" | "resolution") {
+    if (!reviewer.trim()) {
+      setBulkActionError("Enter a reviewer email above first — it's who these actions get attributed to.");
+      return;
+    }
+    setBulkActionError(null);
+    setModal(which);
+  }
 
   function toggle(id: string) {
     setSelected((prev) => {
@@ -195,23 +205,19 @@ export default function TriageQueuePage() {
             </button>
           </div>
           <div className="actions">
-            <button
-              className="secondary"
-              disabled={!reviewer.trim()}
-              title={reviewer.trim() ? "" : "enter a reviewer email above first"}
-              onClick={() => setModal("owner")}
-            >
+            <button className="secondary" onClick={() => openModal("owner")}>
               Assign Owner
             </button>
-            <button
-              className="secondary"
-              disabled={!reviewer.trim()}
-              title={reviewer.trim() ? "" : "enter a reviewer email above first"}
-              onClick={() => setModal("resolution")}
-            >
+            <button className="secondary" onClick={() => openModal("resolution")}>
               Other resolution
             </button>
           </div>
+        </div>
+      )}
+
+      {bulkActionError && (
+        <div className="error-box" style={{ marginTop: 8 }}>
+          {bulkActionError}
         </div>
       )}
 
