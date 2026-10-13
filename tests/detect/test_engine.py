@@ -135,7 +135,7 @@ async def test_run_detection_no_match_creates_nothing() -> None:
 
 
 async def test_run_detection_suppressed_by_promoted_suppressions_yaml_entry() -> None:
-    """Stage 8: `feedback/promote.py` writes a suppressions.yaml
+    """PLAN.md §7 Stage 8: `feedback/promote.py` writes a suppressions.yaml
     entry after N humans agree a category+asset combo is FP for the same
     reason — this proves that entry actually stops the finding from firing
     again, not just sitting inert in org-context.

@@ -1,4 +1,4 @@
-"""DNS resolution verification — asking a resolver,
+"""DNS resolution verification (PLAN.md §7 Stage 6) — asking a resolver,
 the same passive-classification reasoning Stage 1's `dnsx` adapter uses
 (you're asking a resolver, not touching the target). Uses the stdlib
 resolver (`socket.getaddrinfo` via the event loop) rather than adding a

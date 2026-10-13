@@ -1,4 +1,4 @@
-"""Evidence bundle assembly — the LLM's entire view of a
+"""Evidence bundle assembly (PLAN.md §4.1) — the LLM's entire view of a
 finding. Every evidence item gets a stable `ev_N` id *within this bundle*
 (not the same as `Evidence.id`, which is scan-scoped) — that's what the
 verdict's `citations` field and `triage/validator.py`'s citation-existence
@@ -8,10 +8,10 @@ Token budget is a rough character-count approximation (`chars // 4`), not a
 real tokenizer — this project takes no tokenizer dependency, and the goal
 is "stay well clear of the limit," not exact accounting. Evidence bodies
 are middle-elided to fit; an evidence item linked to the finding is never
-dropped entirely, only shrunk, down to a floor — the design's rule is
+dropped entirely, only shrunk, down to a floor — PLAN.md's rule is
 "truncate, never silently drop an evidence item cited by a rule."
 
-Redaction happens here, not in the
+Redaction (PLAN.md §11 open question #2) happens here, not in the
 provider layer: a `local_only` category must never reach this function
 with `is_hosted_call=True` (the caller — `triage/agent.py` — is expected to
 route it to a local provider only; this function still refuses as defense
@@ -216,7 +216,7 @@ def build_bundle(
             "related_change_events": [event.kind.value for event in change_events],
         },
         "available_verification_tools": list(_AVAILABLE_VERIFICATION_TOOLS),
-        # Stage 9: org-specific playbooks, selected by
+        # PLAN.md §7 Stage 9: org-specific playbooks, selected by
         # `skills/loader.py` against this category before the bundle was
         # built — knowledge injection only, no executable capability.
         "skills": [{"name": s.name, "body": s.body} for s in (skills or [])],

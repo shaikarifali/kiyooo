@@ -1,4 +1,4 @@
-"""Routing orchestrator: for every TRIAGED finding whose
+"""Routing orchestrator (PLAN.md §7 Stage 7): for every TRIAGED finding whose
 latest verdict is a true positive, resolves the route, renders + lints the
 ticket, and — per the category's autonomy level — either does nothing
 (shadow), drafts an `Approval` for a human to send, or files/reopens a

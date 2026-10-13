@@ -1,4 +1,4 @@
-"""Tenable.io / Nessus. `parse_vulnerability` is pure
+"""Tenable.io / Nessus (PLAN.md §7 Stage 1b). `parse_vulnerability` is pure
 and fixture-tested against Tenable.io's `/workbenches/vulnerabilities`
 shape; `fetch_vulnerabilities` makes the live call and is untested.
 """

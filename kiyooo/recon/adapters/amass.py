@@ -1,4 +1,4 @@
-"""amass enum -passive — passive subdomain enumeration. The design's v1 set names
+"""amass enum -passive — passive subdomain enumeration. PLAN.md's v1 set names
 this tool explicitly as "amass(passive)": active enumeration (brute force,
 zone transfer attempts) is a different, more intrusive subcommand this
 adapter never invokes.

@@ -1,4 +1,4 @@
-"""TLS handshake verification — a real handshake with
+"""TLS handshake verification (PLAN.md §7 Stage 6) — a real handshake with
 no client certificate presented, to observe what the server actually
 requires. This is the live probe `detect/predicates.py`'s
 `tls_handshake_requires_client_cert` predicate (Stage 4) has been waiting

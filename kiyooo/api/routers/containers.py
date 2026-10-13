@@ -1,4 +1,4 @@
-"""GET/POST /api/containers/scans — the web UI's Containers page (the design
+"""GET/POST /api/containers/scans — the web UI's Containers page (PLAN.md §7
 Stage 14): point kiyooo at a container image or a Kubernetes cluster and run
 Trivy (OSS, Apache-2.0) against it. Mirrors `cloud.py`'s account-list/
 create/sync shape exactly.

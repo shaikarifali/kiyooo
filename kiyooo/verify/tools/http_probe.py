@@ -1,4 +1,4 @@
-"""Read-only HTTP verification probe: GET/HEAD only, a
+"""Read-only HTTP verification probe (PLAN.md §7 Stage 6): GET/HEAD only, a
 capped response body, no auth attempted. `verify/safety.py` has already
 rejected anything else (POST/PUT/DELETE, a path not starting with `/`)
 before this module ever runs — this trusts its input the way every

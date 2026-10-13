@@ -1,8 +1,8 @@
 """Shared helpers for every decoy service in the kiyoo-ai lab.
 
-Every response in this lab is decoy-grade, never exploit-grade: it emits
-exactly the fingerprint a real kiyooo scan looks for, and nothing behind
-it. No service in this package executes
+Every response in this lab is decoy-grade, never exploit-grade (see
+../PLAN.md §0): it emits exactly the fingerprint a real kiyooo scan looks
+for, and nothing behind it. No service in this package executes
 attacker-supplied input, writes outside its own process memory, or
 implements the dangerous operation its banner advertises.
 """
@@ -17,7 +17,7 @@ LAB_NOTICE = (
     "This is a deliberately vulnerable security-research lab for the "
     "kiyooo project (https://github.com/). All data here is synthetic. "
     "No destructive action, code execution, or data exfiltration is "
-    "implemented behind this endpoint — see the design doc section 0."
+    "implemented behind this endpoint — see PLAN.md section 0."
 )
 
 

@@ -1,4 +1,4 @@
-"""Per-kind change-event detection.
+"""Per-kind change-event detection (PLAN.md §7 Stage 2).
 
 Given a `before`/`after` state pair for one asset (either can be `None` — no
 snapshot in that scan), `detect()` returns the single most specific
@@ -6,13 +6,13 @@ snapshot in that scan), `detect()` returns the single most specific
 `diff/engine.py` calls this once per asset that appears in either of the two
 scans being compared.
 
-Two of the design's nine named kinds are not implemented here:
+Two of PLAN.md's nine named kinds are not implemented here:
 
 `DNS_CHANGED` (a hostname's resolved-IP set changed) and `TAKEOVER_RISK` (a
 hostname stopped resolving to anything after previously resolving to
 something) are both edge-set comparisons — "which `RESOLVES_TO` edges does
 this hostname have now vs. last scan" — and `asset_edge` has no
-`scan_run_id` column (the design's schema versions `asset_snapshot` per scan,
+`scan_run_id` column (PLAN.md §3's schema versions `asset_snapshot` per scan,
 but not edges), so "the edge set as of scan N" isn't a query this schema can
 answer precisely yet. Approximating it from `first_seen`/`last_seen`
 timestamps would be unreliable enough to risk the DoD's own idempotency

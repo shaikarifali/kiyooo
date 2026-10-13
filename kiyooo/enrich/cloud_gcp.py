@@ -1,6 +1,6 @@
 """GCP cloud enrichment — deferred, not implemented this stage.
 
-Stage 3 names GCP alongside AWS and Azure, but only AWS's SDK
+PLAN.md §7 Stage 3 names GCP alongside AWS and Azure, but only AWS's SDK
 (`boto3`) ships a credential-free test double (`botocore.stub.Stubber`).
 Google's client libraries have no equivalent this project can rely on the
 same way, so implementing GCP here now would mean shipping code with no way

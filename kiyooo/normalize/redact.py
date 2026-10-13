@@ -1,4 +1,4 @@
-"""Secret redaction at ingest (Stage 11, invariant #7: "Secrets
+"""Secret redaction at ingest (PLAN.md §7 Stage 11, invariant #7: "Secrets
 are redacted at ingest. Store type, location, and partial hash. Never a
 live credential in plaintext evidence, logs, or tickets.").
 

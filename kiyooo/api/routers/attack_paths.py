@@ -1,4 +1,4 @@
-"""GET /api/attack-paths — Stage 17. Computed on demand each
+"""GET /api/attack-paths — PLAN.md §7 Stage 17. Computed on demand each
 call (see `graph/attack_path.py`'s docstring for why there's no persisted
 table); loads the whole graph/finding set rather than paging, matching
 this project's other whole-graph reads (`assets query`, decommission

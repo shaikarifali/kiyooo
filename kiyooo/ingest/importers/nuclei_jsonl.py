@@ -1,4 +1,4 @@
-"""nuclei JSONL file importer — the same output
+"""nuclei JSONL file importer (PLAN.md §7 Stage 1b) — the same output
 shape `recon/adapters/nuclei.py` parses live, replayed from a file the
 user already has (a scan run elsewhere, CI output, an older export).
 """

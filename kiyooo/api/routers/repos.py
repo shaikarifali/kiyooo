@@ -1,4 +1,4 @@
-"""GET/POST /api/repos/scans — the web UI's Repos page:
+"""GET/POST /api/repos/scans — the web UI's Repos page (PLAN.md §7 Stage 15):
 point kiyooo at a git repo and scan it for verified live secrets with
 TruffleHog (OSS engine, AGPL-3.0). Mirrors `cloud.py`/`containers.py`'s
 list/create/sync shape exactly.

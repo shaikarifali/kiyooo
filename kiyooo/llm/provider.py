@@ -1,9 +1,9 @@
-"""LLM provider abstraction. Every provider is a thin
+"""LLM provider abstraction (PLAN.md §7 Stage 5). Every provider is a thin
 REST wrapper over `httpx` — no vendor SDKs, so the whole layer is auditable
 in one place and testable offline via `httpx.MockTransport`, consistent
 with this project's "no live network calls in the test suite" rule.
 
-Evidence never enters the system prompt. This ABC takes
+Evidence never enters the system prompt (PLAN.md §4.5.1). This ABC takes
 that on faith from its caller — `complete()` sends whatever `messages` it's
 given verbatim; message construction discipline lives in `triage/bundler.py`
 and `triage/agent.py`, not here.
@@ -45,7 +45,7 @@ class ProviderError(Exception):
     """A provider call failed for a reason that isn't a model refusal —
     network error, auth failure, rate limit, malformed request. Distinct
     from `LlmResponse.refused`, which is a *successful* call the model
-    declined to answer.
+    declined to answer (PLAN.md §4.4's refusal handling).
     """
 
 
@@ -66,7 +66,7 @@ class LlmProvider(ABC):
         native structured-output mechanism where one exists (Anthropic:
         forced tool-use with `schema` as the tool's `input_schema`; Ollama:
         the `format` field) rather than JSON-mode-and-hope. Retry-with-
-        error-text is the caller's responsibility,
+        error-text (PLAN.md §4.3 step 4) is the caller's responsibility,
         not this method's — a provider makes one call and reports what it
         got.
         """

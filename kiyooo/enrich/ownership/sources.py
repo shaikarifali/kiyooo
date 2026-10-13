@@ -1,4 +1,4 @@
-"""The 6 ownership sources Stage 3 implements for real (the design's other
+"""The 6 ownership sources Stage 3 implements for real (PLAN.md §7's other
 2 — DNS audit log and LLM inference — are deferred; see
 `kiyooo.db.models.OwnershipSource`'s docstring for why).
 
@@ -220,7 +220,7 @@ async def git_blame_owner(
     manifest_file: str,
     email_to_owner: dict[str, str],
 ) -> OwnershipCandidate | None:
-    """the design doc names this "git blame," but per-line blame output has nothing
+    """PLAN.md names this "git blame," but per-line blame output has nothing
     useful to attribute to a whole asset — this uses the manifest file's
     most recent committer instead (`git log -1`), which is what "who owns
     the file that deployed this" actually needs.

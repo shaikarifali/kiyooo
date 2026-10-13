@@ -1,4 +1,4 @@
-"""Prompt file loading (the design doc: "versioned prompt files, not string literals
+"""Prompt file loading (PLAN.md: "versioned prompt files, not string literals
 in code"). The prompt version is stored on every `Verdict` row so a prompt
 change can be A/B tested and rolled back like a model change (invariant #8).
 """

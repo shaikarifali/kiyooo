@@ -4,7 +4,7 @@ Revision ID: 0014
 Revises: 0013
 Create Date: 2026-09-06
 
-Stage 13 — cloud posture via Prowler (OSS, Apache-2.0). SQLAlchemy's
+PLAN.md §7 Stage 13 — cloud posture via Prowler (OSS, Apache-2.0). SQLAlchemy's
 `Enum` stores a Python enum member's `.name`, not its `.value`, by default (no
 `values_callable` is set on this column — see e.g. 'MANDIANT_ASM' in
 0001_initial.py) — so the new Postgres enum label is the uppercase member

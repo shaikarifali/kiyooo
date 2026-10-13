@@ -1,4 +1,4 @@
-"""Verdict schema — the LLM's structured output. Enforced
+"""Verdict schema — the LLM's structured output (PLAN.md §4.2). Enforced
 with Pydantic + provider-native structured output: `verdict_json_schema()`
 is what `llm/provider.py`'s `complete()` gets as its `schema` argument
 (Anthropic's tool `input_schema`, Ollama's `format`), and `VerdictSchema`

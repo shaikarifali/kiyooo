@@ -1,4 +1,4 @@
-"""AI-tech fingerprint promotion — same pattern as
+"""AI-tech fingerprint promotion (PLAN.md §7 Stage 11b) — same pattern as
 `enrich/tech.py`'s wappalyzer-tag promotion, pointed at
 `detect/ai_fingerprints.py`'s AI-specific signature catalog instead
 (Ollama, Chroma, MCP, ... aren't in httpx's generic tech-detect database).

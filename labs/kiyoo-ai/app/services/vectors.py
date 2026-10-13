@@ -1,4 +1,4 @@
-"""`vectors` — a Chroma-shaped vector store.
+"""`vectors` — a Chroma-shaped vector store (PLAN.md §3.2).
 
 Heartbeat + collection *names* only, matching kiyooo's `chroma` fingerprint
 (body contains the literal key `"nanosecond heartbeat"`) and the

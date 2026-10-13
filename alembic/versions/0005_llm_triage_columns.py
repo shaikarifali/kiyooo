@@ -8,7 +8,7 @@ Stage 5's `triage/memory.py` needs `human_review.embedding` (nomic-embed-text's
 768-dim output — see `kiyooo.db.models._EMBEDDING_DIM`) for pgvector
 similarity retrieval, and the `pgvector` extension itself. `evidence.
 injection_suspected` is `normalize/injection.py`'s canary-scan output
- — existing rows default to `false`, not unknown, since a
+(PLAN.md §4.5.3) — existing rows default to `false`, not unknown, since a
 scan that ran before this migration genuinely never flagged anything.
 """
 

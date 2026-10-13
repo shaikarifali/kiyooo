@@ -307,7 +307,7 @@ CATEGORIES: list[Category] = [
                 "read_file — Read any file on the server filesystem.\n\n"
                 "Same reachability as a harmless MCP server — the tool catalog itself "
                 "is the finding kiyooo's category-aware triage catches that a bare "
-                "port scan can't."
+                "port scan can't (PLAN.md's 'demo centrepiece')."
             ),
         ),
         "labs/kiyoo-ai — mcp-ops",
@@ -418,7 +418,7 @@ CATEGORIES: list[Category] = [
                 "</title><h1>Jupyter Notebook</h1><p>token: null</p>\n\n"
                 "No token required. A real Jupyter server in this state is a "
                 "code-execution primitive — this decoy has no kernel attached and "
-                "never will."
+                "never will (PLAN.md §0's rule applies hardest here)."
             ),
         ),
         "labs/kiyoo-ai — notebook",

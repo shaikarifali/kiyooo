@@ -24,7 +24,7 @@ app = FastAPI(title="kiyoo-range", docs_url=None, redoc_url=None)
 _LAB_NOTICE = (
     "kiyoo-range is the interactive index for every kiyooo demo lab — all "
     "content it links to or serves directly is synthetic, decoy-grade, "
-    "never exploit-grade. See each lab's own README for detail."
+    "never exploit-grade. See each lab's own PLAN.md/README for detail."
 )
 
 _SEVERITY_COLOR = {

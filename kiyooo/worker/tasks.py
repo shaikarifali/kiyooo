@@ -1,4 +1,4 @@
-"""arq worker tasks. The CLI's own `_run_*` functions
+"""arq worker tasks (PLAN.md §7 Stage 11). The CLI's own `_run_*` functions
 (`kiyooo/cli.py`) are the single source of truth for what each pipeline
 stage does — these tasks call them on a schedule or in response to an
 event trigger instead of a human typing a command. Nothing here duplicates
@@ -51,7 +51,7 @@ async def _run_full_pipeline_after_scan(settings: Settings, org_context: OrgCont
 
 
 async def passive_discovery_scan(ctx: dict[str, object]) -> None:
-    """Hourly — Stage 11."""
+    """Hourly — PLAN.md §7 Stage 11."""
     settings = Settings()
     org_context = load_org_context(settings.org_context_path)
     seeds = [*org_context.scope.domains, *org_context.scope.wildcards]
@@ -62,7 +62,7 @@ async def passive_discovery_scan(ctx: dict[str, object]) -> None:
 
 
 async def active_scan(ctx: dict[str, object]) -> None:
-    """Weekly — Stage 11. Structurally cannot run unless
+    """Weekly — PLAN.md §7 Stage 11. Structurally cannot run unless
     scope.yaml's own authorization gates are set, same as `kiyooo scan
     --active` — this task doesn't add a second way to turn active scanning
     on, it just declines to run when the org-context gates are off.
@@ -79,7 +79,7 @@ async def active_scan(ctx: dict[str, object]) -> None:
 
 
 async def refresh_kev_feed(ctx: dict[str, object]) -> None:
-    """Daily — Stage 11. Writes CISA's raw KEV JSON to
+    """Daily — PLAN.md §7 Stage 11. Writes CISA's raw KEV JSON to
     `settings.kev_cache_path` so hourly passive scans read a cached file
     (`_run_detect(..., kev_file=...)`) instead of hitting the feed every
     single hour.

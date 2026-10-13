@@ -1,4 +1,4 @@
-"""CISA Known Exploited Vulnerabilities (KEV) catalog.
+"""CISA Known Exploited Vulnerabilities (KEV) catalog (PLAN.md §7 Stage 3).
 
 "CVE relevance is gated on known exploited + EPSS score, not CVSS" — this
 module answers the "known exploited" half (see `epss.py` for the other). The

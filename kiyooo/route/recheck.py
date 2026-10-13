@@ -1,4 +1,4 @@
-"""Closure-requires-proof: closing a ticket moves the
+"""Closure-requires-proof (PLAN.md §7 Stage 7): closing a ticket moves the
 finding to `VERIFICATION_PENDING`, never straight to `FIXED`. This module is
 the "targeted re-check" — re-runs only that finding's category predicate
 against the evidence collected in a given scan_run, and flips the finding to

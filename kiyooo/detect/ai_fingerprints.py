@@ -1,4 +1,4 @@
-"""Loads and matches `detect/fingerprints/ai.yaml` —
+"""Loads and matches `detect/fingerprints/ai.yaml` (PLAN.md §7 Stage 11b) —
 passive signature matching against evidence already collected by Stage 1's
 recon adapters. A match tags the asset (`enrich/ai_tech.py`); it never
 decides true/false-positive on its own — that's still a category

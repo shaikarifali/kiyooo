@@ -1,4 +1,4 @@
-"""GET /api/categories, POST /api/categories/{id}/preview — the design
+"""GET /api/categories, POST /api/categories/{id}/preview — PLAN.md §7
 Stage 10's "category editor with live 'what would this match' preview."
 The preview reuses `detect/cases.py`'s `Case` shape (asset + evidence +
 synthetic KEV/EPSS context) and `detect/evaluate.py`'s real

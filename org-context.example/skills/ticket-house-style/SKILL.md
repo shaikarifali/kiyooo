@@ -3,7 +3,7 @@ name: ticket-house-style
 description: >
   testcorp's house style for remediation writing — how appsec phrases
   steps so an on-call engineer with no security background can act on a
-  ticket without a follow-up question, matching the design's ticket-contract
+  ticket without a follow-up question, matching PLAN.md's ticket-contract
   goal of zero clarifying questions per ticket.
 applies_to_categories: [exposed-database, exposed-admin-panel, exposed-devops-console, leaked-secret]
 ---

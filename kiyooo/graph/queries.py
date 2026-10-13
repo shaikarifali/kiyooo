@@ -1,14 +1,14 @@
 """Minimal `assets query` filter language and the decommission-candidate
-query.
+query (PLAN.md §7 Stage 2).
 
 `kiyooo assets query <expr>...` takes one or more `field=value` /
 `field!=value` clauses, ANDed together. This is deliberately minimal — no
-substring/regex/OR support. The design doesn't specify a fuller query language
+substring/regex/OR support. PLAN.md doesn't specify a fuller query language
 anywhere else in the plan, and building one ahead of an actual need would be
 exactly the kind of unrequested abstraction CLAUDE.md rules out. Extend this
 once a real use case needs more than exact-match AND.
 
-Decommission-candidates implements three of the design's four named conditions
+Decommission-candidates implements three of PLAN.md's four named conditions
 (reachable, no owner >=0.8 confidence, unchanged in N scans) — the fourth,
 "serves no traffic signal," has no data source anywhere in the schema, and
 approximating "no data" as "no traffic" would bias the list toward flagging

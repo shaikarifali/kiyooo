@@ -1,5 +1,5 @@
 """nuclei — template-based scanning. `is_active = True` and the most powerful
-tool in the v1 set, which is exactly why CLAUDE.md invariant #1 and the design's
+tool in the v1 set, which is exactly why CLAUDE.md invariant #1 and PLAN.md's
 Stage 1 safety requirements single it out by name:
 
     "nuclei invoked with -etags dos,intrusive,fuzz and a template allowlist"
@@ -31,7 +31,7 @@ if TYPE_CHECKING:
     from kiyooo.recon.base import RunContext
 
 # Never negotiable: invariant #1 (no exploitation primitives — no dos, no
-# fuzzing, no intrusive checks) and Stage 1 name these three tags
+# fuzzing, no intrusive checks) and PLAN.md §7 Stage 1 name these three tags
 # explicitly.
 _EXCLUDED_TAGS = ("dos", "intrusive", "fuzz")
 

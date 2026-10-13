@@ -1,11 +1,11 @@
-"""skills/loader.py — Stage 9: org-specific playbooks injected
+"""skills/loader.py — PLAN.md §7 Stage 9: org-specific playbooks injected
 into triage on demand. Reads `org-context/skills/*/SKILL.md` (Anthropic
 skills format: YAML frontmatter — `name`, `description`,
 `applies_to_categories` — then a markdown body) and selects which ones
 apply to a given category, capping total injected tokens per bundle.
 
 A skill is a knowledge injection only here — the body text a category's
-`triage_hints` couldn't hold. The design also floats letting a skill ship
+`triage_hints` couldn't hold. PLAN.md also floats letting a skill ship
 executable helpers (`scripts/`) exposed as extra verification tools; that
 is deliberately not implemented — `verify/safety.py`'s `ALLOWED_TOOLS` is a
 closed, hardcoded set of exactly six reviewed tools by design ("the model

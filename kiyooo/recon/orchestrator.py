@@ -1,4 +1,4 @@
-"""Stage DAG + evidence writer.
+"""Stage DAG + evidence writer (PLAN.md §7 Stage 1).
 
 Runs every registered adapter for the current profile, in `_STAGE_ORDER`,
 feeding each stage's discovered assets forward as the next stage's targets.
@@ -71,12 +71,12 @@ _INLINE_THRESHOLD_BYTES = 4096
 
 class EvidenceWriter:
     """Turns an adapter's `ParsedEvidence` into a persisted `Evidence` row plus
-    the `Asset` row it belongs to ("raw stdout -> S3/MinIO, metadata
+    the `Asset` row it belongs to (PLAN.md §7: "raw stdout -> S3/MinIO, metadata
     row -> Postgres, content hash for dedupe").
 
     Storage is content-addressed (`cas/<sha256>.json`): an unchanged rescan
     that re-produces byte-identical raw output reuses the existing object
-    instead of re-uploading it. This is the "content hash for dedupe" the design doc
+    instead of re-uploading it. This is the "content hash for dedupe" PLAN.md
     asks for — it dedupes *storage*, not evidence rows; every scan still gets
     its own `Evidence` row tied to its own `scan_run_id`, because "identical to
     last time" is itself something Stage 2's diff engine needs to see.
@@ -157,7 +157,7 @@ class EvidenceWriter:
             content_hash=content_hash,
             size_bytes=len(raw_bytes),
             redacted=bool(secrets_found),
-            # the design — scanned before storage, not at triage time,
+            # PLAN.md §4.5.3 — scanned before storage, not at triage time,
             # so the flag is a durable property of the evidence row itself.
             injection_suspected=scan_evidence_content(redacted_content),
         )

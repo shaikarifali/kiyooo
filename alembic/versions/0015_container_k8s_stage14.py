@@ -5,7 +5,7 @@ Revision ID: 0015
 Revises: 0014
 Create Date: 2026-09-06
 
-Stage 14 — containers/Kubernetes via Trivy (OSS, Apache-2.0).
+PLAN.md §7 Stage 14 — containers/Kubernetes via Trivy (OSS, Apache-2.0).
 Same uppercase-member-name convention as 0010/0014 (SQLAlchemy's `Enum`
 stores `.name`, not `.value`, with no `values_callable` set on either
 column).

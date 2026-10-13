@@ -9,7 +9,7 @@ applies_to:
   - k8s_workload
   - container_image
 
-# This category's findings arrive exclusively via Stage 14's
+# This category's findings arrive exclusively via PLAN.md §7 Stage 14's
 # Trivy ingest path (`ingest/pipeline.py::ingest_finding`), which never
 # calls `detect/engine.py` — Trivy's own misconfig scanner already made the
 # determination. This `detect` block is a structural placeholder to satisfy

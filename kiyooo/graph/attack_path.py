@@ -1,4 +1,4 @@
-"""Attack path engine — the last of the domain-
+"""Attack path engine (PLAN.md §7 Stage 17) — the last of the domain-
 expansion stages, and the one that needs no new external tool: pure graph
 traversal over the asset graph Stage 2 already builds, which gets richer
 as Stages 13-16 add new asset types and their categories get linked in via
@@ -13,7 +13,7 @@ hops between them. Finding two unrelated problems that happen to share an
 asset graph is exactly the "seven unrelated findings" this collapses into
 one story.
 
-Deliberately simpler than the design's original sketch in one respect: this
+Deliberately simpler than PLAN.md's original sketch in one respect: this
 computes paths on demand from the current graph/finding state rather than
 maintaining a persisted `attack_path` table — there is no staleness to
 manage, and the traversal itself is cheap for the graph sizes this project

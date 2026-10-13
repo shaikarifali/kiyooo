@@ -4,7 +4,7 @@ Revision ID: 0017
 Revises: 0016
 Create Date: 2026-09-06
 
-Stage 16 — mobile static analysis. Same uppercase-member-name
+PLAN.md §7 Stage 16 — mobile static analysis. Same uppercase-member-name
 convention as 0010/0014/0015/0016.
 """
 

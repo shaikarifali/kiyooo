@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generates a self-signed, deliberately-expired TLS cert covering 40
-vhosts (app01.acmecorp.lab .. app40.acmecorp.lab) — Stage 12's
+vhosts (app01.acmecorp.lab .. app40.acmecorp.lab) — PLAN.md §7 Stage 12's
 "expired cert shared by 40 vhosts" clustering demo: kiyooo's fingerprint
 rule (normalize/fingerprint.py) clusters all 40 findings into one
 cluster_id because they share the same cert serial, so the demo shows 40

@@ -38,7 +38,7 @@ checked by hand against each service's real source in this session; the
 *live*, non-offline path (this app's proxy actually reaching a running
 `kiyoo-ai`/`acmecorp`) needs both those labs' Docker stacks up, which
 this sandbox can't do (no Docker daemon here) — rehearse that path once
-before relying on it, same rule as every other lab's README.
+before a booth, same rule as every other lab's README.
 
 ## Run
 

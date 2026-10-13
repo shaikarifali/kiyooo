@@ -1,4 +1,4 @@
-"""Full certificate chain verification — leaf plus
+"""Full certificate chain verification (PLAN.md §7 Stage 6) — leaf plus
 every intermediate the server actually presents. Python's stdlib `ssl`
 module only exposes the leaf certificate from a live connection
 (`SSLSocket.getpeercert()`); getting the intermediates needs OpenSSL's own

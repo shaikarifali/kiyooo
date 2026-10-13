@@ -1,4 +1,4 @@
-"""`internal-tools` — the drift scenario.
+"""`internal-tools` — the drift scenario (PLAN.md §4).
 
 Before: nginx-allowlist-shaped 403, no MCP protocol advertised at all.
 After `scenarios/dev-exposes-prod.sh` runs: the exact same dangerous

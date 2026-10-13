@@ -1,4 +1,4 @@
-"""Trivy — wraps aquasecurity/trivy (Apache-2.0,
+"""Trivy (PLAN.md §7 Stage 14) — wraps aquasecurity/trivy (Apache-2.0,
 ~36.5k GitHub stars, the most-adopted OSS container/k8s scanner; one binary
 covers image CVEs, secrets, and Kubernetes misconfiguration) rather than
 reimplementing any of that ourselves (§0's non-goal, same as every other

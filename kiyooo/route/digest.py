@@ -1,4 +1,4 @@
-"""Slack daily digest: a summary of change events + new
+"""Slack daily digest (PLAN.md §7 Stage 7): a summary of change events + new
 true positives since the last run, so people aren't paged per-finding.
 `build_digest` is pure; sending it is `route/sinks/slack.py`'s job.
 """

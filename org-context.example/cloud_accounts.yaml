@@ -1,4 +1,4 @@
-# cloud_accounts.yaml — Stage 13. One entry per cloud account
+# cloud_accounts.yaml — PLAN.md §7 Stage 13. One entry per cloud account
 # Prowler should audit. Loaded via the CLI (`kiyooo cloud accounts add --name
 # <name> --config <this-file-per-account>`) or the API/UI — this file is a
 # worked example of one account's config, not a list consumed directly like

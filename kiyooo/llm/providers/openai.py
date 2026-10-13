@@ -1,9 +1,9 @@
 """OpenAI — deferred, not implemented this stage.
 
-Stage 5 names 5 providers; Anthropic and Ollama were built and
+PLAN.md §7 Stage 5 names 5 providers; Anthropic and Ollama were built and
 tested for real (see `providers/anthropic.py`, `providers/ollama.py`) —
 between them they cover the two poles the rest of this project's design
-actually cares about (hosted frontier vs. local, the design's "Hosted vs.
+actually cares about (hosted frontier vs. local, PLAN.md §2's "Hosted vs.
 local" table). OpenAI, vLLM, and OpenRouter are all OpenAI-Chat-Completions-
 API-shaped (`POST /chat/completions` with `response_format: {"type":
 "json_schema", "json_schema": {...}}` for structured output, an

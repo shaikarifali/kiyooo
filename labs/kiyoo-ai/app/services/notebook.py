@@ -1,8 +1,8 @@
-"""`notebook` — a Jupyter-shaped server, no token.
+"""`notebook` — a Jupyter-shaped server, no token (PLAN.md §3.2).
 
 Matches kiyooo's `jupyter` fingerprint (body contains "jupyter"). No
 kernel exists behind this — there is no code-execution path here, ever
-(a real Jupyter server with
+(PLAN.md §0's rule applies hardest to this one: a real Jupyter server with
 no token is a code-execution primitive, so this decoy must never become
 one, even by accident).
 """

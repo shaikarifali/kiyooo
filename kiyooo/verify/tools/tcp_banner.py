@@ -1,4 +1,4 @@
-"""TCP banner grab verification: connect and read
+"""TCP banner grab verification (PLAN.md §7 Stage 6): connect and read
 whatever the service sends unprompted — no protocol handshake, no
 authentication attempted, nothing written to the socket beyond the TCP
 handshake itself.

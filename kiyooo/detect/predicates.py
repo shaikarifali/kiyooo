@@ -1,4 +1,4 @@
-"""The predicate library used by category and control YAML (the design
+"""The predicate library used by category and control YAML (PLAN.md §7
 Stage 4). Every predicate is pure — `(asset, evidence, ctx, arg) ->
 PredicateResult` — and records which `Evidence` row(s) it matched, since
 that's what feeds citations in Stage 5's LLM bundle.
@@ -6,12 +6,12 @@ that's what feeds citations in Stage 5's LLM bundle.
 17 predicates ship here (plus `evidence_injection_suspected` for Stage
 11b's `mcp-tool-poisoning-risk`, and `tls_protocol_version_in`/
 `nuclei_tags_include` for Stage 12's `weak-tls-version`/`generic-web-cve`
-demo-lab categories), 3 more than the design's prose list of 13 in §7 — each
+demo-lab categories), 3 more than PLAN.md's prose list of 13 in §7 — each
 one is still plan-sourced, just missing from that summary paragraph:
 `tls_cert_expires_within_days` because `expired-cert.yaml` (a required core
 category, and the DoD's own clustering demo case) has no other way to
 detect an expiring certificate; `tls_handshake_requires_client_cert`
-because it's `mtls_required`'s own `detect:` clause in the design's
+because it's `mtls_required`'s own `detect:` clause in PLAN.md §5.2's
 worked controls.yaml example; `service_banner_matches` because
 `exposed-database.yaml`'s worked example (also already shipped in
 org-context.example) pairs it with `port_in` as a fingerprint check that a
@@ -308,7 +308,7 @@ def tls_cert_expires_within_days(
 def tls_handshake_requires_client_cert(
     asset: Asset, evidence: list[Evidence], ctx: PredicateContext, arg: object
 ) -> PredicateResult:
-    """the design's `mtls_required` control detects exactly this. Reads
+    """PLAN.md §5.2's `mtls_required` control detects exactly this. Reads
     `Evidence.content_inline["requires_client_cert"]` — the contract a
     future dedicated mTLS-enforcement probe would populate; `tlsx` doesn't
     test this passively (it would require attempting a handshake with no
@@ -394,7 +394,7 @@ def has_control(
 def evidence_injection_suspected(
     asset: Asset, evidence: list[Evidence], ctx: PredicateContext, arg: object
 ) -> PredicateResult:
-    """Stage 11b's `mcp-tool-poisoning-risk`: a tool
+    """PLAN.md §7 Stage 11b's `mcp-tool-poisoning-risk`: a tool
     *description* enters a client's context window with instruction-level
     authority, so this points Stage 4.5's injection canary
     (`normalize/injection.py`, already run on every evidence write — see

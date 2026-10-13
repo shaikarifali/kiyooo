@@ -1,4 +1,4 @@
-"""`qdrant` — a Qdrant-shaped vector store.
+"""`qdrant` — a Qdrant-shaped vector store (PLAN.md §3.2).
 
 Matches kiyooo's `qdrant` fingerprint (`"title":\\s*"qdrant`) and the
 `exposed-vector-store` category (`port_in: [6333]` in the real deployment

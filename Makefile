@@ -24,7 +24,7 @@ fmt:
 down:
 	docker compose down
 
-# The acmecorp demo lab. Requires kiyooo's own
+# PLAN.md §7 Stage 12 — the acmecorp demo lab. Requires kiyooo's own
 # `make dev` stack (Postgres/Redis/MinIO) already running, plus
 # org_context_path pointed at org-context.example (the default). See
 # labs/acmecorp/README.md before your first run.
@@ -41,8 +41,8 @@ lab-up:
 	@echo "expired-cert:8443 (40 vhosts), sso-admin:8083, + 200 imported findings."
 	@echo "Run: uv run kiyooo scan --seeds labs/acmecorp/seeds.txt --profile standard"
 
-# Full teardown + reseed — under 60 seconds once images are already
-# pulled (first run pulls images and won't be as fast).
+# Full teardown + reseed — PLAN.md's DoD is "under 60 seconds," which this
+# meets once images are already pulled (first run pulls images and won't).
 lab-reset: lab-down lab-up
 
 # Refuses to start if the configured LLM providers would need egress —

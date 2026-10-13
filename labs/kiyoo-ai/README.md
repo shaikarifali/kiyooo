@@ -1,13 +1,12 @@
 # kiyoo-ai — the AI attack-surface lab
 
-A single Host-routed FastAPI app standing in for ~20 AI-native and
+PLAN.md: a single Host-routed FastAPI app standing in for ~20 AI-native and
 conventional services (MCP servers, a vector store, a model registry, a
 notebook server, plus a handful of conventional contrast cases), built to
-prove kiyooo's AI-asset detection against something closer to a real
-environment than a unit-test fixture. Same rule as `labs/acmecorp/`:
-everything here is decoy-grade, never exploit-grade — no code path here
-executes an attacker's input, only serves realistic-looking static
-responses.
+prove kiyooo's Stage 11b AI-asset detection against something closer to a
+real environment than a unit-test fixture. Same rule as `labs/acmecorp/`:
+everything here is decoy-grade, never exploit-grade — see `PLAN.md` §0
+before reading further.
 
 **Honesty note, read this first:** every service's response shape was
 verified directly against kiyooo's real fingerprint catalog
@@ -18,8 +17,9 @@ checked against the exact regex/header pattern kiyooo's pipeline matches
 on, not just eyeballed for plausibility. What has **not** been run: the
 full `docker compose up` -> `kiyooo scan` -> `kiyooo triage` chain against
 the live containers, because this environment has no running Docker
-daemon. **Rehearse that full chain once yourself before relying on this**
-— same caveat `labs/acmecorp/README.md` gives, for the same reason.
+daemon. **Rehearse that full chain once yourself before relying on this
+at a booth or public URL** — same caveat `labs/acmecorp/README.md` gives,
+for the same reason.
 
 ## Setup (once)
 
@@ -79,14 +79,15 @@ docker compose -f labs/kiyoo-ai/docker-compose.yml down -v
 |---|---|
 | `app/` | The FastAPI app — one module per decoy service under `app/services/` |
 | `docker-compose.yml`, `Dockerfile`, `requirements.txt` | Standalone; does not import the `kiyooo` package, so it can deploy to a public VPS on its own |
-| `expected.yaml` | Hand-verified expected-findings matrix — reference data, not wired to a CLI command (see the note at the top of that file for why) |
+| `expected.yaml` | Hand-verified expected-findings matrix (PLAN.md §2) — reference data, not wired to a CLI command (see the note at the top of that file for why) |
 | `PLANTED_SECRETS.md` | Inventory of every fake credential/artifact this lab serves, and proof each is fake |
 | `scenarios/` | The drift demo scripts |
+| `PLAN.md` | The full original design doc — DNS layout for a public deployment, hosting/abuse-containment checklist, and the build order this lab followed |
 
 ## Deploying this publicly
 
-A public deployment needs more than what's implemented here: account
-isolation, egress-deny, rate limits, a `security.txt`, and a disclosure
-notice are all real requirements before pointing real DNS at this.
-Nothing in this lab currently implements them; they belong at the
+`PLAN.md` §6 covers what a public deployment needs beyond what's here:
+account isolation, egress-deny, rate limits, `security.txt`, and a
+disclosure notice — all real requirements before pointing real DNS at
+this. Nothing in this lab currently implements them; they belong at the
 infrastructure layer (reverse proxy / cloud config), not in this app.

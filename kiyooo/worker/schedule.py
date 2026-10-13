@@ -1,4 +1,4 @@
-"""worker/schedule.py — Stage 11's named schedules, as plain
+"""worker/schedule.py — PLAN.md §7 Stage 11's named schedules, as plain
 data. Kept separate from `worker/tasks.py` so the schedule itself (what
 runs, how often) is testable without an arq/redis runtime — `tasks.py`
 turns each entry into an actual `arq.cron` job at import time.
@@ -12,12 +12,12 @@ from dataclasses import dataclass
 @dataclass(frozen=True, slots=True)
 class ScheduleEntry:
     task_name: str
-    cadence: str  # human-readable, matches the design's own wording
+    cadence: str  # human-readable, matches PLAN.md's own wording
     hour: int | None = None  # None = every hour (only meaningful for "hourly")
     weekday: int | None = None  # 0=Monday, arq/crontab convention
 
 
-# Stage 11: "continuous passive discovery (hourly), full active
+# PLAN.md §7 Stage 11: "continuous passive discovery (hourly), full active
 # scan (weekly), KEV feed refresh (daily), SLA escalation sweep (daily)" —
 # plus the re-check sweep Stage 7 built the decision logic for and Stage 11
 # is explicitly responsible for scheduling.

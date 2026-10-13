@@ -1,4 +1,4 @@
-"""`chat` — a public chatbot claiming tool access.
+"""`chat` — a public chatbot claiming tool access (PLAN.md §3.2).
 
 Matches kiyooo's `open_webui` fingerprint and the
 `public-chatbot-excessive-agency` category (body matches

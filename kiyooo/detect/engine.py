@@ -1,4 +1,4 @@
-"""YAML category evaluator. Evaluates every enabled
+"""YAML category evaluator (PLAN.md §7 Stage 4). Evaluates every enabled
 category against every asset it applies to, applies suppression — a
 category's own `suppress_if` clauses and controls.yaml's compensating
 controls — *before* a `Finding` row is ever created, computes the
@@ -11,7 +11,7 @@ and persisted as a `Control` row — visible to Stage 5's LLM bundle via
 `controls_detected` — but `Finding.raw_severity` always stays the
 category's own `severity_base`. `Verdict.adjusted_severity` /
 `compensating_controls` (Stage 5) is where a control's effect on severity
-actually gets recorded; the fingerprint-reconciliation rule in the design
+actually gets recorded; the fingerprint-reconciliation rule in PLAN.md §3
 is explicit that severity comes from the category, never from a detector.
 """
 
@@ -74,7 +74,7 @@ def _suppressed_by_controls(
 def _suppressed_by_promoted_rule(
     category: CategoryDefinition, suppressions: SuppressionsFile, asset: Asset
 ) -> bool:
-    """Stage 8: `feedback/promote.py` writes these entries after
+    """PLAN.md §7 Stage 8: `feedback/promote.py` writes these entries after
     N humans agree the same category+asset is a false positive for the same
     reason — a literal match, not a predicate, since a free-text rationale
     can't be turned into a precise predicate without another model call

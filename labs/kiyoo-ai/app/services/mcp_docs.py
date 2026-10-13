@@ -1,4 +1,4 @@
-"""`mcp-docs` — the harmless MCP twin.
+"""`mcp-docs` — the harmless MCP twin (PLAN.md §3.1, twin A).
 
 Byte-identical to `mcp_ops` in every way kiyooo's fingerprinting can see
 (protocol, transport, auth-none, TLS config) except the tool catalog. The

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# The drift scenario — the live moment in the demo.
+# The drift scenario (PLAN.md §4) — the live moment in the demo.
 #
 # Before: internal-tools.kiyoo-ai.lab -> 403, no MCP advertised.
 # After:  the same catalog as mcp-ops (query_customer_db, send_email,

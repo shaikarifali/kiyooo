@@ -1,4 +1,4 @@
-"""`ai-portal` — a shadow AI SaaS tenant decoy.
+"""`ai-portal` — a shadow AI SaaS tenant decoy (PLAN.md §3.2).
 
 The real deployment CNAMEs this hostname to an actual third-party AI SaaS
 login (a genuinely unsanctioned tenant is the finding). Locally/offline

@@ -1,4 +1,4 @@
-"""Anti-hallucination cross-checks + identifier verification,
+"""Anti-hallucination cross-checks + identifier verification (PLAN.md §4.4),
 run after every LLM call, deterministically — no model in this loop.
 
 Identifier verification's "resolvable in NVD/OSV" and "CVSS pulled from
@@ -7,7 +7,7 @@ nothing in the test suite calls it (same treatment as `enrich/kev.py`'s
 `fetch_kev_catalog`). `verify_identifiers` takes an optional `nvd_lookup`
 callable; without one, CVE/CWE/CVSS checks fall back to what's derivable
 from the bundle alone (evidence-presence, cross-referencing claims within
-the same verdict) rather than the full NVD authority check the design doc
+the same verdict) rather than the full NVD authority check PLAN.md
 describes — a documented partial mode, not a silent gap.
 """
 

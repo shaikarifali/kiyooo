@@ -1,4 +1,4 @@
-"""feedback/agreement.py — Stage 8's agreement dashboard:
+"""feedback/agreement.py — PLAN.md §7 Stage 8's agreement dashboard:
 model/human agreement rate per category, per model, per prompt_version.
 Categories with low agreement are the ones whose `triage_hints` need
 rewriting. Pure — the caller joins `HumanReview.agreed_with_model` (already

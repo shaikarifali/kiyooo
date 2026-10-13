@@ -1,7 +1,7 @@
 # Planted secrets inventory — kiyoo-ai lab
 
 Every "secret" this lab serves is shaped correctly but provably fake
-. None of these is a live credential. If any of them are ever
+(PLAN.md §5). None of these is a live credential. If any of them are ever
 reported as a real leak by a scanner or a person, that's this lab working
 as intended — point them here.
 

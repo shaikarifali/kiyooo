@@ -470,7 +470,7 @@ export type IngestTestResultOut = {
   error: string | null;
 };
 
-// Cloud posture — mirrors `ingest/adapters/prowler.py`'s
+// Cloud posture (PLAN.md §7 Stage 13) — mirrors `ingest/adapters/prowler.py`'s
 // `ProwlerConfig`. Point kiyooo at an AWS/Azure/GCP/Kubernetes account and
 // audit it with Prowler (OSS, Apache-2.0); every finding still flows through
 // the same category -> LLM triage -> human review pipeline as everything else.
@@ -497,7 +497,7 @@ export type CloudAccountCreateRequest = {
   enabled?: boolean;
 };
 
-// Containers & Kubernetes — mirrors
+// Containers & Kubernetes (PLAN.md §7 Stage 14) — mirrors
 // `ingest/adapters/trivy.py`'s `TrivyConfig`. Point kiyooo at a container
 // image or a Kubernetes cluster and scan it with Trivy (OSS, Apache-2.0);
 // same "candidate, not a finding" triage pipeline as everything else.
@@ -525,7 +525,7 @@ export type ContainerScanCreateRequest = {
   enabled?: boolean;
 };
 
-// Source code & supply chain — mirrors
+// Source code & supply chain (PLAN.md §7 Stage 15) — mirrors
 // `ingest/adapters/trufflehog.py`'s `TrufflehogConfig`. Point kiyooo at a
 // git repo and scan it for verified live secrets with TruffleHog (OSS
 // engine, AGPL-3.0); same "candidate, not a finding" triage pipeline.
@@ -550,7 +550,7 @@ export type RepoScanCreateRequest = {
   enabled?: boolean;
 };
 
-// Mobile static analysis — mirrors
+// Mobile static analysis (PLAN.md §7 Stage 16) — mirrors
 // `ingest/adapters/mobile_static.py`'s `MobileScanConfig`. Android only —
 // static analysis via apktool + a reused TruffleHog filesystem scan, no
 // device/emulator/Frida involved anywhere.
@@ -576,7 +576,7 @@ export type MobileScanCreateRequest = {
   enabled?: boolean;
 };
 
-// Attack path engine — computed on demand, mirrors
+// Attack path engine (PLAN.md §7 Stage 17) — computed on demand, mirrors
 // `graph/attack_path.py`'s dataclasses.
 
 export type AttackPathHopOut = {

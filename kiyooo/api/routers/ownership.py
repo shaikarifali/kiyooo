@@ -1,4 +1,4 @@
-"""GET/POST /api/assets/{id}/ownership — Stage 10's "ownership
+"""GET/POST /api/assets/{id}/ownership — PLAN.md §7 Stage 10's "ownership
 override" deliverable, and Stage 7's "confirm or reassign in one click"
 UI action for a low-confidence attribution shown on a ticket. A POST here
 writes a `MANUAL` ownership candidate exactly like `ownership_

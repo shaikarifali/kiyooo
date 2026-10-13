@@ -1,4 +1,4 @@
-"""Per-scan immutable `asset_snapshot` rows.
+"""Per-scan immutable `asset_snapshot` rows (PLAN.md §7 Stage 2).
 
 One snapshot per asset touched in a scan run, capturing just enough of that
 asset's observable state for `diff/engine.py` to compare consecutive scans.

@@ -1,4 +1,4 @@
-"""snapshot(N-1) vs snapshot(N) -> `change_event` rows.
+"""snapshot(N-1) vs snapshot(N) -> `change_event` rows (PLAN.md §7 Stage 2).
 
 Compares every asset that has a snapshot in either the current scan or the
 previous one, and persists a `ChangeEvent` for every kind `diff.rules.detect`

@@ -1,4 +1,4 @@
-"""Prometheus metrics: "assets discovered, findings
+"""Prometheus metrics (PLAN.md §7 Stage 11): "assets discovered, findings
 by verdict, LLM cost/run, cache hit rate, tool failure rate, scan
 duration, critical-miss rate."
 

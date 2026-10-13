@@ -1,4 +1,4 @@
-"""ScopeGuard — the hard boundary.
+"""ScopeGuard — the hard boundary (PLAN.md §7 Stage 1, CLAUDE.md invariant #2).
 
 Every adapter calls `ScopeGuard.check()` before it sends a single packet to a
 target. No other code path is permitted to originate outbound network activity
@@ -7,7 +7,7 @@ sandboxing that physically prevents an adapter from ignoring it) — the discipl
 is: `run()` implementations call `check()` first and branch on the result, full
 stop. `orchestrator.py` never calls a tool for a target ScopeGuard has not ALLOWed.
 
-**Matching rules (Stage 1 interpretation — the design doc gives the config fields but
+**Matching rules (Stage 1 interpretation — PLAN.md gives the config fields but
 not their exact matching semantics):**
 
 - `domains`: exact hostname match only. A domain you own also needs its
@@ -17,7 +17,7 @@ not their exact matching semantics):**
   hostname.
 - `cidrs`: IP containment via `ipaddress`.
 - `asns`: literal match only, against a target already given in `AS<number>`
-  form. Resolving an arbitrary IP to its ASN is an enrichment lookup (the design doc
+  form. Resolving an arbitrary IP to its ASN is an enrichment lookup (PLAN.md
   §6 `enrich/asn.py`, Stage 3), not something ScopeGuard does itself — doing
   live ASN resolution inside the scope check would make the safety boundary
   depend on a third-party lookup succeeding.

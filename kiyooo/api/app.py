@@ -1,4 +1,4 @@
-"""FastAPI app: assets, findings (+verdict+evidence),
+"""FastAPI app (PLAN.md §7 Stage 10): assets, findings (+verdict+evidence),
 change feed, scan runs, review actions, ownership override, coverage
 stats. OpenAPI spec is FastAPI's automatic `/openapi.json` — no separate
 spec to hand-maintain.

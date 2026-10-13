@@ -1,4 +1,4 @@
-"""Compensating control detection.
+"""Compensating control detection (PLAN.md §7 Stage 4 / §5.2).
 
 Evaluates every `ControlDefinition.detect` block against one asset and
 persists a `Control` row for each match — idempotently, via

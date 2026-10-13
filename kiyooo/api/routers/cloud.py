@@ -1,4 +1,4 @@
-"""GET/POST /api/cloud/accounts — the web UI's Cloud page (the design
+"""GET/POST /api/cloud/accounts — the web UI's Cloud page (PLAN.md §7
 Stage 13): point kiyooo at an AWS/Azure/GCP/Kubernetes account and run
 Prowler (OSS, Apache-2.0) against it. Mirrors `ingest.py`'s source-list/
 create/sync shape exactly (Part D §8 parity: CLI and API share this

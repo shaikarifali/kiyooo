@@ -1,5 +1,5 @@
 """Generic evaluation of a `PredicateBlock` / bare predicate-clause list
-against one asset. Shared by `detect/controls.py`
+against one asset (PLAN.md §7 Stage 4). Shared by `detect/controls.py`
 (each control's own `detect:` block) and `detect/engine.py` (each
 category's `detect:` and `suppress_if:` blocks) so both interpret the same
 YAML shape — `all_of` is AND, `any_of` is OR, a bare clause list (like

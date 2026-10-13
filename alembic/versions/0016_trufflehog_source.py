@@ -4,7 +4,7 @@ Revision ID: 0016
 Revises: 0015
 Create Date: 2026-09-06
 
-Stage 15 — source code & supply chain via TruffleHog (OSS
+PLAN.md §7 Stage 15 — source code & supply chain via TruffleHog (OSS
 engine, AGPL-3.0). Same uppercase-member-name convention as 0010/0014/0015.
 """
 

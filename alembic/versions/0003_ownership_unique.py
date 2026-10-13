@@ -4,7 +4,7 @@ Revision ID: 0003
 Revises: 0002
 Create Date: 2026-08-07
 
-Stage 3 adds three ownership sources the design's confidence table names but
+Stage 3 adds three ownership sources PLAN.md §7's confidence table names but
 the original enum didn't have slots for (TEAM_PATTERN, GIT_BLAME,
 SIBLING_ASSET — see kiyooo.db.models.OwnershipSource's docstring), plus a
 uniqueness constraint: one candidate row per (asset, source), so re-running

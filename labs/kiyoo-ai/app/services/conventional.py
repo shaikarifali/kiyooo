@@ -1,5 +1,5 @@
-"""The non-AI half of the lab — plumbing and contrast, not
-the main point. Three of these matter more than the rest: `portal` (SSO
+"""The non-AI half of the lab (PLAN.md §3.3) — plumbing and contrast, not
+the pitch. Three of these matter more than the rest: `portal` (SSO
 false-positive), `shop` (WAF-reduced, not suppressed), `legacy`
 (expired-cert, correctly low/not-exploitable) — these prove triage is
 doing work, not just detecting.
@@ -22,7 +22,7 @@ async def landing() -> str:
     return (
         f"<h1>kiyoo-ai lab</h1><p>{LAB_NOTICE}</p>"
         f"<p>Part of the <a href='https://github.com/'>kiyooo</a> project. "
-        f"See <code>the design doc</code> in this lab's repo for the full asset "
+        f"See <code>PLAN.md</code> in this lab's repo for the full asset "
         f"inventory and expected findings.</p>"
     )
 
@@ -196,4 +196,4 @@ def build_noise_app(name: str) -> FastAPI:
     return noise_app
 
 
-NOISE_HOST_COUNT = 10  # 100 in the design's public deployment; 10 is enough locally
+NOISE_HOST_COUNT = 10  # 100 in PLAN.md's public deployment; 10 is enough locally

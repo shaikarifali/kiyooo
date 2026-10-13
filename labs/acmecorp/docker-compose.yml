@@ -1,4 +1,4 @@
-# Stage 12 — a fake org, planted to exercise real shipped
+# PLAN.md §7 Stage 12 — a fake org, planted to exercise real shipped
 # categories (and, just as importantly, their false-positive paths).
 # Everything here binds to 127.0.0.1 only — this lab is meant to run
 # entirely offline on one laptop, never on a real network. See
@@ -26,7 +26,7 @@ services:
   # exposed-nonprod-to-internet (TP, downgraded to medium by seeded-data
   # detection) — a staging app with a debug header and obviously-fake
   # customer data, so the triage step demonstrates the fixture-data
-  # downgrade the design's category triage_hints calls for.
+  # downgrade PLAN.md's category triage_hints calls for.
   staging-app:
     image: nginx:alpine
     ports:

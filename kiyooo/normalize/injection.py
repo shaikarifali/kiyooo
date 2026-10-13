@@ -1,4 +1,4 @@
-"""Prompt injection canary scan. Runs across every
+"""Prompt injection canary scan (PLAN.md §4.5.3). Runs across every
 evidence body at ingest — HTTP response bodies, page titles, TLS cert CN/
 SAN fields, headers, service banners, JS content are all attacker-
 controlled (whoever runs the scanned host wrote them). A hit sets

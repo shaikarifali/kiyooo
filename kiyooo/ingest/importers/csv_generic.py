@@ -1,4 +1,4 @@
-"""Generic CSV importer — for any vendor export
+"""Generic CSV importer (PLAN.md §7 Stage 1b) — for any vendor export
 without a dedicated adapter. Column names are supplied by the caller
 (`kiyooo ingest --file x.csv --asset-col host ...`), never guessed at —
 an org's export columns aren't something this module can know in advance.

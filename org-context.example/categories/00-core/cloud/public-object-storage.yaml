@@ -8,7 +8,7 @@ severity_base: critical
 applies_to:
   - cloud_resource
 
-# This category's findings arrive exclusively via Stage 13's
+# This category's findings arrive exclusively via PLAN.md §7 Stage 13's
 # Prowler ingest path (`ingest/pipeline.py::ingest_finding`), which never
 # calls `detect/engine.py` — Prowler already ran the actual check. This
 # `detect` block exists only to satisfy `CategoryDefinition`'s schema (every

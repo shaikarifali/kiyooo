@@ -142,7 +142,7 @@ def test_nuclei_emits_matched_at_as_url_with_full_finding_in_content() -> None:
 
 def test_nuclei_always_excludes_dos_intrusive_fuzz_tags() -> None:
     """The one adapter where the command line itself is a safety control
-    . This test exists so nobody can quietly drop the
+    (PLAN.md §7 Stage 1). This test exists so nobody can quietly drop the
     flag in a refactor without a test noticing.
     """
     from kiyooo.recon.adapters.nuclei import _EXCLUDED_TAGS

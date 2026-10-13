@@ -1,6 +1,6 @@
 """Ollama — thin `httpx` wrapper over the local `/api/chat` and `/api/embed`
-endpoints. The "nothing leaves the host" half of the
-hosted-vs-local duality.
+endpoints (PLAN.md §7 Stage 5). The "nothing leaves the host" half of the
+hosted-vs-local duality (PLAN.md §2).
 
 Structured output via Ollama's `format` field set to the JSON schema
 directly (its native structured-outputs mode, not `format: "json"`'s
@@ -18,7 +18,7 @@ import httpx
 
 from kiyooo.llm.provider import LlmProvider, LlmResponse, Message, ProviderError
 
-_DEFAULT_TIMEOUT_S = 120.0  # local inference on CPU can be slow
+_DEFAULT_TIMEOUT_S = 120.0  # local inference on CPU can be slow (PLAN.md §2's "laptop" tier)
 
 
 class OllamaProvider(LlmProvider):

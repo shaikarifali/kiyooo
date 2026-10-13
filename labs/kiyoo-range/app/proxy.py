@@ -8,7 +8,7 @@ never leaves kiyoo-range's own origin.
 
 Decoy-grade like everything else here: this forwards GET/POST bytes
 as-is, it does not add capability the underlying lab doesn't already
-have.
+have (see kiyoo-ai/PLAN.md section 0).
 """
 
 from __future__ import annotations

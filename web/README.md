@@ -1,13 +1,13 @@
 # kiyooo web
 
-Next.js (App Router, TypeScript) frontend for kiyooo — Stage 10.
+Next.js (App Router, TypeScript) frontend for kiyooo — PLAN.md §7 Stage 10.
 Talks to the FastAPI backend in `../kiyooo/api/` over plain `fetch`; no
 server-side auth or session handling yet (the API itself has none — see
 `kiyooo/api/deps.py`).
 
 ## Pages
 
-In the design's priority order:
+In PLAN.md's priority order:
 
 1. `/` — change feed (landing page: "what's new since yesterday")
 2. `/triage`, `/triage/[id]` — triage queue + finding detail (verdict,

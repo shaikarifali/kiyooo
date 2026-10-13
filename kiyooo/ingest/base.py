@@ -1,4 +1,4 @@
-"""Common shape every vendor adapter / file importer maps onto (the design
+"""Common shape every vendor adapter / file importer maps onto (PLAN.md §7
 Stage 1b). "We ingest their findings; we do not inherit their severity" —
 `vendor_severity` is carried through for reference only; `ingest/pipeline.py`
 never reads it to set `Finding.raw_severity`, only `category.severity_base`

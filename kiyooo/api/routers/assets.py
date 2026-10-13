@@ -1,4 +1,4 @@
-"""GET /api/assets (filter/search), GET /api/assets/{id} — the design
+"""GET /api/assets (filter/search), GET /api/assets/{id} — PLAN.md §7
 Stage 10. Search reuses `graph/queries.py`'s existing `field=value` filter
 language (Stage 2) rather than inventing a second query DSL for the API.
 """

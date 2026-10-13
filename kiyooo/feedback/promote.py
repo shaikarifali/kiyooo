@@ -1,4 +1,4 @@
-"""feedback/promote.py — Stage 8: when N humans mark the same
+"""feedback/promote.py — PLAN.md §7 Stage 8: when N humans mark the same
 category+asset a false positive for the same reason, propose a
 `suppressions.yaml` entry rather than eating that noise forever. Pure —
 grouping and YAML-entry construction only; opening the PR against

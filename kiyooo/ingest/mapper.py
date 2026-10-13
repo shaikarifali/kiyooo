@@ -1,4 +1,4 @@
-"""vendor_issue_type -> our category_id. Pure lookup
+"""vendor_issue_type -> our category_id (PLAN.md §7 Stage 1b). Pure lookup
 against the org-context mapping table — an unmapped vendor issue type is
 not an error, it's a work item (`kiyooo ingest --report-unmapped`).
 """

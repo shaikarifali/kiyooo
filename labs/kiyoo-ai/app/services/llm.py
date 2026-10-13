@@ -1,12 +1,12 @@
 """`llm` — an Ollama-shaped + OpenAI-compatible inference endpoint
-. Real response shapes on purpose: kiyooo's `ollama` and
+(PLAN.md §3.2). Real response shapes on purpose: kiyooo's `ollama` and
 `openai_compatible` fingerprints match on the literal text a real server
 returns (`GET /` -> "Ollama is running"; `/v1/models` -> the OpenAI list
 envelope), so this is not a paraphrase of those responses, it's the same
 bytes a live Ollama/vLLM instance would send.
 
 `/api/generate` returns one canned string, always — this is a lab, not a
-free inference backend for the internet (see the design, abuse
+free inference backend for the internet (see PLAN.md §6, abuse
 containment).
 """
 

@@ -1,4 +1,4 @@
-"""Tech fingerprint promotion.
+"""Tech fingerprint promotion (PLAN.md §7 Stage 3).
 
 httpx's evidence already carries a wappalyzer-style `tech[]` array (Stage 1's
 `-tech-detect` flag, already surfaced in Stage 2's per-scan snapshot state) —

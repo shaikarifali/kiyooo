@@ -64,7 +64,7 @@ class AssetRepository(Repository[Asset]):
         return await self.add(asset)
 
     async def list_by_value_suffix(self, suffix: str) -> list[Asset]:
-        """Used by the sibling-asset ownership source to
+        """Used by the sibling-asset ownership source (PLAN.md §7 Stage 3) to
         find other hostnames under the same parent domain, e.g.
         `suffix=".example.com"` matches `api.example.com`.
         """

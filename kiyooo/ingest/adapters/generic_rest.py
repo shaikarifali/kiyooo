@@ -1,4 +1,4 @@
-"""Generic, config-driven REST/JSON connector (Stage 1b, "or
+"""Generic, config-driven REST/JSON connector (PLAN.md §7 Stage 1b, "or
 any other" tool). Every other adapter in this package is one hardwired
 `parse_*()` per vendor because Mandiant/Tenable's shapes were verified
 against real docs; this one instead validates a `GenericRestConfig` (the

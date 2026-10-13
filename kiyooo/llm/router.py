@@ -1,9 +1,9 @@
-"""Bulk vs escalation model selection + per-run cost ceiling (the design
+"""Bulk vs escalation model selection + per-run cost ceiling (PLAN.md §7
 Stage 5, §2's model routing policy).
 
 Every finding gets a bulk-pass call first — routing here only decides
 whether an *escalation* pass follows it, based on what the bulk pass
-actually returned: confidence below the category's
+actually returned (PLAN.md §4.3 step 6): confidence below the category's
 own `escalation_threshold`, severity >= high, or `category.always_escalate`.
 Never a decision made in advance of seeing the bulk result.
 
@@ -34,7 +34,7 @@ _ESCALATE_SEVERITIES = frozenset({Severity.HIGH, Severity.CRITICAL})
 class CostCeilingExceeded(Exception):
     """Raised before a call that would push a scan_run's total LLM spend
     past its configured ceiling. The run halts and reports rather than
-    silently continuing to spend.
+    silently continuing to spend (PLAN.md §2).
     """
 
 

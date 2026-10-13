@@ -1,4 +1,4 @@
-"""`db` — a MySQL 5.7.29 handshake decoy on TCP.
+"""`db` — a MySQL 5.7.29 handshake decoy on TCP (PLAN.md §3.3, §1).
 
 The only non-HTTP listener in this lab, kept deliberately tiny: it writes
 one real MySQL protocol handshake packet and closes. No auth handler, no

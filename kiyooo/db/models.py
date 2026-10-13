@@ -1,4 +1,4 @@
-"""SQLAlchemy 2.0 models — the schema in the design, implemented as specified.
+"""SQLAlchemy 2.0 models — the schema in PLAN.md §3, implemented as specified.
 
 Deliberately no ORM `relationship()` graph here: every cross-table reference is a
 plain foreign-key column. The repository layer (`db/repo/`) does explicit queries.
@@ -30,7 +30,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 from sqlalchemy.types import Enum as SAEnum
 
-# nomic-embed-text outputs
+# nomic-embed-text (PLAN.md §2's suggested local embedding model) outputs
 # 768-dim vectors — pinning the column to that dimension, not making it
 # configurable, mirrors invariant #8: changing the embedding model is a
 # model-pin change (`ModelPin`, role=EMBEDDING), not a runtime option.
@@ -46,7 +46,7 @@ def _uuid_pk() -> Mapped[uuid.UUID]:
 
 
 # --------------------------------------------------------------------------- #
-# Enums — every one of these is a closed vocabulary. Adding a
+# Enums — every one of these is a closed vocabulary from PLAN.md §3. Adding a
 # value later is a migration, same as adding a column.
 # --------------------------------------------------------------------------- #
 
@@ -86,13 +86,13 @@ class AssetType(enum.StrEnum):
     MCP_SERVER = "mcp_server"
     MODEL_REGISTRY = "model_registry"
     AI_AGENT_WEBHOOK = "ai_agent_webhook"
-    # Stage 11b's remaining three named asset types —
+    # PLAN.md §7 Stage 11b's remaining three named asset types —
     # llm_endpoint/mcp_server/model_registry/vector_db (vector_store)
     # already existed from Stage 0's forward-looking schema.
     NOTEBOOK = "notebook"
     AI_APP = "ai_app"
     AI_SAAS_TENANT = "ai_saas_tenant"
-    # Stage 14 — containers/Kubernetes.
+    # PLAN.md §7 Stage 14 — containers/Kubernetes.
     CONTAINER_IMAGE = "container_image"
     K8S_CLUSTER = "k8s_cluster"
     K8S_WORKLOAD = "k8s_workload"
@@ -194,7 +194,7 @@ class OwnerType(enum.StrEnum):
 
 
 class OwnershipSource(enum.StrEnum):
-    """Stage 3's 8-source confidence table. `IAC` is reserved for a
+    """PLAN.md §7 Stage 3's 8-source confidence table. `IAC` is reserved for a
     future source reading `Owner`-style tags directly off Terraform resource
     blocks — Stage 3 only implements the state→repo→CODEOWNERS pipeline
     (`CODEOWNERS`), not a direct-tag variant. `DNS_AUDIT` (Route53/Cloudflare
@@ -234,18 +234,18 @@ class ExternalFindingSystem(enum.StrEnum):
     NUCLEI_JSON = "nuclei_json"
     NESSUS = "nessus"
     CUSTOM = "custom"
-    # Stage 13 — Prowler (OSS, Apache-2.0) cloud posture audits.
+    # PLAN.md §7 Stage 13 — Prowler (OSS, Apache-2.0) cloud posture audits.
     # A distinct value rather than CUSTOM: unlike the generic REST connector,
     # Prowler's config shape (`ingest/adapters/prowler.py`'s `ProwlerConfig`)
     # is fixed and dispatch (which parser runs) needs to key off `system`.
     PROWLER = "prowler"
-    # Stage 14 — Trivy (OSS, Apache-2.0) container image + k8s
+    # PLAN.md §7 Stage 14 — Trivy (OSS, Apache-2.0) container image + k8s
     # cluster scanning. Same reasoning as PROWLER above.
     TRIVY = "trivy"
-    # Stage 15 — TruffleHog (OSS engine, AGPL-3.0) verified
+    # PLAN.md §7 Stage 15 — TruffleHog (OSS engine, AGPL-3.0) verified
     # secret scanning in source repos. Same reasoning as PROWLER above.
     TRUFFLEHOG = "trufflehog"
-    # Stage 16 — mobile static analysis (apktool + reused
+    # PLAN.md §7 Stage 16 — mobile static analysis (apktool + reused
     # TruffleHog filesystem scan). Same reasoning as PROWLER above.
     MOBILE_STATIC = "mobile_static"
 
@@ -447,7 +447,7 @@ class ChangeEvent(Base):
 class Evidence(Base):
     __tablename__ = "evidence"
 
-    # Human-readable per ev_<scan>_<n>, assigned by the bundler/writer,
+    # Human-readable per PLAN.md §3: ev_<scan>_<n>, assigned by the bundler/writer,
     # not the database.
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     scan_run_id: Mapped[uuid.UUID] = mapped_column(
@@ -466,7 +466,7 @@ class Evidence(Base):
     content_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     size_bytes: Mapped[int | None] = mapped_column(Integer)
     redacted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    # normalize/injection.py's canary scan sets this on
+    # PLAN.md §4.5.3: normalize/injection.py's canary scan sets this on
     # ingest. Downstream, §4.5.4 inverts the triage default on any finding
     # whose bundle includes evidence flagged here — never auto-closeable.
     injection_suspected: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
@@ -492,7 +492,7 @@ class Finding(Base):
         SAEnum(FindingDetector, name="finding_detector"), nullable=False
     )
     detector_ref: Mapped[str | None] = mapped_column(String(256))
-    # Stable dedupe key; survives rescans. See fingerprint rule in the design —
+    # Stable dedupe key; survives rescans. See fingerprint rule in PLAN.md §3 —
     # never includes the raw IP for anything behind a load balancer.
     fingerprint: Mapped[str] = mapped_column(String(64), nullable=False, unique=True, index=True)
     cluster_id: Mapped[uuid.UUID | None] = mapped_column(Uuid(as_uuid=True), index=True)
@@ -539,7 +539,7 @@ class Verdict(Base):
         SAEnum(Severity, name="severity"), nullable=False
     )
     reasoning: Mapped[str] = mapped_column(Text, nullable=False)
-    # Stage 7's ticket contract needs this for the "why it
+    # PLAN.md §7 Stage 7's ticket contract needs this for the "why it
     # matters here" block; the model always produces it (VerdictSchema
     # requires it) but nothing persisted it before Stage 7.
     business_impact_hypothesis: Mapped[str] = mapped_column(Text, nullable=False)
@@ -581,7 +581,7 @@ class HumanReview(Base):
 
 class Ownership(Base):
     """One row per (asset, source): each ownership source that applies to an
-    asset gets its own candidate row, not a single merged row — the design
+    asset gets its own candidate row, not a single merged row — PLAN.md §7
     Stage 3's merge rule ("highest confidence wins; if top two disagree and
     both >=0.8, mark disputed... never silently pick one") is computed by
     querying all of an asset's rows, not by collapsing them at write time.
@@ -835,7 +835,7 @@ class ModuleToggle(Base):
 
 
 class AuditLog(Base):
-    """Append-only record of every ScopeGuard decision.
+    """Append-only record of every ScopeGuard decision (Stage 1, PLAN.md §8).
 
     Every outbound-capable action — allowed, denied, or requiring confirmation —
     gets a row here before any packet can be sent. This table is the evidence

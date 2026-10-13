@@ -1,4 +1,4 @@
-"""Verification request validation (Stage 6, §4.5.5's defense-
+"""Verification request validation (PLAN.md §7 Stage 6, §4.5.5's defense-
 in-depth layer: "the verification executor validates every argument
 against a typed schema and ScopeGuard, so a model persuaded by injected
 text to probe attacker.example.com is stopped at the executor rather than
@@ -11,7 +11,7 @@ the scope check itself lives in `verify/executor.py`, deliberately kept
 separate so a request can be rejected here without ever constructing a
 target string ScopeGuard would need to evaluate.
 
-Stage 11b's AI attack surface module names a hard constraint
+PLAN.md §7 Stage 11b's AI attack surface module names a hard constraint
 that lives here by omission, not by an explicit deny-list entry: an MCP
 server's `initialize`/`tools/list` handshake is read-only reconnaissance
 and would be a legitimate seventh tool if one existed here — `tools/call`
@@ -34,7 +34,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from kiyooo.triage.schema import VerificationRequest
 
-# The 6 tools Stage 6 names, and nothing else — the model cannot
+# The 6 tools PLAN.md §7 Stage 6 names, and nothing else — the model cannot
 # name a tool that isn't one of these regardless of what it asks for.
 ALLOWED_TOOLS = frozenset(
     {"http_probe", "tcp_banner", "tls_handshake", "dns_resolve", "cert_chain", "nuclei_single"}

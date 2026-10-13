@@ -1,4 +1,4 @@
-"""Evidence-driven `AssetEdge` derivation.
+"""Evidence-driven `AssetEdge` derivation (PLAN.md §7 Stage 2).
 
 Each tool that implies a relationship between two assets gets a small
 `derive_edges(item) -> list[EdgeHint]` function here, keyed by `source_tool`.

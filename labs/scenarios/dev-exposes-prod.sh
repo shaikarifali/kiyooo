@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Stage 12's "money shot" — live, on screen: a dev removes the
+# PLAN.md §7 Stage 12's "money shot" — live, on screen: a dev removes the
 # auth gateway in front of the admin panel, and kiyooo goes change event
 # -> triage -> owner attribution -> drafted ticket without anyone typing
 # more than this one command. Run `make lab-up` first.

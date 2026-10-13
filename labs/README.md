@@ -63,6 +63,13 @@ is the one `kiyoo-labs` opens by default.
 specifically; `kiyoo-ai` has its own equivalent under
 `labs/kiyoo-ai/scenarios/`.
 
+**Presenting this at a booth?** [`demo-10min.md`](demo-10min.md) and
+[`demo-40min.md`](demo-40min.md) are scripted, minute-by-minute walkthroughs
+across both labs plus the real tool — what to run, what to say, and what
+to always pre-run rather than live (full recon scans genuinely take
+several minutes against `.lab` domains; never start one in front of
+someone).
+
 ## Adding a new lab
 
 Give it its own folder here (`labs/<name>/`) with its own README, compose

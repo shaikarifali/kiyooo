@@ -100,7 +100,7 @@ async def sync_prowler_source(
     source_repo: ExternalFindingSourceRepository,
     scan_run_repo: ScanRunRepository,
 ) -> IngestOutcome:
-    """Stage 13 — same shape as `sync_generic_source`, swapping
+    """PLAN.md §7 Stage 13 — same shape as `sync_generic_source`, swapping
     an HTTP fetch for a Prowler subprocess run. Prowler always audits an
     account's current state (there is no `--since`), so there's no
     watermark to compute going in — `last_sync_at` still gets recorded on
@@ -151,7 +151,7 @@ async def sync_trufflehog_source(
     source_repo: ExternalFindingSourceRepository,
     scan_run_repo: ScanRunRepository,
 ) -> IngestOutcome:
-    """Stage 15 — same shape as `sync_prowler_source`/
+    """PLAN.md §7 Stage 15 — same shape as `sync_prowler_source`/
     `sync_trivy_source`. A TruffleHog scan re-walks the repo's full history
     each run (no incremental `--since-commit` watermark wired up here);
     `(source_id, external_id)` idempotency in `ingest_batch` still means a
@@ -202,7 +202,7 @@ async def sync_mobile_static_source(
     source_repo: ExternalFindingSourceRepository,
     scan_run_repo: ScanRunRepository,
 ) -> IngestOutcome:
-    """Stage 16 — same shape as the other `sync_*_source`
+    """PLAN.md §7 Stage 16 — same shape as the other `sync_*_source`
     functions, except the adapter itself (`run_mobile_static_scan`) already
     returns `ImportedFinding`s directly rather than a raw-bytes/parse pair
     (there's no single tool's stdout to hand back — see that module's
@@ -252,7 +252,7 @@ async def sync_trivy_source(
     source_repo: ExternalFindingSourceRepository,
     scan_run_repo: ScanRunRepository,
 ) -> IngestOutcome:
-    """Stage 14 — same shape as `sync_prowler_source`, swapping
+    """PLAN.md §7 Stage 14 — same shape as `sync_prowler_source`, swapping
     the subprocess call for Trivy's. Like Prowler, a Trivy scan always
     reflects current state; there's no `--since` watermark to compute.
     """

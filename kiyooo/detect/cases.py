@@ -1,10 +1,10 @@
-"""Fixture format for `kiyooo categories test` (Stage 4 DoD:
+"""Fixture format for `kiyooo categories test` (PLAN.md §7 Stage 4 DoD:
 "runs each category against labeled fixture assets [should-match /
 should-not-match] and passes").
 
 One `<category-id>.cases.yaml` file sits alongside each category YAML in
 org-context — org-specific, since categories themselves are org-specific
-customization, not something this repo's own `tests/` can
+customization (PLAN.md §5), not something this repo's own `tests/` can
 cover for an org's custom `10-custom/` categories.
 """
 

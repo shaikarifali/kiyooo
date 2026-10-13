@@ -1,4 +1,4 @@
-"""`mcp-legacy` — the tool-poisoning case.
+"""`mcp-legacy` — the tool-poisoning case (PLAN.md §3.1).
 
 A tool *description* carrying hidden imperative text aimed at whatever LLM
 reads the manifest. This tests two things at once: kiyooo's
@@ -8,7 +8,7 @@ the manifest is fed in via `kiyooo ingest` — a live scan never calls
 defence (normalize/injection.py) must treat this text as evidence to
 report, never as an instruction to follow. If a triage run over this
 manifest ever comes back false_positive, that's a real bug in the
-pipeline, not a lab bug — see the design's closing note.
+pipeline, not a lab bug — see PLAN.md §3.1's closing note.
 """
 
 from __future__ import annotations

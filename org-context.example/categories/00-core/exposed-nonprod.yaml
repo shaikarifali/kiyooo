@@ -46,7 +46,7 @@ route:
     low: 45
     info: 90
   ticket_template: templates/nonprod-exposure.md.j2
-  # Stage 7: every new category ships at autonomy 0 (shadow);
+  # PLAN.md §7 Stage 7: every new category ships at autonomy 0 (shadow);
   # this one is promoted to 1 (approval queue) as a worked example — a human
   # still clicks send, nothing auto-files.
   autonomy_level: 1

@@ -1,4 +1,4 @@
-"""AWS cloud enrichment — read-only, maps public IPs,
+"""AWS cloud enrichment (PLAN.md §7 Stage 3) — read-only, maps public IPs,
 ELB DNS names, S3 buckets, and CloudFront distributions to their owning AWS
 account, resource, tags, and (for EC2) security groups. GCP/Azure aren't
 implemented this stage — see `cloud_gcp.py`/`cloud_azure.py` — only AWS's

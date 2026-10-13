@@ -1,4 +1,4 @@
-# mobile_scans.yaml — Stage 16. One entry per local APK file to
+# mobile_scans.yaml — PLAN.md §7 Stage 16. One entry per local APK file to
 # statically analyze. Loaded via the CLI (`kiyooo mobile scans add --name
 # <name> --config <this-file-per-apk>`) or the API/UI.
 #

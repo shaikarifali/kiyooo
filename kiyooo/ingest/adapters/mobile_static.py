@@ -1,4 +1,4 @@
-"""Mobile static analysis — Android APK only in this
+"""Mobile static analysis (PLAN.md §7 Stage 16) — Android APK only in this
 stage; IPA is deferred (different tooling, different plist-based manifest
 shape — a real second effort, not a copy-paste of this one).
 

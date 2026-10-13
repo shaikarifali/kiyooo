@@ -1,4 +1,4 @@
-"""Ownership merge logic: "highest confidence wins; if
+"""Ownership merge logic (PLAN.md §7 Stage 3): "highest confidence wins; if
 top two disagree and both >=0.8, mark disputed and surface to a human. Never
 silently pick one."
 

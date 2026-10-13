@@ -1,4 +1,4 @@
-# repo_scans.yaml — Stage 15. One entry per repo TruffleHog
+# repo_scans.yaml — PLAN.md §7 Stage 15. One entry per repo TruffleHog
 # should scan for verified live secrets. Loaded via the CLI (`kiyooo repos
 # scans add --name <name> --config <this-file-per-repo>`) or the API/UI —
 # this file is a worked example of one repo's config, same

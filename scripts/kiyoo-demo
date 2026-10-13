@@ -1,0 +1,198 @@
+#!/usr/bin/env bash
+# Hands-free rehearsal helper for labs/demo-10min.md and labs/demo-40min.md.
+# It does not replace those files — it walks you through the same steps in
+# the same order, opens the right URL (or runs the one deterministic
+# command each step needs) and shows real elapsed time against that
+# step's budget, so you can practice pacing against the exact script
+# you'd use at the booth. Steps whose command needs a value only the
+# live run produces (a scan_run id) are shown, not executed — copy it
+# from the terminal output the way you would for real.
+#
+# Usage:
+#   kiyoo-demo 10        # labs/demo-10min.md
+#   kiyoo-demo 40        # labs/demo-40min.md (runs the 10-minute steps first)
+#
+# Install once so `kiyoo-demo` works from anywhere:
+#   ln -sf "$(pwd)/scripts/kiyoo-demo" ~/.local/bin/kiyoo-demo
+#
+set -euo pipefail
+
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+REPO_ROOT="$(cd "$(dirname "$SCRIPT_PATH")/.." && pwd)"
+cd "$REPO_ROOT"
+# /usr/local/bin and ~/go/bin go FIRST, deliberately, ahead of anything
+# .bashrc may have already put on PATH: this repo's own Python deps
+# install a console script literally named `httpx`, colliding with
+# ProjectDiscovery's real recon binary of the same name (confirmed live
+# — ~/.bashrc unconditionally prepends a venv bin dir that shadows it).
+# Whichever `httpx` PATH finds first wins; this makes it the real one.
+export PATH="/usr/local/bin:$HOME/go/bin:$HOME/.local/bin:$HOME/.local/node/bin:$PATH"
+
+RANGE_PORT="${KIYOO_RANGE_PORT:-9900}"
+WEB_PORT="${KIYOOO_WEB_PORT:-3000}"
+
+# Same fast-venv trick as scripts/kiyoo-labs: a venv on the native Linux
+# filesystem imports fastapi/sqlalchemy/etc in under a second; the same
+# venv sitting under /mnt/c can take minutes under load. This only
+# changes where the interpreter/packages load from — kiyooo itself is
+# still the live source in this repo (confirmed editable-installed
+# against it).
+if [ -x "$HOME/kiyooo/.venv/bin/kiyooo" ]; then
+  KIYOOO_BIN="$HOME/kiyooo/.venv/bin/kiyooo"
+else
+  KIYOOO_BIN="uv run kiyooo"
+fi
+
+STEP_N=0
+DEMO_START=$(date +%s)
+
+info()  { echo -e "\033[1;34m==>\033[0m $*"; }
+ok()    { echo -e "\033[1;32m✓\033[0m $*"; }
+
+open_url() {
+  local url="$1"
+  if command -v explorer.exe >/dev/null 2>&1; then
+    explorer.exe "$url" >/dev/null 2>&1 || true
+  elif command -v wslview >/dev/null 2>&1; then
+    wslview "$url" >/dev/null 2>&1 || true
+  elif command -v xdg-open >/dev/null 2>&1; then
+    xdg-open "$url" >/dev/null 2>&1 || true
+  else
+    echo "   open manually: $url"
+  fi
+}
+
+# step <budget_seconds> <title> <say> — prints the narration cue and
+# real elapsed-vs-budget time. Called once per step, before its action.
+step() {
+  local budget="$1" title="$2" say="$3"
+  STEP_N=$((STEP_N + 1))
+  local elapsed=$(( $(date +%s) - DEMO_START ))
+  local mm=$((elapsed / 60)) ss=$((elapsed % 60))
+  echo
+  echo -e "\033[1;36m── step ${STEP_N}: ${title}\033[0m  (budget ${budget}s · elapsed ${mm}m${ss}s)"
+  echo "$say" | fold -s -w 78 | sed 's/^/   /'
+}
+
+open_step() {
+  echo "   -> opening ${1}"
+  open_url "$1"
+}
+
+run_step() {
+  echo "   -> running: $1"
+  eval "$1"
+}
+
+show_step() {
+  echo "   -> run this yourself once you have the id it needs:"
+  echo "        $1"
+}
+
+pause() {
+  read -rp $'\n   [Enter for next step, Ctrl-C to stop] ' _ || true
+}
+
+preflight() {
+  local bad=0
+  if ! curl -sf "http://localhost:${RANGE_PORT}/healthz" >/dev/null 2>&1; then
+    echo "kiyoo-range isn't answering on :${RANGE_PORT} — run 'kiyoo-labs' first." >&2
+    bad=1
+  fi
+  if ! curl -sf "http://localhost:${WEB_PORT}/" >/dev/null 2>&1; then
+    echo "the web UI isn't answering on :${WEB_PORT} — run 'kiyoo' (or" >&2
+    echo "  KIYOOO_API_PORT=8100 kiyoo if kiyoo-ai is also up) first." >&2
+    bad=1
+  fi
+  [ "$bad" -eq 0 ] || exit 1
+  ok "labs + real tool are both up — starting the rehearsal"
+}
+
+run_10min() {
+  step 60 "Change feed" \
+"Open localhost:${WEB_PORT} — the landing page. Point at a couple of recent change events, don't dwell: 'here's everything new since the last scan.'"
+  open_step "http://localhost:${WEB_PORT}/"
+  pause
+
+  step 120 "A correctly suppressed finding" \
+"Open the triage queue, find exposed-admin-panel on admin.acmecorp.lab. It is NOT in the queue — show the sso_gateway control and the real redirect chain it matched. 'This is the finding a lesser tool would page someone about at 2am.'"
+  open_step "http://localhost:${WEB_PORT}/triage"
+  pause
+
+  step 60 "Clustering" \
+"Open the expired-cert finding — 40 vhosts, one shared expired cert, one cluster_id, one ticket. 'Three vendor tools would have reported this 40 times.'"
+  pause
+
+  step 180 "The headline: blast radius, not just exposure" \
+"Open mcp-docs and mcp-ops side by side. Same category, same kind of exposure. mcp-docs lands medium (read-only), mcp-ops lands critical. Point at the reasoning citing query_customer_db/send_email/run_shell/read_file. Then open mcp-legacy — hidden instruction text in a tool description, flagged, not followed."
+  pause
+
+  step 120 "Watch it happen — the honest live moment" \
+"Not the full pipeline live — timed it end to end, it's 6+ minutes even for one asset, too slow for a live conversation. But the drift itself is real and instant: a curl before, the toggle, a curl after. Then point at THIS MORNING's already-triaged version of the same finding sitting in the triage queue — same reasoning, not conjured live."
+  run_step "curl -s http://internal-tools.kiyoo-ai.lab:8000/ | head -c 200; echo"
+  run_step "./labs/kiyoo-ai/scenarios/dev-exposes-prod.sh"
+  run_step "curl -s http://internal-tools.kiyoo-ai.lab:8000/ | head -c 200; echo"
+  echo "   -> now show this morning's baseline finding in the triage queue, then reset:"
+  run_step "./labs/kiyoo-ai/scenarios/undo.sh"
+  pause
+
+  step 60 "Close on the noise" \
+"'And here's what it didn't force on anyone' — show the unmapped rows as a visible backlog item, never silently dropped, never silently surfaced as 190 pages in someone's queue."
+  run_step "$KIYOOO_BIN ingest unmapped"
+  pause
+}
+
+run_40min_extra() {
+  step 600 "A scan from scratch, live (budget generously — 6+ min is real, not worst-case)" \
+"Start a real scan and talk over the wait, not through it: ScopeGuard is the enforcement point (show *.kiyoo-ai.lab sitting in scope.yaml, active_scanning_enabled+attestation both on for this synthetic first-party lab), active behind three gates otherwise. The LLM drafts but never decides. When it lands, run detect+triage on it live. Heads up: this laptop's other local services can show up in the port-scan stage since everything's on 127.0.0.1 — check anything unfamiliar before presenting it."
+  show_step "$KIYOOO_BIN scan --seeds labs/kiyoo-ai/seeds.txt --profile standard --active"
+  echo "   -> then, with the scan_run id it prints:"
+  show_step "$KIYOOO_BIN detect --scan-run <id> && $KIYOOO_BIN triage --scan-run <id>"
+  pause
+
+  step 300 "Category editor — what would this match" \
+"Pick exposed-mcp-server, paste a synthetic asset+evidence payload, run the live preview. Drop run_shell from the tool list and re-run it to show the severity move. 'Same evaluator that just ran against the real lab a minute ago.'"
+  open_step "http://localhost:${WEB_PORT}/categories"
+  pause
+
+  step 300 "Routing and human approval" \
+"Show a drafted ticket sitting in approvals list — not sent. Invariant #6: a human approves outbound, always, until a category is explicitly promoted up the autonomy ladder."
+  show_step "$KIYOOO_BIN route run --scan-run <id> && $KIYOOO_BIN route approvals list"
+  pause
+
+  step 300 "Coverage and the dashboard" \
+"Coverage: what fraction of known assets has a recent scan touched. Dashboard: model/human agreement and LLM spend per scan run — 'the honest answer when someone asks how do you know it works.'"
+  open_step "http://localhost:${WEB_PORT}/coverage"
+  pause
+  open_step "http://localhost:${WEB_PORT}/dashboard"
+  pause
+
+  step 300 "Asset explorer + noise, in full" \
+"Browse what's been discovered across both labs, then walk the unmapped rows in full this time — why each is noise, why it's a backlog item, not a silent drop."
+  open_step "http://localhost:${WEB_PORT}/assets"
+  run_step "$KIYOOO_BIN ingest unmapped"
+  pause
+
+  info "reset for the next person:"
+  run_step "labs/scenarios/undo.sh 2>/dev/null; labs/kiyoo-ai/scenarios/undo.sh"
+}
+
+case "${1:-}" in
+  10)
+    preflight
+    run_10min
+    ok "10-minute rehearsal done."
+    ;;
+  40)
+    preflight
+    run_10min
+    run_40min_extra
+    ok "40-minute rehearsal done."
+    ;;
+  *)
+    echo "usage: kiyoo-demo [10|40]"
+    echo "  10  labs/demo-10min.md, rehearsed hands-free"
+    echo "  40  labs/demo-40min.md (runs the 10-minute steps first)"
+    exit 1
+    ;;
+esac

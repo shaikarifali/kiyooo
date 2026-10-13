@@ -1,6 +1,6 @@
-"""Eval metrics — pure functions over a list of
+"""Eval metrics (PLAN.md §7 Stage 5) — pure functions over a list of
 (predicted, ground-truth) pairs. `critical_miss_rate` is "the metric that
-matters" : a real true positive the model called
+matters" per PLAN.md: a real true positive the model called
 `false_positive`/`not_exploitable` when the human label says `critical`.
 """
 

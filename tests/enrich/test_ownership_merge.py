@@ -64,7 +64,7 @@ def test_top_two_agreeing_both_above_threshold_is_resolved_not_disputed() -> Non
 
 
 def test_dispute_never_silently_picks_a_winner() -> None:
-    """The design rule verbatim: "never silently pick one." A disputed
+    """The PLAN.md rule verbatim: "never silently pick one." A disputed
     result still reports `top`, but the outcome tag itself is what a caller
     must check before treating it as resolved — this test exists so nobody
     "simplifies" DISPUTED handling into just reading `.top`.

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Generates labs/acmecorp/seed/junk-findings.csv — Stage 12's
+"""Generates labs/acmecorp/seed/junk-findings.csv — PLAN.md §7 Stage 12's
 "200 seeded junk findings from a fake scanner import." Most rows are noise
 a generic vendor scanner reports that has no `vendor_mapping.yaml` entry
 (surfaces via `kiyooo ingest unmapped` as a work item, never silently
 dropped) or maps onto an asset a compensating control already covers. The
-demo point the design doc calls out explicitly: correctly discarding 200 things
+demo point PLAN.md calls out explicitly: correctly discarding 200 things
 and explaining why, not finding one more bug, is what a review board
 actually wants to see (§0.5's Forrester critique).
 

@@ -1,5 +1,5 @@
 """GET/POST /api/ingest/sources — the web UI's Ingest page: point kiyooo
-at any REST/JSON-emitting ASM/VM tool (Stage 1b, "or any
+at any REST/JSON-emitting ASM/VM tool (PLAN.md §7 Stage 1b, "or any
 other") without a code change. `system` is always `CUSTOM` here — the
 two hand-written adapters (Mandiant/Tenable) stay CLI/`.env`-only, this
 endpoint is for the generic, config-driven connector

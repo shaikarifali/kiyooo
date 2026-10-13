@@ -1,4 +1,4 @@
-"""ToolAdapter ABC — the contract every recon tool wrapper implements (the design,
+"""ToolAdapter ABC — the contract every recon tool wrapper implements (PLAN.md §7,
 Stage 1). `orchestrator.py` drives instances of this; `adapters/*.py` implement it.
 
 Two things are deliberately NOT part of this contract:
@@ -35,7 +35,7 @@ if TYPE_CHECKING:
 
 
 class ReconStage(enum.StrEnum):
-    """Stage 1: DISCOVER|RESOLVE|PORTSCAN|PROBE|CRAWL|SCAN."""
+    """PLAN.md §7 Stage 1: DISCOVER|RESOLVE|PORTSCAN|PROBE|CRAWL|SCAN."""
 
     DISCOVER = "discover"
     RESOLVE = "resolve"
@@ -80,7 +80,7 @@ class ToolResult:
 
 
 class HostRateLimiter:
-    """Requests-per-second cap per target host, enforced centrally (the design
+    """Requests-per-second cap per target host, enforced centrally (PLAN.md §7
     Stage 1 safety requirements) — one shared instance per scan run, not a
     per-tool setting.
 

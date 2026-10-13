@@ -1,4 +1,4 @@
-# AI infrastructure fingerprint catalog — one
+# AI infrastructure fingerprint catalog (PLAN.md §7 Stage 11b) — one
 # signature per row. Each row matches against PORT_BANNER/HTTP_RESPONSE
 # evidence already collected by Stage 1's recon adapters; a match tags the
 # asset (`enrich/ai_tech.py`'s `apply_ai_tech`, mirroring Stage 3's

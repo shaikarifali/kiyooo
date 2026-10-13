@@ -1,7 +1,7 @@
-"""kiyoo-ai lab — a single ASGI app, routed by `Host` header (the design
+"""kiyoo-ai lab — a single ASGI app, routed by `Host` header (PLAN.md §3
 recommends exactly this: "one app with Host-based routing... simpler and
 resets faster" than one container per service). Every hostname below maps
-to one decoy module under `services/`; see the design for the DNS layout
+to one decoy module under `services/`; see PLAN.md §1 for the DNS layout
 this mirrors.
 
 Run locally:  uvicorn app.main:app --host 0.0.0.0 --port 8000

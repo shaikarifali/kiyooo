@@ -1,4 +1,4 @@
-"""Finding fingerprint + cluster key.
+"""Finding fingerprint + cluster key (PLAN.md §7 Stage 4).
 
 fingerprint = sha256(category_id | normalized_asset_identity | discriminator)
 
@@ -27,7 +27,7 @@ _CLUSTER_NAMESPACE = uuid.UUID("6a3e1b6a-6b3e-4b1a-9c1e-3f6c8f8b9a10")
 
 
 def normalized_asset_identity(asset: Asset) -> str:
-    """Per the design's fingerprint rule:
+    """Per PLAN.md's fingerprint rule:
 
     http_service  -> scheme://host:port (host = the DNS name)
     tcp_service   -> stable_host_id:port/proto

@@ -32,7 +32,7 @@ export default function ChangeFeedPage() {
     <div>
       <h2>What&apos;s new</h2>
       <p className="muted">
-        Change events across the asset graph — the default landing page.
+        Change events across the asset graph — the default landing page (PLAN.md §7 Stage 10).
       </p>
 
       <div className="filters">

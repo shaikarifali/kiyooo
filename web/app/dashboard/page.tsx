@@ -17,7 +17,7 @@ export default function DashboardPage() {
     <div>
       <h2>Dashboard</h2>
       <p className="muted">
-        Triage funnel, model/human agreement, and LLM spend. Low-agreement
+        Triage funnel, model/human agreement, and LLM spend (PLAN.md §7 Stage 10). Low-agreement
         categories are the ones whose triage_hints need rewriting.
       </p>
 

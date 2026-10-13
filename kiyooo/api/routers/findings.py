@@ -1,4 +1,4 @@
-"""GET /api/findings (+verdict+evidence) — Stage 10's change-
+"""GET /api/findings (+verdict+evidence) — PLAN.md §7 Stage 10's change-
 feed and triage-queue data source.
 """
 

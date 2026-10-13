@@ -1,8 +1,8 @@
-"""Anthropic Messages API — thin `httpx` wrapper.
+"""Anthropic Messages API — thin `httpx` wrapper (PLAN.md §7 Stage 5).
 
 Structured output via forced tool-use: `schema` becomes the single tool's
 `input_schema`, and `tool_choice` forces the model to call it. A response
-with no matching `tool_use` block is treated as a refusal —
+with no matching `tool_use` block is treated as a refusal (PLAN.md §4.4) —
 Anthropic has no explicit refusal flag, so "declined to call the tool" is
 the closest observable signal.
 """
@@ -45,7 +45,7 @@ class AnthropicProvider(LlmProvider):
         tools: list[dict[str, object]] | None = None,
     ) -> LlmResponse:
         # Anthropic has no "system" role in `messages[]` — it's a separate
-        # top-level field. Evidence never enters it; it's
+        # top-level field. Evidence never enters it (PLAN.md §4.5.1); it's
         # only ever the static, versioned prompt text a `Message(role=
         # "system", ...)` carries.
         system_text = "\n\n".join(m.content for m in messages if m.role == "system")

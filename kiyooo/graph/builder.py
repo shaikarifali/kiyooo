@@ -1,4 +1,4 @@
-"""Idempotent Asset upserts and is_active decay.
+"""Idempotent Asset upserts and is_active decay (PLAN.md §7 Stage 2).
 
 `upsert_asset` is the one place raw tool output becomes an `Asset` row.
 Stage 1's `EvidenceWriter` calls this instead of `AssetRepository.get_or_create`
@@ -36,7 +36,7 @@ async def decay_inactive_assets(
     scan_threshold: int = DEFAULT_DECAY_SCAN_THRESHOLD,
 ) -> list[Asset]:
     """Mark `is_active = False` on assets not seen in `scan_threshold`
-    consecutive completed scans. Never deletes a row — the design doc is explicit
+    consecutive completed scans. Never deletes a row — PLAN.md is explicit
     that attrition is a state change, not a removal: an asset's `asset_edge`/
     `evidence` history stays queryable after it decays, and `AssetRepository.
     get_or_create` reactivates it automatically if it's ever seen again.

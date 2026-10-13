@@ -1,4 +1,4 @@
-"""Prowler — wraps prowler-cloud/prowler (Apache-2.0,
+"""Prowler (PLAN.md §7 Stage 13) — wraps prowler-cloud/prowler (Apache-2.0,
 ~14k GitHub stars, the most widely used OSS cloud security scanner; one
 binary covers AWS, Azure, GCP, and Kubernetes) rather than reimplementing
 cloud posture checks ourselves — same non-goal as every other stage (§0:

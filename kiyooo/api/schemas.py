@@ -1,4 +1,4 @@
-"""API response/request schemas — the boundary types
+"""API response/request schemas (PLAN.md §7 Stage 10) — the boundary types
 CLAUDE.md requires for anything crossing the API surface. Deliberately
 separate from `db/models.py`'s SQLAlchemy models: a response shape is a
 public contract, an ORM column list is an implementation detail, and the
@@ -144,7 +144,7 @@ class HumanReviewOut(BaseModel):
 
 class FindingDetailOut(BaseModel):
     """`GET /api/findings/{id}` — the finding plus everything a triager
-    needs to decide without leaving the page (the design's "finding + verdict
+    needs to decide without leaving the page (PLAN.md's "finding + verdict
     + reasoning + evidence + agree/disagree" triage-queue deliverable).
     """
 
@@ -399,7 +399,7 @@ class ProviderTestResultOut(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# External finding ingest — "point kiyooo at the
+# External finding ingest (PLAN.md §7 Stage 1b) — "point kiyooo at the
 # ASM/VM tool(s) an org already pays for." `IngestSourceCreateRequest`
 # embeds `GenericRestConfig` directly so its own field validation (auth
 # type needs credential_ref, etc.) runs at the API boundary, not just in
@@ -464,7 +464,7 @@ class IngestTestResultOut(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# Cloud posture — Prowler-backed accounts. Own
+# Cloud posture (PLAN.md §7 Stage 13) — Prowler-backed accounts. Own
 # endpoints rather than reusing `/api/ingest/sources`: a `ProwlerConfig`
 # (provider + credential env-var map) has no `base_url`/field-mapping shape
 # in common with `GenericRestConfig`, and syncing one always means "run a
@@ -496,7 +496,7 @@ class CloudAccountUpdateRequest(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# Containers & Kubernetes — Trivy-backed scans. Own
+# Containers & Kubernetes (PLAN.md §7 Stage 14) — Trivy-backed scans. Own
 # endpoints for the same reason `/api/cloud/accounts` has its own: a
 # `TrivyConfig` has no shape in common with `GenericRestConfig`, and a scan
 # always means "run Trivy now," never an incremental fetch.
@@ -526,7 +526,7 @@ class ContainerScanUpdateRequest(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# Source code & supply chain — TruffleHog-backed repo
+# Source code & supply chain (PLAN.md §7 Stage 15) — TruffleHog-backed repo
 # scans. Own endpoints, same reasoning as `/api/cloud/accounts` and
 # `/api/containers/scans`: `TrufflehogConfig` has its own shape and a scan
 # always means "run TruffleHog now."
@@ -556,7 +556,7 @@ class RepoScanUpdateRequest(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# Mobile static analysis — apktool + reused TruffleHog
+# Mobile static analysis (PLAN.md §7 Stage 16) — apktool + reused TruffleHog
 # filesystem scan, Android only. Own endpoints, same reasoning as the other
 # domain-expansion stages.
 # --------------------------------------------------------------------------- #
@@ -585,7 +585,7 @@ class MobileScanUpdateRequest(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# Attack path engine — computed on demand from the
+# Attack path engine (PLAN.md §7 Stage 17) — computed on demand from the
 # current asset graph + finding state, not a persisted table. See
 # `graph/attack_path.py`'s module docstring for why.
 # --------------------------------------------------------------------------- #

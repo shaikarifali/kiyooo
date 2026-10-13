@@ -1,4 +1,4 @@
-"""POST /api/findings/{id}/review — Stage 10's "review actions"
+"""POST /api/findings/{id}/review — PLAN.md §7 Stage 10's "review actions"
 deliverable: the triage queue's agree/disagree action. Writes the same
 `human_review` row `kiyooo review` does; unlike the CLI command, this
 doesn't generate an embedding or add the finding to the eval corpus —

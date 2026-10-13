@@ -1,4 +1,4 @@
-"""Verification tool executor — takes a verdict's
+"""Verification tool executor (PLAN.md §7 Stage 6) — takes a verdict's
 `requires_verification[]`, validates each entry (`verify/safety.py`),
 clears it through `ScopeGuard` exactly like a Stage 1 active adapter would,
 rate-limits, executes, and returns new `Evidence` rows with fresh ids.
@@ -176,7 +176,7 @@ async def execute_verifications(
     runners: dict[str, Callable[[ValidatedRequest], Awaitable[dict[str, object]]]] | None = None,
 ) -> list[VerificationOutcome]:
     """Caps at `max_tool_calls` per call — `triage/agent.py`'s own
-    max-2-re-adjudication-round cap bounds the total
+    max-2-re-adjudication-round cap (PLAN.md §4.3 step 5) bounds the total
     across a finding's whole verification process without this function
     needing to track state across calls itself.
 

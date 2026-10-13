@@ -1,4 +1,4 @@
-"""LLM response cache. A rescan that reproduces the
+"""LLM response cache (PLAN.md §7 Stage 5). A rescan that reproduces the
 same evidence bundle, prompt version, and model must never call the LLM
 again — `input_hash` is the key that makes this possible, and it's what
 gives the DoD's "cache hit on identical rescan is 100%" its teeth.

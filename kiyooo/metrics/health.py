@@ -1,4 +1,4 @@
-"""Product-health metrics — "track the §0.5 pain
+"""Product-health metrics (PLAN.md §7 Stage 11) — "track the §0.5 pain
 points directly... treat a worsening trend as a release blocker, not a
 dashboard curiosity." Pure functions over plain data; the CLI
 (`kiyooo metrics report`) does the DB querying and hands in primitives, so
@@ -25,7 +25,7 @@ class HealthMetrics:
 def findings_surfaced_per_analyst_per_week(
     finding_count: int, *, analyst_count: int, weeks: float
 ) -> float:
-    """the design's own warning is load-bearing: this number must not be read
+    """PLAN.md's own warning is load-bearing: this number must not be read
     in isolation — "must not rise without true-positive yield rising."
     """
     if analyst_count <= 0 or weeks <= 0:

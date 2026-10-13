@@ -56,7 +56,7 @@ def _candidate(
 
 
 def test_owner_of_asset_resolves_to_user_and_manager_of_owner_resolves_team_manager() -> None:
-    """Mirrors this is
+    """Mirrors PLAN.md §5.1's own worked example category verbatim: this is
     Stage 7's DoD case — "a Jira ticket assigned to the right engineer with
     their manager on the watchers list".
     """

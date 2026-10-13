@@ -1,4 +1,4 @@
-"""Ticket sink protocol. A sink is idempotent from the
+"""Ticket sink protocol (PLAN.md §7 Stage 7). A sink is idempotent from the
 caller's side, not its own: `route/pipeline.py` looks up any existing
 `Ticket` for a finding before calling `create` vs `reopen` — a sink itself
 never has to know whether this is the first time.

@@ -1,4 +1,4 @@
-"""Labeled corpus format for the eval harness (Stage 5: "a
+"""Labeled corpus format for the eval harness (PLAN.md §7 Stage 5: "a
 labeled corpus (start with 100 hand-labeled findings from your own
 scans)"). One file per case — reuses `detect/cases.py`'s `CaseAsset`/
 `CaseEvidence` fixture shapes, since a labeled eval case and a category
@@ -47,7 +47,7 @@ def load_corpus(path: Path) -> EvalCorpus:
 
 
 def save_case(case: LabeledCase, corpus_dir: Path) -> Path:
-    """Stage 8: "auto-add reviewed findings to the eval corpus"
+    """PLAN.md §7 Stage 8: "auto-add reviewed findings to the eval corpus"
     — one file per case, same layout `load_corpus` reads back. Overwrites
     on a repeat id (a second review of the same finding replaces its case
     rather than duplicating it).

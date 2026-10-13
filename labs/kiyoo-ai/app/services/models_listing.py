@@ -1,5 +1,5 @@
 """`models` — an autoindex serving an unsafe-format model artifact
-. Matches kiyooo's `unsafe-model-artifact` category
+(PLAN.md §3.2). Matches kiyooo's `unsafe-model-artifact` category
 (`\\.(pkl|pt|pth|bin|h5|ckpt)([\"'<)\\s]|$)` against the directory-listing
 HTML). The artifact itself starts with a pickle magic header so a byte
 sniffer would agree it *looks* like a pickle — but it is a few KB of

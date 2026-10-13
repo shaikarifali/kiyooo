@@ -1,4 +1,4 @@
-"""`mcp-ops` — the catastrophic MCP twin.
+"""`mcp-ops` — the catastrophic MCP twin (PLAN.md §3.1, twin B).
 
 Same server, same lack of auth, same everything as `mcp_docs` — the only
 difference is what the tool catalog claims to be able to do. This is the

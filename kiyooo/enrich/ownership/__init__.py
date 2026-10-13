@@ -1,4 +1,4 @@
-"""Ownership resolution orchestrator: runs every
+"""Ownership resolution orchestrator (PLAN.md §7 Stage 3): runs every
 applicable source for an asset, persists every candidate it returns as an
 `Ownership` row (see `Ownership`'s docstring in `db/models.py` — one row per
 source, not a single merged row), and returns the merge outcome for

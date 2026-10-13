@@ -126,8 +126,8 @@ class FindingRepository(Repository[Finding]):
         await self._session.flush()
 
     async def count_by_status(self) -> dict[FindingStatus, int]:
-        """The dashboard's triage funnel — "a human always confirms before
-        anything closes," made visible: every row here is
+        """The dashboard's triage funnel (PLAN.md's "human always confirms
+        before anything closes" pitch, made visible): every row here is
         one of the handful of statuses a finding can actually be in —
         `NEW`/`TRIAGING` awaiting adjudication, `TRIAGED` awaiting a
         human's agree/disagree, everything past that only reachable via

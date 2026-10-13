@@ -1,4 +1,4 @@
-"""Orchestrates one import batch: map each vendor
+"""Orchestrates one import batch (PLAN.md §7 Stage 1b): map each vendor
 finding onto our asset/evidence/finding schema, reusing Stage 4's exact
 fingerprint + upsert path so cross-tool reconciliation is automatic — the
 same category + same asset identity always yields the same fingerprint no
@@ -114,7 +114,7 @@ async def ingest_finding(
         # "one_per_asset" (default) is what makes cross-tool reconciliation
         # work — three vendors reporting the same category on the same
         # asset collapse to one Finding regardless of their different
-        # external_ids (Stage 1b's DoD, tested by
+        # external_ids (PLAN.md §7 Stage 1b's DoD, tested by
         # test_cross_tool_reconciliation_collapses_to_one_finding).
         # "one_per_vendor_finding" is for bucket categories
         # (`vulnerable-base-image`, `leaked-secret-in-repo`, ...) where many

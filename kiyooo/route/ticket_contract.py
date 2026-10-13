@@ -1,7 +1,7 @@
-"""The ticket contract: a ticket body renders from a
+"""The ticket contract (PLAN.md §7 Stage 7): a ticket body renders from a
 Jinja2 template, and code — not template authors — refuses to file one
 missing any of six required blocks. 42% of surveyed practitioners report
-tickets lacking remediation or asset context; this is the
+tickets lacking remediation or asset context (PLAN.md §0.5); this is the
 structural fix.
 
 Required blocks, matched as markdown headers (any `#` level, case-insensitive):

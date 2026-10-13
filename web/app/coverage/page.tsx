@@ -11,7 +11,7 @@ export default function CoveragePage() {
     <div>
       <h2>Coverage &amp; orphan-asset report</h2>
       <p className="muted">
-        How much of the asset graph has a confirmed owner.
+        How much of the asset graph has a confirmed owner (PLAN.md §7 Stage 10).
       </p>
 
       {error && <div className="error-box">{error}</div>}

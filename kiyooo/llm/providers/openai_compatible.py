@@ -1,5 +1,5 @@
 """OpenAI-compatible Chat Completions API — thin `httpx` wrapper, the
-bring-your-own-model path (Stage 5's "no feature depends on a
+bring-your-own-model path (PLAN.md §7 Stage 5's "no feature depends on a
 hosted model" principle, extended to "no feature depends on exactly two
 named providers"). Real OpenAI (including the Codex/GPT model family),
 OpenRouter, vLLM's OpenAI-compatible server, Azure OpenAI's compat mode,
@@ -106,7 +106,7 @@ class OpenAiCompatibleProvider(LlmProvider):
         # A content filter or a refusal shows up as an empty/short
         # completion with a non-"stop" finish_reason on most
         # OpenAI-compatible servers — the same "refused, not errored"
-        # signal Message/refusal handling expects.
+        # signal Message/refusal handling (PLAN.md §4.4) expects.
         refused = content is None and finish_reason in {"content_filter", "length", None}
 
         return LlmResponse(

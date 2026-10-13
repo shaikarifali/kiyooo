@@ -48,7 +48,7 @@ export default function CategoryEditorPage() {
       <h2>Category editor</h2>
       <p className="muted">
         Live &quot;what would this match&quot; preview — runs the exact same predicate evaluator
-        `kiyooo categories test` and live detection use. Paste a synthetic
+        `kiyooo categories test` and live detection use (PLAN.md §7 Stage 10). Paste a synthetic
         asset + evidence to see whether a category would fire.
       </p>
 

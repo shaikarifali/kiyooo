@@ -1,4 +1,4 @@
-"""Asset identity canonicalization.
+"""Asset identity canonicalization (PLAN.md §7 Stage 2).
 
 `Asset` has `UNIQUE(type, value)` — if two tools report the same host as
 `WWW.Example.COM.` and `www.example.com`, that constraint doesn't save you;
@@ -9,7 +9,7 @@ so identity resolution happens once, in one place, not per-adapter.
 This is deliberately conservative: a canonicalization rule that's wrong
 merges two assets that are actually different, which is worse than a
 duplicate row a human can spot. Where the right normalization for an asset
-type isn't obvious from the design doc (cloud resources, repos, SaaS tenants, ...),
+type isn't obvious from PLAN.md (cloud resources, repos, SaaS tenants, ...),
 `canonicalize()` only strips surrounding whitespace and leaves the value
 otherwise untouched — narrowing that later is easy; un-merging two
 incorrectly-collapsed assets after the fact is not.

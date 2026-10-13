@@ -1,4 +1,4 @@
-"""`mlflow` — an MLflow-shaped model registry.
+"""`mlflow` — an MLflow-shaped model registry (PLAN.md §3.2).
 
 Matches kiyooo's `mlflow` fingerprint (body contains "mlflow") and the
 `exposed-model-registry` category (`port_in: [5000]` in the real

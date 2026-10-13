@@ -1,4 +1,4 @@
-"""SLA tracking + escalation: an open ticket whose
+"""SLA tracking + escalation (PLAN.md §7 Stage 7): an open ticket whose
 `sla_due_at` has passed escalates — notified via the owning team's
 `escalation_after_sla` contact, and the ticket moves to `escalated` so a
 repeat sweep doesn't re-notify every run. Scheduling this as a daily sweep

@@ -1,4 +1,4 @@
-"""GET /api/scan-runs — Stage 10."""
+"""GET /api/scan-runs — PLAN.md §7 Stage 10."""
 
 from __future__ import annotations
 

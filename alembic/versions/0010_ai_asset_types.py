@@ -6,7 +6,7 @@ Create Date: 2026-08-08
 
 Stage 11b's AI attack surface module. llm_endpoint/mcp_server/
 model_registry/vector_db already existed from Stage 0's forward-looking
-schema; these three round it out to Stage 11b's full named list.
+schema; these three round it out to PLAN.md §7 Stage 11b's full named list.
 """
 
 from collections.abc import Sequence

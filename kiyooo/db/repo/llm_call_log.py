@@ -30,7 +30,7 @@ class LlmCallLogRepository(Repository[LlmCallLog]):
         return float(result.scalar_one())
 
     async def total_cost_all_time(self) -> float:
-        """`kiyooo metrics report`'s cost_per_scan_run input (the design
+        """`kiyooo metrics report`'s cost_per_scan_run input (PLAN.md §7
         Stage 11).
         """
         result = await self._session.execute(

@@ -1,4 +1,4 @@
-"""TruffleHog — wraps trufflesecurity/trufflehog (the
+"""TruffleHog (PLAN.md §7 Stage 15) — wraps trufflesecurity/trufflehog (the
 OSS engine, AGPL-3.0, ~25.7k GitHub stars) rather than reimplementing secret
 scanning ourselves (§0's non-goal). Invoked as an external subprocess whose
 output is parsed, never linked into or redistributed with kiyooo — AGPL-3.0

@@ -1,6 +1,6 @@
 """Runtime settings (env) and the org-context loader.
 
-Org-context is the customization surface: `scope.yaml`, `teams.yaml`,
+Org-context is the customization surface (PLAN.md §5): `scope.yaml`, `teams.yaml`,
 `controls.yaml`, `categories/**/*.yaml`, all git-owned by the org, not this repo.
 The one rule that matters here: a malformed category is a hard failure at load time,
 never a silent skip. Predicate *evaluation* (what `hostname_matches` actually does at
@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     minio_bucket: str = "kiyooo-evidence"
     minio_secure: bool = False
 
-    # Bulk pass — the 90% case. Defaults
+    # Bulk pass — the 90% case (PLAN.md §2's model routing policy). Defaults
     # to local: zero marginal cost, nothing leaves the host. See §11 open
     # question #1 — this is deliberately the config knob that answers it.
     llm_provider: str = "ollama"
@@ -67,18 +67,18 @@ class Settings(BaseSettings):
     github_repo: str | None = None  # "owner/repo" — Stage 7's Issues sink
     # Stage 8's feedback/promote.py opens its suppression PR against this
     # repo instead — org-context is a separate git repo the org owns
-    #, never this one.
+    # (PLAN.md §5), never this one.
     org_context_repo: str | None = None  # "owner/repo"
 
     embedding_provider: str = "ollama"
     embedding_model: str = "nomic-embed-text"
 
-    # Hard per-scan-run ceiling — a run that would
+    # Hard per-scan-run ceiling (PLAN.md §7 Stage 5) — a run that would
     # exceed this halts and reports rather than silently burning budget.
     max_cost_usd_per_run: float = 5.0
 
     org_context_path: Path = Path("./org-context.example")
-    # Where `kiyooo review` auto-adds newly labeled findings (the design
+    # Where `kiyooo review` auto-adds newly labeled findings (PLAN.md §7
     # Stage 8's "auto-add reviewed findings to the eval corpus"). Defaults
     # to this repo's own illustrative corpus so it works out of the box;
     # point it at your org's real corpus once you have one.
@@ -159,7 +159,7 @@ class PredicateBlock(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# categories/*.yaml — the design
+# categories/*.yaml — PLAN.md §5.1
 # --------------------------------------------------------------------------- #
 
 Severity = Literal["critical", "high", "medium", "low", "info"]
@@ -190,7 +190,7 @@ AssetTypeName = Literal[
     "k8s_workload",
 ]
 
-# the design open question #2: some orgs cannot send response bodies to a
+# PLAN.md §11 open question #2: some orgs cannot send response bodies to a
 # hosted API. A category declares the minimum profile it's triageable
 # under; `triage/bundler.py` enforces it before any hosted-provider call.
 #   full          - everything: bodies, headers, evidence content_inline as-is.
@@ -207,7 +207,7 @@ class RouteConfig(BaseModel):
     notify_channels: list[str] = Field(default_factory=list)
     sla_days: dict[Severity, int]
     ticket_template: str | None = None
-    # Stage 7's autonomy ladder: 0=shadow (nothing sent), 1=every
+    # PLAN.md §7 Stage 7's autonomy ladder: 0=shadow (nothing sent), 1=every
     # outbound drafted and held for a human to click send, 2=low/medium
     # auto-file but high/critical still held, 3=everything auto-files.
     # Stored per category, in org-context, so promoting one is a reviewable
@@ -229,7 +229,7 @@ class CategoryDefinition(BaseModel):
     suppress_if: list[PredicateClause] = Field(default_factory=list)
     evidence_required: list[str] = Field(default_factory=list)
 
-    # Stage 17 — the attack-path engine's endpoint marker.
+    # PLAN.md §7 Stage 17 — the attack-path engine's endpoint marker.
     # "Extend the existing category schema, don't invent a parallel one":
     # a finding in a category with this set to true means its asset holds
     # or grants access to something worth protecting (data, credentials) —
@@ -313,7 +313,7 @@ class ScopeConfig(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# teams.yaml — the design
+# teams.yaml — PLAN.md §5.3
 # --------------------------------------------------------------------------- #
 
 
@@ -354,7 +354,7 @@ class TeamsFile(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# controls.yaml — the design
+# controls.yaml — PLAN.md §5.2
 # --------------------------------------------------------------------------- #
 
 
@@ -397,7 +397,7 @@ class ControlsFile(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# ownership_overrides.yaml — Stage 3, the `manual` ownership source
+# ownership_overrides.yaml — PLAN.md §7 Stage 3, the `manual` ownership source
 # (confidence 1.00). The only ownership source that isn't inferred from
 # something else — an admin states the answer directly, so it always wins.
 # --------------------------------------------------------------------------- #
@@ -427,7 +427,7 @@ class OwnershipOverridesFile(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# vendor_mapping.yaml — Stage 1b: vendor_issue_type -> our
+# vendor_mapping.yaml — PLAN.md §7 Stage 1b: vendor_issue_type -> our
 # category_id, PR-reviewed so a mapping change is a reviewable diff, not a
 # runtime decision.
 # --------------------------------------------------------------------------- #
@@ -457,7 +457,7 @@ class VendorMappingFile(BaseModel):
 
 
 # --------------------------------------------------------------------------- #
-# suppressions.yaml — Stage 8's `feedback/promote.py` output: when
+# suppressions.yaml — PLAN.md §7 Stage 8's `feedback/promote.py` output: when
 # N humans mark the same category+asset a false positive for the same
 # reason, a PR proposes an entry here rather than eating that noise forever.
 # Deliberately not predicate-based like `suppress_if`/`controls.yaml` — a

@@ -1,4 +1,4 @@
-"""GET/POST /api/mobile/scans — the web UI's Mobile page (the design
+"""GET/POST /api/mobile/scans — the web UI's Mobile page (PLAN.md §7
 Stage 16): point kiyooo at a local APK file and statically analyze it
 (apktool + reused TruffleHog filesystem scan). Mirrors the other
 domain-expansion routers' list/create/sync shape exactly.

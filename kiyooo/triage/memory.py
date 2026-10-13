@@ -1,4 +1,4 @@
-"""Similar-past-decisions retrieval (Stage 5, §4.1's
+"""Similar-past-decisions retrieval (PLAN.md §7 Stage 5, §4.1's
 `similar_past_decisions`) — pgvector cosine similarity over `human_review`
 rows in the same category; top-3 feed directly into the bundle. This is
 how the tool learns an org's own judgment calls without fine-tuning.

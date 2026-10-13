@@ -1,4 +1,4 @@
-"""The autonomy ladder. Level is stored per category in
+"""The autonomy ladder (PLAN.md §7 Stage 7). Level is stored per category in
 org-context (`CategoryDefinition.route.autonomy_level`) so promoting one is a
 reviewable diff, never a runtime decision — this module only implements the
 *behaviour* each level and severity combination produces; it never decides

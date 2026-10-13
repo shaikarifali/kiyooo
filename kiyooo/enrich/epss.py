@@ -1,4 +1,4 @@
-"""FIRST.org EPSS (Exploit Prediction Scoring System) scores (the design
+"""FIRST.org EPSS (Exploit Prediction Scoring System) scores (PLAN.md §7
 Stage 3) — the other half of "known exploited + EPSS score, not CVSS."
 
 Same shape as `kev.py`: `parse_epss_response` is pure and fixture-tested;

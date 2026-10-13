@@ -1,4 +1,4 @@
-"""Mandiant ASM.
+"""Mandiant ASM (PLAN.md §7 Stage 1b names `GET /api/library/issues`).
 `parse_issue` is pure and fixture-tested; `fetch_issues` makes the live
 call and is untested, same treatment as every other network-touching
 fetcher in this project. Exact field names are best-effort against

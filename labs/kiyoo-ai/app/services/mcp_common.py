@@ -1,4 +1,4 @@
-"""Factory for the three MCP twin/poisoned servers.
+"""Factory for the three MCP twin/poisoned servers (PLAN.md §3.1).
 
 Protocol-accurate on purpose: `initialize` and `tools/list` follow the real
 MCP JSON-RPC 2.0 shape, because a decoy that only *looks* right doesn't
@@ -9,7 +9,7 @@ this responds exactly the way a real server would to those two methods.
 `tools/call` — and every other method — is never implemented. It returns
 405 with a lab notice instead of a JSON-RPC error, so it's unambiguous to
 a human *and* impossible to mistake for a working tool invocation. See
-this is the one architectural rule the whole lab follows.
+PLAN.md §0: this is the one architectural rule the whole lab follows.
 """
 
 from __future__ import annotations

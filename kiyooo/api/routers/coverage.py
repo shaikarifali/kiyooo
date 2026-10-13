@@ -1,4 +1,4 @@
-"""GET /api/coverage — Stage 10's coverage stats, backing the
+"""GET /api/coverage — PLAN.md §7 Stage 10's coverage stats, backing the
 "coverage & orphan-asset report" UI page.
 """
 

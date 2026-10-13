@@ -1,4 +1,4 @@
-"""Per-model token pricing. Used by `llm/router.py`'s
+"""Per-model token pricing (PLAN.md §7 Stage 5). Used by `llm/router.py`'s
 per-run cost ceiling and stored on every `Verdict`/`LlmCallLog` row.
 
 Local providers (Ollama, vLLM) are always free at the token level — their

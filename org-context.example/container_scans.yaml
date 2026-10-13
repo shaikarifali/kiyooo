@@ -1,4 +1,4 @@
-# container_scans.yaml — Stage 14. One entry per image or
+# container_scans.yaml — PLAN.md §7 Stage 14. One entry per image or
 # Kubernetes cluster Trivy should scan. Loaded via the CLI (`kiyooo
 # containers scans add --name <name> --config <this-file-per-scan>`) or the
 # API/UI — this file is a worked example of one scan's config, same

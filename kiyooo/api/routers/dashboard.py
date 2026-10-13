@@ -1,4 +1,4 @@
-"""GET /api/dashboard — Stage 10's cost/agreement dashboard
+"""GET /api/dashboard — PLAN.md §7 Stage 10's cost/agreement dashboard
 page. Reuses Stage 8's `feedback/agreement.py` (model/human agreement per
 category+model+prompt_version) and Stage 11's `LlmCallLogRepository`
 (total spend) directly — same computation the CLI's `kiyooo feedback

@@ -1,4 +1,4 @@
-"""The adjudication loop.
+"""The adjudication loop (PLAN.md §4.3).
 
 Steps, mapped to what runs here:
   1. Deterministic prefilter    -> already done upstream: a finding only
@@ -28,7 +28,7 @@ Steps, mapped to what runs here:
   6. Escalation                 -> `llm/router.py`'s `needs_escalation()`.
   7. Persist + route            -> `Verdict` row + `Finding.status`.
 
-A `local_only` category never reaches a hosted provider at
+A `local_only` category (PLAN.md §11) never reaches a hosted provider at
 any point in this loop — `_model_for` pins both bulk and escalation to the
 same local model for such a category, so a low-confidence result stays
 `needs_human` rather than escalating to a provider that must never see
@@ -89,7 +89,7 @@ if TYPE_CHECKING:
     from kiyooo.triage.validator import NvdLookup
 
 _MAX_SCHEMA_RETRIES = 1
-_MAX_VERIFICATION_ROUNDS = 2  # the design step 5: "re-adjudicate (max 2 loops)"
+_MAX_VERIFICATION_ROUNDS = 2  # PLAN.md §4.3 step 5: "re-adjudicate (max 2 loops)"
 _FORCE_HUMAN_IDENTIFIER_KINDS = frozenset(
     {IdentifierKind.CVE, IdentifierKind.CWE, IdentifierKind.CVSS_VECTOR, IdentifierKind.HOSTNAME}
 )
@@ -302,7 +302,7 @@ async def _verify_and_flag(
 ) -> bool:
     """Persists every identifier check and reports whether any of them
     forces human review — a hallucinated CVE/CWE/CVSS/hostname, per
-    the design's per-identifier action table. A version mismatch alone never
+    PLAN.md's per-identifier action table. A version mismatch alone never
     forces review on its own; `run_cross_checks` already downgrades
     confidence for thinly-cited high-confidence verdicts generally.
     """
@@ -401,7 +401,7 @@ async def _run_adjudication_round(
     pass_type = VerdictPassType.BULK
 
     if bulk_verdict is None and not is_local_provider(bulk_selection.provider):
-        # a hosted refusal falls back to the local model
+        # PLAN.md §4.4: a hosted refusal falls back to the local model
         # rather than dropping the finding. Hardcoded to "ollama" rather
         # than `settings.llm_provider` — if an org points bulk itself at a
         # hosted provider, `settings.llm_provider` IS the provider that

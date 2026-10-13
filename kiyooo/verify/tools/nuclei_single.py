@@ -1,4 +1,4 @@
-"""Single-template nuclei verification — exactly one
+"""Single-template nuclei verification (PLAN.md §7 Stage 6) — exactly one
 allowlisted, non-intrusive template against one target. `-etags
 dos,intrusive,fuzz` is passed unconditionally, the same non-negotiable
 invariant #1 enforcement as Stage 1's `NucleiAdapter`, belt-and-suspenders

@@ -187,7 +187,7 @@ console = Console()
 # fresh clone tells you what's missing before you try to run a scan.
 _RECON_BINARIES = ["subfinder", "httpx", "naabu", "dnsx", "tlsx"]
 
-# "what it reads"  Stage 1 --explain requirement. Not derivable
+# "what it reads" per PLAN.md §7 Stage 1 --explain requirement. Not derivable
 # from the ABC (is_active only says whether it sends packets, not to what) —
 # kept here, next to the README table it's meant to match, not on ToolAdapter.
 _ADAPTER_READS: dict[str, str] = {
@@ -1459,7 +1459,7 @@ def triage(
 ) -> None:
     """Adjudicate every NEW finding from --scan-run: bulk model call,
     validator cross-checks + identifier verification, escalation when
-    warranted, cached on identical rescan. Without
+    warranted, cached on identical rescan. See PLAN.md §4.3. Without
     --active, a verdict that requests verification stays needs_human —
     every requires_verification tool call is an active probe.
     """
@@ -1597,7 +1597,7 @@ def review(
     rationale: str = typer.Option(..., "--rationale"),
     reviewer: str = typer.Option(..., "--reviewer", help="Email of the human reviewing this"),
 ) -> None:
-    """Records a human verdict on a finding: writes a
+    """Records a human verdict on a finding (PLAN.md §7 Stage 8): writes a
     `human_review` row that feeds Stage 5's similar-past-decisions memory,
     embeds it for future retrieval, and auto-adds the finding to the local
     eval corpus so labeled data compounds every time someone reviews
@@ -1735,7 +1735,7 @@ app.add_typer(feedback_app, name="feedback")
 def feedback_agreement_cmd() -> None:
     """Model/human agreement rate per (category, model, prompt_version).
     Low-agreement categories are the ones whose triage_hints need
-    rewriting — see Stage 8.
+    rewriting — see PLAN.md §7 Stage 8.
     """
     settings = Settings()
     stats = asyncio.run(_run_agreement(settings))
@@ -1762,7 +1762,7 @@ def feedback_promote_cmd(
     entry, opened as a PR against org_context_repo for a human to merge.
     Without org_context_repo/github_token configured (or with --dry-run),
     prints what would be proposed instead of opening anything — nothing is
-    ever suppressed automatically. See Stage 8.
+    ever suppressed automatically. See PLAN.md §7 Stage 8.
     """
     settings = Settings()
     try:
@@ -1847,7 +1847,7 @@ def route_run_cmd(
     """Routes every TRIAGED true-positive finding from --scan-run: resolves
     assignee/cc/SLA against ownership + teams.yaml, renders + lints the
     ticket, and — per the category's autonomy level — shadows, drafts an
-    approval, or auto-files. See Stage 7.
+    approval, or auto-files. See PLAN.md §7 Stage 7.
     """
     try:
         scan_run_id = uuid.UUID(scan_run)
@@ -1976,7 +1976,7 @@ async def _close_ticket(settings: Settings, ticket_id: uuid.UUID) -> Ticket:
 @route_app.command(name="close")
 def route_close_cmd(ticket_id: str = typer.Argument(...)) -> None:
     """Closing a ticket moves its finding to verification_pending, never
-    straight to fixed — see Stage 7's closure-requires-proof
+    straight to fixed — see PLAN.md §7 Stage 7's closure-requires-proof
     rule. Run `route recheck --scan-run <id>` after a fresh scan to confirm.
     """
     settings = Settings()
@@ -2088,7 +2088,7 @@ def route_escalate_cmd() -> None:
     """Sweeps open tickets past their SLA due date and marks them escalated
     — a repeat run won't re-escalate the same ticket. Wiring this to notify
     each team's `escalation_after_sla` contact is a `route/sinks/` call away
-    once a real Slack/email sink is configured; see Stage 7.
+    once a real Slack/email sink is configured; see PLAN.md §7 Stage 7.
     """
     settings = Settings()
     escalated = asyncio.run(_run_escalate(settings))
@@ -2210,14 +2210,14 @@ async def _decommission_candidates(settings: Settings) -> list[Asset]:
 def assets_decommission_candidates_cmd() -> None:
     """Reachable, unowned (no attribution >=0.8 confidence), and unchanged for
     3 consecutive scans. A lead list for human review — never an autonomous
-    action — and evaluates 3 of the design's 4 conditions: "serves no traffic
+    action — and evaluates 3 of PLAN.md's 4 conditions: "serves no traffic
     signal" has no data source in this schema yet, see graph/queries.py.
     """
     settings = Settings()
     assets = asyncio.run(_decommission_candidates(settings))
     console.print(
         "[dim]Lead list for human review, not an autonomous action. Evaluates 3 of "
-        "4 the design doc conditions — no traffic-signal data source exists yet.[/dim]"
+        "4 PLAN.md conditions — no traffic-signal data source exists yet.[/dim]"
     )
     _render_assets(assets)
 
@@ -2404,7 +2404,7 @@ async def _attack_paths(settings: Settings, org_context: OrgContext) -> list[Att
 
 @app.command(name="attack-paths")
 def attack_paths_cmd() -> None:
-    """Stage 17 — one correlated path per sensitive finding
+    """PLAN.md §7 Stage 17 — one correlated path per sensitive finding
     (`is_sensitive_target: true` category) reachable from another active
     finding, instead of N unrelated findings. Computed on demand from the
     current graph/finding state, not a persisted table — see
@@ -2582,7 +2582,7 @@ async def _run_pipeline_chain(
     """detect -> triage -> route against one scan_run's evidence — the
     single chain both `kiyooo events handle` and every scheduled
     `worker/tasks.py` job run, so a fix to one step is a fix everywhere it
-    runs. See Stage 11's event-trigger deliverable.
+    runs. See PLAN.md §7 Stage 11's event-trigger deliverable.
     """
     kev_file = settings.kev_cache_path if settings.kev_cache_path.exists() else None
     detect_outcome = await _run_detect(
@@ -2625,7 +2625,7 @@ def events_handle_cmd(
     ),
 ) -> None:
     """Targeted mini-scan of exactly one newly-discovered asset, chained
-    straight through detect -> triage -> route in one process — the design
+    straight through detect -> triage -> route in one process — PLAN.md §7
     Stage 11's event-trigger deliverable ("new cloud resource, new DNS
     record, new repo, CI/CD deploy webhook -> targeted mini-scan of just
     the new asset"). An external relay (an EventBridge rule, a GitHub
@@ -2894,7 +2894,7 @@ def eval_run_cmd(
 ) -> None:
     """Runs a labeled corpus through one model's bulk-pass adjudication and
     reports precision, high/critical recall, critical-miss rate, cost, and
-    latency. This calls a real model — it is never run
+    latency (PLAN.md §7 Stage 5). This calls a real model — it is never run
     as part of the test suite, and it is not run automatically by any
     other command.
 
@@ -3273,7 +3273,7 @@ def sources_sync_cmd(
 
 cloud_app = typer.Typer(
     add_completion=False,
-    help="Cloud posture accounts, audited via Prowler (OSS, Apache-2.0) — Stage 13",
+    help="Cloud posture accounts, audited via Prowler (OSS, Apache-2.0) — PLAN.md §7 Stage 13",
 )
 app.add_typer(cloud_app, name="cloud")
 
@@ -3380,7 +3380,7 @@ def cloud_scan_cmd(
 containers_app = typer.Typer(
     add_completion=False,
     help="Container images / Kubernetes clusters, scanned via Trivy (OSS, Apache-2.0) — "
-    "Stage 14",
+    "PLAN.md §7 Stage 14",
 )
 app.add_typer(containers_app, name="containers")
 
@@ -3494,7 +3494,7 @@ def containers_scan_cmd(
 repos_app = typer.Typer(
     add_completion=False,
     help="Source repos, scanned for verified live secrets via TruffleHog "
-    "(OSS engine, AGPL-3.0) — Stage 15",
+    "(OSS engine, AGPL-3.0) — PLAN.md §7 Stage 15",
 )
 app.add_typer(repos_app, name="repos")
 
@@ -3606,7 +3606,7 @@ def repos_scan_cmd(
 mobile_app_typer = typer.Typer(
     add_completion=False,
     help="Static analysis of a local APK (apktool + reused TruffleHog filesystem scan) — "
-    "Stage 16",
+    "PLAN.md §7 Stage 16",
 )
 app.add_typer(mobile_app_typer, name="mobile")
 
@@ -3723,7 +3723,7 @@ app.add_typer(skills_app, name="skills")
 def skills_list_cmd() -> None:
     """Loads every org-context/skills/*/SKILL.md — a parse error here is
     the same kind of load-time failure a malformed category gets, not a
-    silent skip. See Stage 9.
+    silent skip. See PLAN.md §7 Stage 9.
     """
     settings = Settings()
     try:
@@ -3804,7 +3804,7 @@ def metrics_report_cmd(
     ),
     weeks: float = typer.Option(1.0, "--weeks", help="Lookback window in weeks"),
 ) -> None:
-    """Product-health metrics — "treat a worsening
+    """Product-health metrics (PLAN.md §7 Stage 11) — "treat a worsening
     trend as a release blocker, not a dashboard curiosity." Two gaps,
     disclosed rather than faked: clarifying_questions_per_ticket has no
     tracking source yet (always 0 until something logs a "needed a
@@ -3856,7 +3856,7 @@ def audit_export_cmd(
     output: Path = typer.Option(..., "--output", help="Destination JSON file"),
     hours: int = typer.Option(24 * 7, "--hours", help="Lookback window"),
 ) -> None:
-    """Dumps ScopeGuard's append-only audit_log to JSON — the design Stage
+    """Dumps ScopeGuard's append-only audit_log to JSON — PLAN.md §7 Stage
     11's audit log export. Every row is a decision (ALLOW/DENY/REQUIRES_
     CONFIRM) invariant #2 already required to exist; this just makes it
     portable for a SIEM or compliance review outside this database.
@@ -3887,7 +3887,7 @@ def serve(
     port: int | None = typer.Option(None, "--port", help="Defaults to settings.api_port"),
     reload: bool = typer.Option(False, "--reload", help="Auto-reload on source changes (dev only)"),
 ) -> None:
-    """Runs the FastAPI backend — assets, findings,
+    """Runs the FastAPI backend (PLAN.md §7 Stage 10) — assets, findings,
     change feed, scan runs, review actions, ownership override, coverage
     stats. No auth: see kiyooo/api/deps.py. Serves the Next.js UI's API
     calls; OpenAPI spec is at /openapi.json once running.

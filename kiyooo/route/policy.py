@@ -1,4 +1,4 @@
-"""Route resolution: turns a category's `route:` block
+"""Route resolution (PLAN.md §7 Stage 7): turns a category's `route:` block
 into concrete assignee/cc/notify_channels/sla for one finding, against
 `teams.yaml` and the asset's resolved ownership (Stage 3's
 `enrich/ownership/merge.py`).

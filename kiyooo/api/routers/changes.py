@@ -1,4 +1,4 @@
-"""GET /api/changes — the change feed, Stage 10's default
+"""GET /api/changes — the change feed, PLAN.md §7 Stage 10's default
 landing page: "what's new since yesterday."
 """
 
